@@ -1,9 +1,9 @@
 # TourBooking
 
-1. Mô tả khái quát về nội dung đề tài
+**1. Mô tả khái quát về nội dung đề tài**  
 Ryokou là một ứng dụng đặt tour du lịch được phát triển trên nền tảng Flutter với mục tiêu mang lại sự tiện lợi, minh bạch và cá nhân hóa trải nghiệm cho người dùng trong ngành du lịch Nhật Bản. Ứng dụng giải quyết các vấn đề khó khăn mà khách hàng và nhà cung cấp dịch vụ thường gặp phải: từ việc tìm kiếm thông tin minh bạch, quản lý thông tin tour, đến tối ưu hóa quảng bá dịch vụ. Ryokou hướng đến việc kết nối khách hàng với các nhà cung cấp dịch vụ du lịch thông qua một nền tảng tập trung, hiện đại, và dễ sử dụng.
 
-2. Mô tả các yêu cầu tổ chức chương trình chính về công nghệ, chức năng
+**2. Mô tả các yêu cầu tổ chức chương trình chính về công nghệ, chức năng**  
 Công nghệ:
 Nền tảng phát triển: Flutter (đa nền tảng, hỗ trợ Android và iOS).
 Cơ sở dữ liệu: Firebase hoặc SQLite (tùy theo yêu cầu dữ liệu lưu trữ và đồng bộ).
@@ -23,7 +23,7 @@ Quản lý dành cho nhà cung cấp dịch vụ:
 Đăng ký và cập nhật thông tin tour.
 Theo dõi yêu cầu đặt tour từ khách hàng.
 Báo cáo doanh thu và hiệu quả hoạt động.
-3. Mô tả về tính sử dụng, áp dụng, các thành phần người dùng
+**3. Mô tả về tính sử dụng, áp dụng, các thành phần người dùng**  
 Tính sử dụng:
 Ứng dụng Ryokou tập trung vào giao diện thân thiện, dễ sử dụng, phù hợp cho cả khách hàng lần đầu trải nghiệm ứng dụng đặt tour và các nhà cung cấp chưa quen với công cụ kỹ thuật số. Tính năng tìm kiếm và đặt tour được tối ưu hóa để xử lý nhanh chóng và hiệu quả, đồng thời ứng dụng hỗ trợ đa ngôn ngữ (tiếng Nhật, tiếng Anh, tiếng Việt).
 
@@ -37,7 +37,7 @@ Theo dõi hiệu quả kinh doanh qua các công cụ phân tích.
 Quản trị viên hệ thống:
 Duyệt nội dung tour mới được thêm vào bởi nhà cung cấp.
 Quản lý và xử lý các khiếu nại từ người dùng.
-4. Mô tả sơ về kết quả dự kiến/mong muốn
+**4. Mô tả sơ về kết quả dự kiến/mong muốn**  
 Ứng dụng Ryokou được kỳ vọng mang lại các lợi ích sau:
 
 Đối với khách hàng:
