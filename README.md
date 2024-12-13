@@ -22,7 +22,8 @@ Lưu trữ thông tin cá nhân và các tour đã đặt.
 Quản lý dành cho nhà cung cấp dịch vụ:
 Đăng ký và cập nhật thông tin tour.
 Theo dõi yêu cầu đặt tour từ khách hàng.
-Báo cáo doanh thu và hiệu quả hoạt động.
+Báo cáo doanh thu và hiệu quả hoạt động.  
+  
 **3. Mô tả về tính sử dụng, áp dụng, các thành phần người dùng**  
 Tính sử dụng:
 Ứng dụng Ryokou tập trung vào giao diện thân thiện, dễ sử dụng, phù hợp cho cả khách hàng lần đầu trải nghiệm ứng dụng đặt tour và các nhà cung cấp chưa quen với công cụ kỹ thuật số. Tính năng tìm kiếm và đặt tour được tối ưu hóa để xử lý nhanh chóng và hiệu quả, đồng thời ứng dụng hỗ trợ đa ngôn ngữ (tiếng Nhật, tiếng Anh, tiếng Việt).
@@ -37,6 +38,7 @@ Theo dõi hiệu quả kinh doanh qua các công cụ phân tích.
 Quản trị viên hệ thống:
 Duyệt nội dung tour mới được thêm vào bởi nhà cung cấp.
 Quản lý và xử lý các khiếu nại từ người dùng.
+  
 **4. Mô tả sơ về kết quả dự kiến/mong muốn**  
 Ứng dụng Ryokou được kỳ vọng mang lại các lợi ích sau:
 
