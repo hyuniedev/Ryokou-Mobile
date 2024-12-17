@@ -11,3 +11,16 @@
 
 ### Fixed
 - Off dynamic Color on Theme
+
+## 16-12-2024
+### Added
+- Connect firebase
+- Add Login with email and password (Have any bugs)
+- Add Login with google account (Doing)
+
+## 17-12-2024
+### Added
+- Completed Login with google account
+### Fixed
+- Fix Login with email and password
+- Fix Client ID and SHA-1 on firebase
