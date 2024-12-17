@@ -1,0 +1,142 @@
+{
+  "project_info": {
+    "project_number": "118820860176",
+    "project_id": "ryokou-7324",
+    "storage_bucket": "ryokou-7324.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:118820860176:android:ead3fe97551509b192b595",
+        "android_client_info": {
+          "package_name": "com.example.ryokou"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "118820860176-rlddbukkp3bmvundjtkma1pkfm1q3k6r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ryokou",
+            "certificate_hash": "43386e0a28dccc783f66c3f639ca8656a96ad60f"
+          }
+        },
+        {
+          "client_id": "118820860176-9kgsk4v5kklok0deii2nko95a71go2pg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHucUBgnXJvyYTq1ABZWKyhrNQ_8KUmOs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "118820860176-9kgsk4v5kklok0deii2nko95a71go2pg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "118820860176-pj6ukioace9qpvmfp9cobt2ibgf8j7mf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.ryokouService"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:118820860176:android:cda5c065439a402092b595",
+        "android_client_info": {
+          "package_name": "com.example.ryokou_service"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "118820860176-t02fj6i0f02bh5b0qj0cr8goo83kt3fh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ryokou_service",
+            "certificate_hash": "c422e5182f6372fb439e825bc0792605d375dc69"
+          }
+        },
+        {
+          "client_id": "118820860176-9kgsk4v5kklok0deii2nko95a71go2pg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHucUBgnXJvyYTq1ABZWKyhrNQ_8KUmOs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "118820860176-9kgsk4v5kklok0deii2nko95a71go2pg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "118820860176-pj6ukioace9qpvmfp9cobt2ibgf8j7mf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.ryokouService"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:118820860176:android:d82586618ee248b892b595",
+        "android_client_info": {
+          "package_name": "com.example.ryokoumobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "118820860176-5k7la99b2mfdn0baviih9jmr0kkoq87n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ryokoumobile",
+            "certificate_hash": "43386e0a28dccc783f66c3f639ca8656a96ad60f"
+          }
+        },
+        {
+          "client_id": "118820860176-9kgsk4v5kklok0deii2nko95a71go2pg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHucUBgnXJvyYTq1ABZWKyhrNQ_8KUmOs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "118820860176-9kgsk4v5kklok0deii2nko95a71go2pg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "118820860176-pj6ukioace9qpvmfp9cobt2ibgf8j7mf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.ryokouService"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
