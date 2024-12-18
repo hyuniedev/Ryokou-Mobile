@@ -73,8 +73,4 @@ class LoginViewModel : ViewModel() {
 
     }
 
-    fun signIn() {
-
-    }
-
 }
