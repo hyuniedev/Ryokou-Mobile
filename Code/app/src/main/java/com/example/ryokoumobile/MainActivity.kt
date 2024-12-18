@@ -19,6 +19,7 @@ import com.example.ryokoumobile.model.repository.Scenes
 import com.example.ryokoumobile.ui.theme.RyokouMobileTheme
 import com.example.ryokoumobile.view.scenes.HomeScene
 import com.example.ryokoumobile.view.scenes.LoginScene
+import com.example.ryokoumobile.view.scenes.SignInScene
 import com.google.firebase.FirebaseApp
 import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
@@ -52,6 +53,9 @@ fun Greeting(modifier: Modifier = Modifier) {
         }
         composable(Scenes.Home.route) {
             HomeScene()
+        }
+        composable(Scenes.SignIn.route) {
+            SignInScene()
         }
     }
 }

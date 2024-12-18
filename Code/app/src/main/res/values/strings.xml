@@ -3,4 +3,6 @@
     <string name="txtEmail">Email</string>
     <string name="txtPassword">Password</string>
     <string name="loginWithGG">Login with Google Acc</string>
+    <string name="signInWithGG">Sign in with Google Acc</string>
+    <string name="wait">Please wait a moment</string>
 </resources>
