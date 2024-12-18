@@ -24,3 +24,8 @@
 ### Fixed
 - Fix Login with email and password
 - Fix Client ID and SHA-1 on firebase
+
+## 18-12-2024
+### Added
+- Add SignIn Scene
+- Inject View with ViewModel (SignIn)
