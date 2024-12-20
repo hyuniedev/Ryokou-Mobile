@@ -9,6 +9,7 @@ data class SignInUiState(
     var numberPhone: String = "",
     var password: String = "",
     var passwordConfirm: String = "",
+    var cbService: Boolean = false,
     var nameError: Boolean = false,
     var emailError: Boolean = false,
     var sexError: Boolean = false,
