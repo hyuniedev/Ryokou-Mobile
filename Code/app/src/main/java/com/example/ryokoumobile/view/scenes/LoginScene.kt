@@ -47,7 +47,9 @@ fun LoginScene(
 
     LaunchedEffect(uiState.value.isLoginSuccessful) {
         if (uiState.value.isLoginSuccessful){
-            navController.navigate(Scenes.Home.route)
+            navController.navigate(Scenes.Home.route){
+                popUpTo(0){inclusive = true}
+            }
         }
     }
 

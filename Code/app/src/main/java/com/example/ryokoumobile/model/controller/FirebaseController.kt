@@ -7,6 +7,7 @@ import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
+import com.example.ryokoumobile.model.entity.User
 import com.google.android.gms.tasks.Task
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
@@ -42,6 +43,10 @@ object FirebaseController {
             if(e is CancellationException) throw e
             return false
         }
+    }
+
+    fun SignIn(user: User): Task<AuthResult>{
+        return auth.createUserWithEmailAndPassword(user.email,user.password)
     }
 
     private suspend fun handleSignIn(result: GetCredentialResponse): Boolean {
