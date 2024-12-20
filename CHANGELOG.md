@@ -33,3 +33,5 @@
 ## 20-12-2024
 ### Added
 - Add check field input when sign in
+- Add sign in with email - password
+- Add sign in with google account
