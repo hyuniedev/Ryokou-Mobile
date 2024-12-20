@@ -15,7 +15,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonColors
 import androidx.compose.material3.RadioButtonDefaults
@@ -27,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -38,20 +42,22 @@ import com.example.ryokoumobile.model.entity.ESex
 import com.example.ryokoumobile.ui.theme.RyokouMobileTheme
 import com.example.ryokoumobile.view.components.MyElevatedButton
 import com.example.ryokoumobile.view.components.MyInputTextField
+import com.example.ryokoumobile.view.components.MyLineTextHaveTextButton
 import com.example.ryokoumobile.view.components.MyProcessWait
 import com.example.ryokoumobile.view.components.MyTopBar
 import com.example.ryokoumobile.viewmodel.SignInViewModel
 
 @Composable
 fun SignInScene(viewModel: SignInViewModel = viewModel()) {
-    val forcusManager = LocalFocusManager.current
+    val context = LocalContext.current
+    val focusManager = LocalFocusManager.current
     val uiState = viewModel.uiState.collectAsState()
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
             topBar = { MyTopBar() },
             modifier = Modifier.clickable(
                 indication = null,
-                interactionSource = remember { MutableInteractionSource() }) { forcusManager.clearFocus() }) { innerPadding ->
+                interactionSource = remember { MutableInteractionSource() }) { focusManager.clearFocus() }) { innerPadding ->
             Column(
                 modifier = Modifier
                     .padding(innerPadding)
@@ -94,8 +100,22 @@ fun SignInScene(viewModel: SignInViewModel = viewModel()) {
                     uiState.value.passwordConfirm,
                     uiState.value.passwordConfirmError
                 ) { newValue -> viewModel.updatePasswordConfirm(newValue) }
-                Spacer(modifier = Modifier.height(20.dp))
-                MyElevatedButton("Sign in") { viewModel.signIn() }
+                Spacer(Modifier.height(5.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Checkbox(
+                        checked = uiState.value.cbService,
+                        onCheckedChange = { viewModel.updateCheckBoxService() })
+                    MyLineTextHaveTextButton(
+                        "I agree to the ",
+                        "Terms of Service & Privacy Policy",
+                        ".",
+                        Arrangement.Start
+                    ) {
+                        //TODO: Hiển thị ShowBottomSheet cho điều khoản & dịch vụ
+                    }
+                }
+                Spacer(modifier = Modifier.height(15.dp))
+                MyElevatedButton("Sign in") { viewModel.signIn(context) }
                 Spacer(modifier = Modifier.height(15.dp))
                 MyElevatedButton(
                     painter = painterResource(R.drawable.logogoogle),
