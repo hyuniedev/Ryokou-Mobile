@@ -24,7 +24,11 @@ fun MyLineTextHaveTextButton(
         horizontalArrangement = position,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = text1, style = MaterialTheme.typography.labelSmall)
+        Text(
+            text = text1,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.primary
+        )
         Text(
             text = textButton,
             style = MaterialTheme.typography.labelSmall.copy(
@@ -33,6 +37,10 @@ fun MyLineTextHaveTextButton(
             ),
             modifier = Modifier.clickable { onClick() }
         )
-        Text(text = text2, style = MaterialTheme.typography.labelSmall)
+        Text(
+            text = text2,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.primary
+        )
     }
 }

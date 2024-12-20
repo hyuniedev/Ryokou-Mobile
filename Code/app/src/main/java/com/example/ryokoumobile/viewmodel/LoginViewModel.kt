@@ -58,12 +58,18 @@ class LoginViewModel : ViewModel() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             try {
+                if(FirebaseController.isSignedIn()){
+                    FirebaseController.SignOut()
+                    _uiState.update { it.copy(isLoginSuccessful = false) }
+                }
                 if(FirebaseController.LoginWithGoogleAccount(context)){
                     _uiState.update { it.copy(isLoading = false, isLoginSuccessful = true) }
                 }else{
+                    _uiState.update { it.copy(isLoading = false) }
                     Log.e("HyuNie","Have any bug when login with gg account")
                 }
             }catch (e: Exception){
+                _uiState.update { it.copy(isLoading = false) }
                 Log.e("HyuNie","Error: " + e.message)
             }
         }

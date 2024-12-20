@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxColors
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
@@ -25,6 +27,7 @@ import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -37,8 +40,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.ryokoumobile.R
 import com.example.ryokoumobile.model.entity.ESex
+import com.example.ryokoumobile.model.repository.Scenes
 import com.example.ryokoumobile.ui.theme.RyokouMobileTheme
 import com.example.ryokoumobile.view.components.MyElevatedButton
 import com.example.ryokoumobile.view.components.MyInputTextField
@@ -48,10 +54,19 @@ import com.example.ryokoumobile.view.components.MyTopBar
 import com.example.ryokoumobile.viewmodel.SignInViewModel
 
 @Composable
-fun SignInScene(viewModel: SignInViewModel = viewModel()) {
+fun SignInScene(navController: NavController = rememberNavController(), viewModel: SignInViewModel = viewModel()) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val uiState = viewModel.uiState.collectAsState()
+
+    LaunchedEffect(uiState.value.isSignInSuccess) {
+        if(uiState.value.isSignInSuccess){
+            navController.navigate(Scenes.Home.route){
+                popUpTo(0){inclusive=true}
+            }
+        }
+    }
+
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
             topBar = { MyTopBar() },
@@ -84,7 +99,10 @@ fun SignInScene(viewModel: SignInViewModel = viewModel()) {
                     uiState.value.email,
                     uiState.value.emailError
                 ) { newValue -> viewModel.updateEmail(newValue) }
-                ChooseSex(uiState.value.sex) { newValue -> viewModel.updateSex(newValue) }
+                ChooseSex(
+                    uiState.value.sex,
+                    uiState.value.sexError
+                ) { newValue -> viewModel.updateSex(newValue) }
                 SignInTextField(
                     "Number phone",
                     uiState.value.numberPhone,
@@ -104,6 +122,8 @@ fun SignInScene(viewModel: SignInViewModel = viewModel()) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Checkbox(
                         checked = uiState.value.cbService,
+                        colors = CheckboxDefaults.colors()
+                            .copy(uncheckedBorderColor = MaterialTheme.colorScheme.primary),
                         onCheckedChange = { viewModel.updateCheckBoxService() })
                     MyLineTextHaveTextButton(
                         "I agree to the ",
@@ -120,7 +140,7 @@ fun SignInScene(viewModel: SignInViewModel = viewModel()) {
                 MyElevatedButton(
                     painter = painterResource(R.drawable.logogoogle),
                     title = "   " + stringResource(R.string.signInWithGG)
-                ) { viewModel.signInWithGG() }
+                ) { viewModel.signInWithGG(context) }
                 Spacer(Modifier.height(20.dp))
             }
         }
@@ -131,7 +151,7 @@ fun SignInScene(viewModel: SignInViewModel = viewModel()) {
 }
 
 @Composable
-private fun ChooseSex(sexSelected: ESex, onChange: (ESex) -> Unit) {
+private fun ChooseSex(sexSelected: ESex, isError: Boolean, onChange: (ESex) -> Unit) {
     Row(
         Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -140,35 +160,35 @@ private fun ChooseSex(sexSelected: ESex, onChange: (ESex) -> Unit) {
         Text(
             "Your sex:",
             style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.primary
+            color = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
         )
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 "Male",
                 style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.primary
+                color = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
             )
-            MyRadioButton(selected = sexSelected == ESex.Male) { onChange(ESex.Male) }
+            MyRadioButton(selected = sexSelected == ESex.Male, isError) { onChange(ESex.Male) }
             Spacer(Modifier.width(15.dp))
             Text(
                 "Female",
                 style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.primary
+                color = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
             )
-            MyRadioButton(selected = sexSelected == ESex.Female) { onChange(ESex.Female) }
+            MyRadioButton(selected = sexSelected == ESex.Female, isError) { onChange(ESex.Female) }
         }
     }
     Spacer(Modifier.height(10.dp))
 }
 
 @Composable
-private fun MyRadioButton(selected: Boolean, onClick: () -> Unit) {
+private fun MyRadioButton(selected: Boolean, isError: Boolean, onClick: () -> Unit) {
     RadioButton(
         selected = selected,
         onClick = onClick,
         colors = RadioButtonDefaults.colors().copy(
             selectedColor = MaterialTheme.colorScheme.tertiary,
-            unselectedColor = MaterialTheme.colorScheme.primary
+            unselectedColor = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
         )
     )
 }

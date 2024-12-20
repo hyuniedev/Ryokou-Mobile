@@ -25,7 +25,7 @@ fun MyProcessWait() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.Black.copy(alpha = 0.5f))
+            .background(color = Color.Black.copy(alpha = 0.65f))
             .clickable(enabled = false) {},
         contentAlignment = Alignment.Center
     ) {

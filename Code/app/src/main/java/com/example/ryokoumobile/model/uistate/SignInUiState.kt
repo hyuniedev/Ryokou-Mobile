@@ -16,5 +16,6 @@ data class SignInUiState(
     var numberPhoneError: Boolean = false,
     var passwordError: Boolean = false,
     var passwordConfirmError: Boolean = false,
-    var isLoading: Boolean = false
+    var isLoading: Boolean = false,
+    var isSignInSuccess: Boolean = false
 )
