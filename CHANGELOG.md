@@ -29,3 +29,7 @@
 ### Added
 - Add SignIn Scene
 - Inject View with ViewModel (SignIn)
+
+## 20-12-2024
+### Added
+- Add check field input when sign in
