@@ -21,6 +21,7 @@
 ## 17-12-2024
 ### Added
 - Completed Login with google account
+
 ### Fixed
 - Fix Login with email and password
 - Fix Client ID and SHA-1 on firebase
@@ -35,3 +36,7 @@
 - Add check field input when sign in
 - Add sign in with email - password
 - Add sign in with google account
+
+### Fixed
+- Fix alpha of background color
+- Fix navigation to Home Scene (popUpTo: Delete Login scene and SignIn scene on nav stack)
