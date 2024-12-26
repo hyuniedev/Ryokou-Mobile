@@ -40,3 +40,8 @@
 ### Fixed
 - Fix alpha of background color
 - Fix navigation to Home Scene (popUpTo: Delete Login scene and SignIn scene on nav stack)
+
+## 26-12-2024
+### Added
+- Add Slider 
+- CountDown Time
