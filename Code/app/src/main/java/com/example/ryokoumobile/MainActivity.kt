@@ -9,7 +9,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -41,8 +40,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             RyokouMobileTheme {
                 Scaffold(modifier = Modifier
-                    .fillMaxSize()
-                    .statusBarsPadding()) { innerPadding ->
+                    .fillMaxSize()) { innerPadding ->
                     Greeting(modifier = Modifier.padding(innerPadding))
                 }
             }
@@ -71,7 +69,7 @@ fun Greeting(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
 
     Box(modifier = modifier) {
-        NavHost(navController = navController, startDestination = Scenes.Login.route) {
+        NavHost(navController = navController, startDestination = Scenes.Home.route) {
             composable(Scenes.Login.route) {
                 LoginScene(navController)
             }
