@@ -74,15 +74,15 @@ dependencies {
 
     implementation("com.google.android.gms:play-services-auth:21.3.0")
 
-    implementation ("androidx.credentials:credentials:1.3.0")
-    implementation ("androidx.credentials:credentials-play-services-auth:1.3.0")
-    implementation ("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+    implementation("androidx.credentials:credentials:1.3.0")
+    implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
 
-    implementation("io.coil-kt.coil3:coil-compose:3.0.4")
+    implementation("io.coil-kt:coil-compose:2.4.0")
 
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
     implementation("com.google.firebase:firebase-analytics")
-    implementation ("com.google.firebase:firebase-appcheck-playintegrity:18.0.0")
+    implementation("com.google.firebase:firebase-appcheck-playintegrity:18.0.0")
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("com.google.firebase:firebase-storage-ktx")
     implementation("com.google.firebase:firebase-auth-ktx")
