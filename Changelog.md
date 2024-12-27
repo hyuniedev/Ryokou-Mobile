@@ -45,3 +45,10 @@
 ### Added
 - Add Slider 
 - CountDown Time
+
+## 27-12-2024
+### Added
+- Add ItemTour
+
+### Fixed
+- Fix image with Coil
