@@ -1,4 +1,4 @@
-package com.example.ryokoumobile.model.entity
+package com.example.ryokoumobile.model.enumClass
 
 enum class ESex {
     Male,

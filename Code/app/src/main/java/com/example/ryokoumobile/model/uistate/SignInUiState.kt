@@ -1,6 +1,6 @@
 package com.example.ryokoumobile.model.uistate
 
-import com.example.ryokoumobile.model.entity.ESex
+import com.example.ryokoumobile.model.enumClass.ESex
 
 data class SignInUiState(
     var name: String = "",

@@ -1,5 +1,7 @@
 package com.example.ryokoumobile.model.entity
 
+import com.example.ryokoumobile.model.enumClass.ESex
+
 data class User(
     val id: String? = null,
     val email: String,

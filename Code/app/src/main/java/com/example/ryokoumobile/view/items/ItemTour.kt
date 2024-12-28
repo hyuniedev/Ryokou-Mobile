@@ -3,6 +3,7 @@ package com.example.ryokoumobile.view.items
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,19 +33,16 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
-import com.example.ryokoumobile.model.controller.DataController
 import com.example.ryokoumobile.model.entity.Tour
-import com.example.ryokoumobile.ui.theme.RyokouMobileTheme
 
 @Composable
-fun ItemTour(tour: Tour, onClickFavorite: () -> Unit) {
+fun ItemTour(tour: Tour, onClick: () -> Unit, onClickFavorite: () -> Unit) {
     Column(
         modifier = Modifier
-            .width(160.dp)
+            .width(170.dp)
             .height(250.dp)
             .wrapContentHeight()
             .border(
@@ -52,11 +50,13 @@ fun ItemTour(tour: Tour, onClickFavorite: () -> Unit) {
                 color = MaterialTheme.colorScheme.primary,
                 shape = RoundedCornerShape(15.dp)
             )
+            .clip(RoundedCornerShape(15.dp))
+            .clickable { onClick() }
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(0.44f),
+                .weight(0.5f),
             contentAlignment = Alignment.BottomCenter
         ) {
             Image(
@@ -96,7 +96,7 @@ fun ItemTour(tour: Tour, onClickFavorite: () -> Unit) {
         }
         Column(
             modifier = Modifier
-                .weight(0.56f)
+                .weight(0.5f)
                 .padding(horizontal = 10.dp, vertical = 5.dp),
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
@@ -131,7 +131,11 @@ fun ItemTour(tour: Tour, onClickFavorite: () -> Unit) {
                 style = TextStyle(color = Color.LightGray, fontSize = 17.sp),
                 textDecoration = TextDecoration.LineThrough
             )
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 Text(
                     "${tour.getPriceWithFormatted()}đ",
                     style = TextStyle(

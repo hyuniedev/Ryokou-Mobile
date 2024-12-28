@@ -1,12 +1,11 @@
 package com.example.ryokoumobile.viewmodel
 
 import android.content.Context
-import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ryokoumobile.model.controller.DataController
 import com.example.ryokoumobile.model.controller.FirebaseController
-import com.example.ryokoumobile.model.entity.ESex
+import com.example.ryokoumobile.model.enumClass.ESex
 import com.example.ryokoumobile.model.entity.User
 import com.example.ryokoumobile.model.uistate.SignInUiState
 import com.example.ryokoumobile.view.components.MyShowToast
@@ -71,6 +70,7 @@ class SignInViewModel : ViewModel() {
                                 context,
                                 "This email is already registered!"
                             )
+
                             else -> MyShowToast(
                                 context,
                                 task.exception?.message ?: "Registration failed."
@@ -141,16 +141,16 @@ class SignInViewModel : ViewModel() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             try {
-                if(FirebaseController.isSignedIn()){
+                if (FirebaseController.isSignedIn()) {
                     FirebaseController.SignOut()
                     _uiState.update { it.copy(isLoading = false) }
                 }
-                if(FirebaseController.LoginWithGoogleAccount(context)){
+                if (FirebaseController.LoginWithGoogleAccount(context)) {
                     _uiState.update { it.copy(isLoading = false, isSignInSuccess = true) }
-                }else{
+                } else {
                     _uiState.update { it.copy(isLoading = false) }
                 }
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 _uiState.update { it.copy(isLoading = true) }
                 e.printStackTrace()
             }

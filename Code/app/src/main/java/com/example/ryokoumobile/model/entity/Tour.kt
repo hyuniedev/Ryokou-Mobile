@@ -1,15 +1,18 @@
 package com.example.ryokoumobile.model.entity
 
+import android.util.Log
+import com.google.firebase.Timestamp
 import java.text.DecimalFormat
 import java.time.LocalDateTime
 import kotlin.math.cos
+import kotlin.math.round
 
 data class Tour(
-    val id: String = "",
+    var id: String = "",
     val name: String = "",
     val city: String = "",
-    val durations: String = "",
-    val start: LocalDateTime = LocalDateTime.now(),
+    val durations: Int = 0,
+    val start: Timestamp = Timestamp.now(),
     val maintainTime: Int = 0,
     val cost: String = "",
     val sale: Int = 0,
@@ -17,11 +20,11 @@ data class Tour(
     val freeService: Boolean = false,
     val pointo: String = "",
     val kisoku: String = "",
-    val lsSchedule: List<Schedule> = listOf(),
+    val schedule: List<Schedule> = listOf(),
     val lsFile: List<String> = listOf(),
     val lsRate: List<Rate> = listOf(),
     val company: String = "",
-    val end: LocalDateTime = LocalDateTime.now()
+    val end: Timestamp = Timestamp.now(),
 ) {
     fun getTotalRate(): Double {
         var total = 0.0
@@ -29,20 +32,21 @@ data class Tour(
         lsRate.forEach {
             total += it.star
         }
-        return total / lsRate.size
+        return round((total / lsRate.size) * 10) / 10.0
     }
 
     private fun getPriceAfterSale(): String {
-        return (cost.replace(".", "").toInt() - (cost.replace(".", "")
-            .toInt() * sale / 100)).toString()
+        val t = (cost.replace(".", "").toLong() - (cost.replace(".", "")
+            .toLong() * sale / 100)).toString()
+        return t
     }
 
     fun getPriceWithFormatted(): String {
         return formatNumber(getPriceAfterSale())
     }
 
-    fun getPriceWithUnformatted(): Int {
-        return getPriceAfterSale().toInt()
+    fun getPriceWithUnformatted(): Long {
+        return getPriceAfterSale().toLong()
     }
 
     private fun formatNumber(number: String): String {

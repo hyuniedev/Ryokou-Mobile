@@ -1,18 +1,24 @@
 package com.example.ryokoumobile.model.controller
 
+import android.util.Log
+import androidx.compose.runtime.mutableStateListOf
 import com.example.ryokoumobile.model.entity.Tour
 import com.example.ryokoumobile.model.entity.User
-import com.example.ryokoumobile.model.repository.lsPager
 
 object DataController {
     var user: User? = null
-    var lsTour: List<Tour> =
-        listOf(
-            Tour(
-                name = "Ngắm hoa anh đào tại Tokyo",
-                cost = "12.000.000",
-                sale = 25,
-                lsFile = lsPager
-            )
-        )
+    var lsTour = mutableStateListOf<Tour>()
+
+    fun LoadDataTours() {
+        FirebaseController.firestore.collection("tours")
+            .get()
+            .addOnSuccessListener { result ->
+                for (doc in result) {
+                    val tour = doc.toObject(Tour::class.java)
+                    tour.id = doc.id
+                    lsTour.add(tour)
+                }
+            }
+            .addOnFailureListener { e -> Log.e("HyuNie", "Error on load tour: " + e.message) }
+    }
 }
