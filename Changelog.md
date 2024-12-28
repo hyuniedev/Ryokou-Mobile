@@ -52,3 +52,11 @@
 
 ### Fixed
 - Fix image with Coil
+
+## 28-12-2024
+### Fixed
+- Type data (LocalDate -> Timestamp of Firebase)
+
+### Added
+- Load data from firebase
+- display tours on homescene
