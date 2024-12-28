@@ -2,6 +2,7 @@ package com.example.ryokoumobile
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
@@ -19,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.ryokoumobile.model.controller.DataController
 import com.example.ryokoumobile.model.repository.Scenes
 import com.example.ryokoumobile.ui.theme.RyokouMobileTheme
 import com.example.ryokoumobile.view.components.MyShowToast
@@ -39,8 +41,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             RyokouMobileTheme {
-                Scaffold(modifier = Modifier
-                    .fillMaxSize()) { innerPadding ->
+                Scaffold(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) { innerPadding ->
                     Greeting(modifier = Modifier.padding(innerPadding))
                 }
             }
@@ -53,12 +57,15 @@ fun Greeting(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val backToOutApp = remember { MutableStateFlow(false) }
     val coroutineScope = rememberCoroutineScope()
+
+    DataController.LoadDataTours()
+
     BackHandler {
-        if(backToOutApp.value){
+        if (backToOutApp.value) {
             (context as? Activity)?.finish()
-        }else{
+        } else {
             backToOutApp.value = true
-            MyShowToast(context,"Press back again to exit")
+            MyShowToast(context, "Press back again to exit")
             coroutineScope.launch {
                 delay(2000)
                 backToOutApp.value = false

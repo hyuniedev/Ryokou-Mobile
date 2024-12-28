@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -38,7 +39,7 @@ fun RangeTimeScale(startTime: Int) {
                 RoundedCornerShape(15.dp)
             )
             .fillMaxWidth()
-            .fillMaxHeight(0.14f)
+            .height(60.dp)
             .clip(RoundedCornerShape(15.dp))
             .background(color = Color(0xFFFEE7ED)),
     ) {
