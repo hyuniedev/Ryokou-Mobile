@@ -6,13 +6,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.time.Duration
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 
 class HomeViewModel : ViewModel() {
     private var _uiState = MutableStateFlow(HomeUIState())
     val uiState = _uiState.asStateFlow()
 
-    fun updateTime(nextTime: LocalTime) {
+    fun updateTime(nextTime: LocalDateTime) {
         _uiState.update {
             it.copy(
                 currentTime = nextTime,
@@ -32,7 +34,16 @@ class HomeViewModel : ViewModel() {
                     _uiState.value.currentTime.hour < _uiState.value.startTime + 2 -> {
                         Duration.between(
                             _uiState.value.currentTime,
-                            LocalTime.of(_uiState.value.startTime + 2, 0)
+                            if (_uiState.value.startTime + 2 < 23)
+                                LocalDateTime.of(
+                                    LocalDate.now(),
+                                    LocalTime.of(_uiState.value.startTime + 2, 0)
+                                )
+                            else
+                                LocalDateTime.of(
+                                    LocalDate.now().plusDays(1),
+                                    LocalTime.of((_uiState.value.startTime + 2) % 24, 0)
+                                )
                         )
                     }
 

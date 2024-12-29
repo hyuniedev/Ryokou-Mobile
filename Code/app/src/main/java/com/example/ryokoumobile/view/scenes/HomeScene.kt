@@ -1,5 +1,6 @@
 package com.example.ryokoumobile.view.scenes
 
+import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -38,15 +39,17 @@ import com.example.ryokoumobile.view.components.RangeTimeScale
 import com.example.ryokoumobile.view.items.ItemTour
 import com.example.ryokoumobile.viewmodel.HomeViewModel
 import kotlinx.coroutines.delay
+import java.time.LocalDateTime
 import java.time.LocalTime
 
 @Composable
 fun HomeScene(viewModel: HomeViewModel = viewModel()) {
     val uiState = viewModel.uiState.collectAsState()
+
     LaunchedEffect(Unit) {
         while (true) {
             delay(1000)
-            viewModel.updateTime(LocalTime.now())
+            viewModel.updateTime(LocalDateTime.now())
             viewModel.updateDuration()
         }
     }

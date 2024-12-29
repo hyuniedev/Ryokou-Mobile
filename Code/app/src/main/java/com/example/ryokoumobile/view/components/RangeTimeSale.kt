@@ -66,7 +66,7 @@ fun RangeTimeScale(startTime: Int) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                "${startTime}H - ${startTime + 2}H",
+                "${startTime}H - ${if (startTime + 2 == 24) 0 else startTime + 2}H",
                 style = TextStyle(
                     color = MaterialTheme.colorScheme.tertiary,
                     fontWeight = FontWeight.Bold,
