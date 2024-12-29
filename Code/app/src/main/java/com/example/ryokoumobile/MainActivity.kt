@@ -59,7 +59,6 @@ fun Greeting(modifier: Modifier = Modifier) {
     val coroutineScope = rememberCoroutineScope()
 
     DataController.LoadDataTours()
-
     BackHandler {
         if (backToOutApp.value) {
             (context as? Activity)?.finish()
