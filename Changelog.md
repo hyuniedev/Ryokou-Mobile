@@ -60,3 +60,7 @@
 ### Added
 - Load data from firebase
 - display tours on homescene
+
+## 29-12-2024
+### Fixed
+- fix countdown time at 24h -> out range LocalTime type
