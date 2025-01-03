@@ -64,3 +64,7 @@
 ## 29-12-2024
 ### Fixed
 - fix countdown time at 24h -> out range LocalTime type
+
+## 3-1-2025
+### Added
+- Change state icon favorite of item tour
