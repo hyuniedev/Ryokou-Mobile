@@ -40,19 +40,14 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             RyokouMobileTheme {
-                Scaffold(
-                    modifier = Modifier
-                        .fillMaxSize()
-                ) { innerPadding ->
-                    Greeting(modifier = Modifier.padding(innerPadding))
-                }
+                Greeting()
             }
         }
     }
 }
 
 @Composable
-fun Greeting(modifier: Modifier = Modifier) {
+fun Greeting() {
     val context = LocalContext.current
     val backToOutApp = remember { MutableStateFlow(false) }
     val coroutineScope = rememberCoroutineScope()
@@ -74,17 +69,15 @@ fun Greeting(modifier: Modifier = Modifier) {
 
     val navController = rememberNavController()
 
-    Box(modifier = modifier) {
-        NavHost(navController = navController, startDestination = Scenes.Login.route) {
-            composable(Scenes.Login.route) {
-                LoginScene(navController)
-            }
-            composable(Scenes.Home.route) {
-                HomeScene(tourVM = tourViewModel)
-            }
-            composable(Scenes.SignIn.route) {
-                SignInScene(navController)
-            }
+    NavHost(navController = navController, startDestination = Scenes.Home.route) {
+        composable(Scenes.Login.route) {
+            LoginScene(navController)
+        }
+        composable(Scenes.Home.route) {
+            HomeScene(navController, tourVM = tourViewModel)
+        }
+        composable(Scenes.SignIn.route) {
+            SignInScene(navController)
         }
     }
 }

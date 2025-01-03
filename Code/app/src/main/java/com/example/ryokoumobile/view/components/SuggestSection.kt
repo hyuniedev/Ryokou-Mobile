@@ -1,10 +1,20 @@
 package com.example.ryokoumobile.view.components
 
+import android.util.Log
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.ryokoumobile.model.controller.DataController
 import com.example.ryokoumobile.model.entity.Tour
 import com.example.ryokoumobile.model.enumClass.EMonth
 import com.example.ryokoumobile.model.enumClass.EProvince
@@ -17,23 +27,37 @@ fun <T> SuggestSection(
     selected: T,
     lsItemCapsule: List<T>,
     lsTour: List<Tour>,
-    onChange: () -> Unit,
-    onClickFavorite: () -> Unit
+    onChange: (item: T) -> Unit,
+    onClickFavorite: (tour: Tour) -> Unit,
+    onClick: () -> Unit
 ) {
-    Column {
-        Text(title)
-        LazyRow {
+    Column(modifier = Modifier.height(340.dp), verticalArrangement = Arrangement.SpaceBetween) {
+        Text(
+            title,
+            style = TextStyle(
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
+            )
+        )
+        LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             items(lsItemCapsule) {
                 ItemCapsule(
-                    if (it is EMonth) it.monthName else (it as EProvince).nameProvince,
+                    it,
                     selected == it
-                ) { onChange() }
+                ) { onChange(it) }
             }
         }
-        LazyRow {
-//            items(lsTour) { tour ->
-//                ItemTour(tour, onClick = onChange, onClickFavorite = onClickFavorite)
-//            }
+        LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            items(lsTour) { tour ->
+                ItemTour(
+                    tour,
+                    onClick = onClick,
+                    isFavorite = DataController.user.value?.lsFavoriteTour?.contains(tour.id)
+                        ?: false,
+                    onClickFavorite = { onClickFavorite(tour) }
+                )
+            }
         }
     }
 }

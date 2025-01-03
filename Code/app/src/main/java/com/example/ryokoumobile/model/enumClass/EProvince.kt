@@ -1,6 +1,6 @@
 package com.example.ryokoumobile.model.enumClass
 
-enum class EProvince(val nameProvince: String) {
+enum class EProvince(val nameProvince: String) : ISection {
     HOKKAIDO("Hokkaido"),
     AOMORI("Aomori"),
     IWATE("Iwate"),

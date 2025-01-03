@@ -1,6 +1,6 @@
 package com.example.ryokoumobile.model.enumClass
 
-enum class EMonth(val monthNumber: Int, val monthName: String) {
+enum class EMonth(val monthNumber: Int, val monthName: String) : ISection {
     JANUARY(1, "January"),
     FEBRUARY(2, "February"),
     MARCH(3, "March"),
