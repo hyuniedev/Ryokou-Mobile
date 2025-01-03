@@ -1,7 +1,8 @@
 package com.example.ryokoumobile.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.example.ryokoumobile.model.entity.Tour
+import com.example.ryokoumobile.model.enumClass.EMonth
+import com.example.ryokoumobile.model.enumClass.EProvince
 import com.example.ryokoumobile.model.uistate.HomeUIState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -56,4 +57,11 @@ class HomeViewModel : ViewModel() {
         }
     }
 
+    fun updateItemSelected1(eMonth: EMonth) {
+        _uiState.update { it.copy(itemSelected1 = eMonth) }
+    }
+
+    fun updateItemSelected2(eProvince: EProvince) {
+        _uiState.update { it.copy(itemSelected2 = eProvince) }
+    }
 }

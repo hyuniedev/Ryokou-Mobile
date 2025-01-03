@@ -1,11 +1,16 @@
 package com.example.ryokoumobile.model.uistate
 
+import com.example.ryokoumobile.model.enumClass.EMonth
+import com.example.ryokoumobile.model.enumClass.EProvince
 import java.time.Duration
 import java.time.LocalDateTime
-import java.time.LocalTime
 
 data class HomeUIState(
     var currentTime: LocalDateTime = LocalDateTime.now(),
     var startTime: Int = 0,
-    var duration: Duration = Duration.ZERO
+    var duration: Duration = Duration.ZERO,
+    var lsSection1: List<EMonth> = EMonth.values().toList(),
+    var itemSelected1: EMonth = EMonth.JANUARY,
+    var lsSection2: List<EProvince> = EProvince.values().toList(),
+    var itemSelected2: EProvince = EProvince.AOMORI,
 )
