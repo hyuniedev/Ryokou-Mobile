@@ -62,7 +62,7 @@ class SignInViewModel : ViewModel() {
             viewModelScope.launch {
                 FirebaseController.SignIn(user).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        DataController.user = user
+                        DataController.user.value = user
                         _uiState.update { it.copy(isSignInSuccess = true) }
                     } else {
                         when (task.exception) {

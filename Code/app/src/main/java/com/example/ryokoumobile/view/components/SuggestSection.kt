@@ -31,9 +31,9 @@ fun <T> SuggestSection(
             }
         }
         LazyRow {
-            items(lsTour) { tour ->
-                ItemTour(tour, onClick = onChange, onClickFavorite = onClickFavorite)
-            }
+//            items(lsTour) { tour ->
+//                ItemTour(tour, onClick = onChange, onClickFavorite = onClickFavorite)
+//            }
         }
     }
 }

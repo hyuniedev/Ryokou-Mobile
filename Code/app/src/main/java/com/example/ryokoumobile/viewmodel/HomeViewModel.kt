@@ -1,6 +1,7 @@
 package com.example.ryokoumobile.viewmodel
 
 import androidx.lifecycle.ViewModel
+import com.example.ryokoumobile.model.entity.Tour
 import com.example.ryokoumobile.model.uistate.HomeUIState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -54,4 +55,5 @@ class HomeViewModel : ViewModel() {
             )
         }
     }
+
 }

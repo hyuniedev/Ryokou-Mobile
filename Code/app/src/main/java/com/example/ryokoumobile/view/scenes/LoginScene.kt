@@ -1,5 +1,6 @@
 package com.example.ryokoumobile.view.scenes
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -46,9 +47,9 @@ fun LoginScene(
     val uiState = viewModel.uiState.collectAsState()
 
     LaunchedEffect(uiState.value.isLoginSuccessful) {
-        if (uiState.value.isLoginSuccessful){
-            navController.navigate(Scenes.Home.route){
-                popUpTo(0){inclusive = true}
+        if (uiState.value.isLoginSuccessful) {
+            navController.navigate(Scenes.Home.route) {
+                popUpTo(0) { inclusive = true }
             }
         }
     }

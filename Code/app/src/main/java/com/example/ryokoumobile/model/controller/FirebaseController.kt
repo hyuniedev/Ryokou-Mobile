@@ -15,24 +15,39 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.tasks.await
 import java.util.concurrent.CancellationException
 
 @SuppressLint("StaticFieldLeak")
 object FirebaseController {
-    private val auth = FirebaseAuth.getInstance()
-    private lateinit var credentialManager: CredentialManager
+    val auth = FirebaseAuth.getInstance()
 
     val firestore = FirebaseFirestore.getInstance()
+
+    private lateinit var credentialManager: CredentialManager
 
     fun isSignedIn(): Boolean {
         return auth.currentUser != null
     }
 
+    fun SignIn(user: User): Task<AuthResult> {
+        val newAccount = auth.createUserWithEmailAndPassword(user.email, user.password)
+        newAccount.addOnSuccessListener { result ->
+            DataController.user.value = user
+            DataController.user.update { it?.copy(id = result.user!!.uid) }
+            firestore.collection("users").add(user)
+        }
+        return newAccount
+    }
+
     fun LoginWithEmailAndPassword(email: String, password: String): Task<AuthResult> {
-        return auth.signInWithEmailAndPassword(email, password)
+        val authResult = auth.signInWithEmailAndPassword(email, password)
+        LoadDataUser()
+        return authResult
     }
 
     suspend fun LoginWithGoogleAccount(context: Context): Boolean {
@@ -42,17 +57,24 @@ object FirebaseController {
         }
         try {
             val result = buildCredentialRequest(context)
-            return handleSignIn(result)
+            val handle = handleSignIn(result)
+            if (auth.currentUser != null) {
+                val newUser = User(
+                    id = auth.currentUser!!.uid,
+                    fullName = auth.currentUser!!.displayName ?: "",
+                    email = auth.currentUser!!.email ?: "",
+                    numberPhone = auth.currentUser!!.phoneNumber ?: ""
+                )
+                firestore.collection("users").document(auth.currentUser!!.uid).set(newUser)
+                LoadDataUser()
+            }
+            return handle
         } catch (e: Exception) {
             Log.e("HyuNie", "Error Login with GG: " + e.message)
             e.printStackTrace()
             if (e is CancellationException) throw e
             return false
         }
-    }
-
-    fun SignIn(user: User): Task<AuthResult> {
-        return auth.createUserWithEmailAndPassword(user.email, user.password)
     }
 
     private suspend fun handleSignIn(result: GetCredentialResponse): Boolean {
@@ -89,7 +111,18 @@ object FirebaseController {
         return credentialManager.getCredential(context = context, request = signInRequest)
     }
 
+    private fun LoadDataUser() {
+        if (auth.currentUser != null) {
+            firestore.collection("users").document(auth.currentUser!!.uid).get()
+                .addOnSuccessListener { doc ->
+                    DataController.user.value = doc.toObject(User::class.java)
+                    DataController.user.update { it?.copy(id = auth.currentUser?.uid) }
+                }
+        }
+    }
+
     fun SignOut() {
+        DataController.user.value = null
         auth.signOut()
     }
 }

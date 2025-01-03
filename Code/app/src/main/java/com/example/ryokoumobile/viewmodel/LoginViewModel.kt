@@ -29,9 +29,9 @@ class LoginViewModel : ViewModel() {
         _uiState.update { it.copy(password = password, passwordError = false) }
     }
 
-     fun login() {
+    fun login() {
         viewModelScope.launch {
-            if(_uiState.value.email.isBlank() || _uiState.value.password.isBlank()){
+            if (_uiState.value.email.isBlank() || _uiState.value.password.isBlank()) {
                 _uiState.update {
                     it.copy(isLoading = false, emailError = true, passwordError = true)
                 }
@@ -46,8 +46,8 @@ class LoginViewModel : ViewModel() {
                     password = _uiState.value.password
                 ).await()
                 _uiState.value.isLoginSuccessful = true
-            }catch (e: Exception){
-                Log.e("HyuNie","Error: " + e.message)
+            } catch (e: Exception) {
+                Log.e("HyuNie", "Error: " + e.message)
                 e.printStackTrace()
             }
             _uiState.update { it.copy(isLoading = false) }
@@ -58,19 +58,19 @@ class LoginViewModel : ViewModel() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             try {
-                if(FirebaseController.isSignedIn()){
+                if (FirebaseController.isSignedIn()) {
                     FirebaseController.SignOut()
                     _uiState.update { it.copy(isLoginSuccessful = false) }
                 }
-                if(FirebaseController.LoginWithGoogleAccount(context)){
+                if (FirebaseController.LoginWithGoogleAccount(context)) {
                     _uiState.update { it.copy(isLoading = false, isLoginSuccessful = true) }
-                }else{
+                } else {
                     _uiState.update { it.copy(isLoading = false) }
-                    Log.e("HyuNie","Have any bug when login with gg account")
+                    Log.e("HyuNie", "Have any bug when login with gg account")
                 }
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 _uiState.update { it.copy(isLoading = false) }
-                Log.e("HyuNie","Error: " + e.message)
+                Log.e("HyuNie", "Error: " + e.message)
             }
         }
     }
