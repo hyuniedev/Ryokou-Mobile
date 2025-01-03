@@ -68,3 +68,7 @@
 ## 3-1-2025
 ### Added
 - Change state icon favorite of item tour
+
+## 4-1-2025
+### Added
+- Box navigation to Login on Home Scene
