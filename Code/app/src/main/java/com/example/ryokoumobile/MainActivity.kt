@@ -2,7 +2,6 @@ package com.example.ryokoumobile
 
 import android.app.Activity
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
@@ -20,13 +19,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.ryokoumobile.model.controller.DataController
 import com.example.ryokoumobile.model.repository.Scenes
 import com.example.ryokoumobile.ui.theme.RyokouMobileTheme
 import com.example.ryokoumobile.view.components.MyShowToast
 import com.example.ryokoumobile.view.scenes.HomeScene
 import com.example.ryokoumobile.view.scenes.LoginScene
 import com.example.ryokoumobile.view.scenes.SignInScene
+import com.example.ryokoumobile.viewmodel.TourViewModel
 import com.google.firebase.FirebaseApp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -58,7 +57,8 @@ fun Greeting(modifier: Modifier = Modifier) {
     val backToOutApp = remember { MutableStateFlow(false) }
     val coroutineScope = rememberCoroutineScope()
 
-    DataController.LoadDataTours()
+    val tourViewModel = TourViewModel()
+
     BackHandler {
         if (backToOutApp.value) {
             (context as? Activity)?.finish()
@@ -75,12 +75,12 @@ fun Greeting(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
 
     Box(modifier = modifier) {
-        NavHost(navController = navController, startDestination = Scenes.Home.route) {
+        NavHost(navController = navController, startDestination = Scenes.Login.route) {
             composable(Scenes.Login.route) {
                 LoginScene(navController)
             }
             composable(Scenes.Home.route) {
-                HomeScene()
+                HomeScene(tourVM = tourViewModel)
             }
             composable(Scenes.SignIn.route) {
                 SignInScene(navController)

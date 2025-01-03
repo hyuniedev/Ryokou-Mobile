@@ -1,24 +1,21 @@
 package com.example.ryokoumobile.model.controller
 
-import android.util.Log
-import androidx.compose.runtime.mutableStateListOf
 import com.example.ryokoumobile.model.entity.Tour
 import com.example.ryokoumobile.model.entity.User
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 
 object DataController {
-    var user: User? = null
-    var lsTour = mutableStateListOf<Tour>()
-
-    fun LoadDataTours() {
-        FirebaseController.firestore.collection("tours")
-            .get()
-            .addOnSuccessListener { result ->
-                for (doc in result) {
-                    val tour = doc.toObject(Tour::class.java)
-                    tour.id = doc.id
-                    lsTour.add(tour)
-                }
-            }
-            .addOnFailureListener { e -> Log.e("HyuNie", "Error on load tour: " + e.message) }
+    var user = MutableStateFlow<User?>(null)
+    fun updateFavoriteTour(tour: Tour) {
+        val ls = user.value?.lsFavoriteTour?.toMutableList() ?: mutableListOf()
+        if (ls.contains(tour.id)) {
+            ls.remove(tour.id)
+        } else {
+            ls.add(tour.id)
+        }
+        user.update {
+            it?.copy(lsFavoriteTour = ls)
+        }
     }
 }

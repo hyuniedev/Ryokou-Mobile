@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -39,7 +40,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.ryokoumobile.model.entity.Tour
 
 @Composable
-fun ItemTour(tour: Tour, onClick: () -> Unit, onClickFavorite: () -> Unit) {
+fun ItemTour(tour: Tour, isFavorite: Boolean, onClick: () -> Unit, onClickFavorite: () -> Unit) {
     Column(
         modifier = Modifier
             .width(170.dp)
@@ -146,7 +147,7 @@ fun ItemTour(tour: Tour, onClick: () -> Unit, onClickFavorite: () -> Unit) {
                 )
                 IconButton(onClick = { onClickFavorite() }) {
                     Icon(
-                        Icons.Default.Favorite,
+                        if (isFavorite) Icons.Default.Favorite else Icons.Outlined.FavoriteBorder,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.tertiary
                     )
