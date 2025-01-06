@@ -18,12 +18,20 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.example.ryokoumobile.model.repository.Scenes
 import com.example.ryokoumobile.ui.theme.RyokouMobileTheme
+import com.example.ryokoumobile.view.components.MyNavigationBar
 import com.example.ryokoumobile.view.components.MyShowToast
+import com.example.ryokoumobile.view.components.MyTopBar
+import com.example.ryokoumobile.view.scenes.AccountScene
+import com.example.ryokoumobile.view.scenes.FavoriteScene
 import com.example.ryokoumobile.view.scenes.HomeScene
 import com.example.ryokoumobile.view.scenes.LoginScene
+import com.example.ryokoumobile.view.scenes.MyTourScene
+import com.example.ryokoumobile.view.scenes.SearchScene
 import com.example.ryokoumobile.view.scenes.SignInScene
 import com.example.ryokoumobile.viewmodel.TourViewModel
 import com.google.firebase.FirebaseApp
@@ -35,25 +43,100 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         FirebaseApp.initializeApp(this)
-//        FirebaseAppCheck.getInstance()
-//            .installAppCheckProviderFactory(PlayIntegrityAppCheckProviderFactory.getInstance())
         enableEdgeToEdge()
         setContent {
             RyokouMobileTheme {
-                Greeting()
+                MainScene()
             }
         }
     }
 }
 
 @Composable
-fun Greeting() {
-    val context = LocalContext.current
-    val backToOutApp = remember { MutableStateFlow(false) }
-    val coroutineScope = rememberCoroutineScope()
-
+fun MainScene() {
     val tourViewModel = TourViewModel()
 
+    val navController = rememberNavController()
+    val navBackStackEntry = navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry.value?.destination?.route
+    val displayNavBar = when (currentRoute) {
+        Scenes.MainGroup.Home.route -> true
+        Scenes.MainGroup.Search.route -> true
+        Scenes.MainGroup.Favorite.route -> true
+        Scenes.MainGroup.MyTour.route -> true
+        Scenes.MainGroup.Account.route -> true
+        else -> false
+    }
+
+    backHandleSpam()
+
+    Scaffold(topBar = { MyTopBar() },
+        bottomBar = {
+            if (displayNavBar) {
+                MyNavigationBar(navController)
+            }
+        })
+    { innerPadding ->
+        val modifier = Modifier.padding(innerPadding)
+        NavHost(navController = navController, startDestination = Scenes.MainGroup.route) {
+            navigation(
+                route = Scenes.AuthGroup.route,
+                startDestination = Scenes.AuthGroup.Login.route
+            ) {
+                composable(Scenes.AuthGroup.Login.route) {
+                    LoginScene(modifier, navController)
+                }
+                composable(Scenes.AuthGroup.SignIn.route) {
+                    SignInScene(modifier, navController)
+                }
+            }
+            navigation(
+                route = Scenes.MainGroup.route,
+                startDestination = Scenes.MainGroup.Home.route
+            ) {
+                composable(Scenes.MainGroup.Home.route) {
+                    HomeScene(
+                        modifier = modifier,
+                        navController,
+                        tourVM = tourViewModel
+                    )
+                }
+                composable(Scenes.MainGroup.Search.route) {
+                    SearchScene(
+                        modifier = modifier,
+                        navController
+                    )
+                }
+                composable(Scenes.MainGroup.Favorite.route) {
+                    FavoriteScene(
+                        modifier = modifier,
+                        navController
+                    )
+                }
+                composable(Scenes.MainGroup.MyTour.route) {
+                    MyTourScene(
+                        modifier = modifier,
+                        navController
+                    )
+                }
+                composable(Scenes.MainGroup.Account.route) {
+                    AccountScene(
+                        modifier = modifier,
+                        navController
+                    )
+                }
+
+            }
+        }
+    }
+}
+
+@Composable
+fun backHandleSpam() {
+    val context = LocalContext.current
+    val backToOutApp = remember { MutableStateFlow(false) }
+
+    val coroutineScope = rememberCoroutineScope()
     BackHandler {
         if (backToOutApp.value) {
             (context as? Activity)?.finish()
@@ -66,26 +149,12 @@ fun Greeting() {
             }
         }
     }
-
-    val navController = rememberNavController()
-
-    NavHost(navController = navController, startDestination = Scenes.Home.route) {
-        composable(Scenes.Login.route) {
-            LoginScene(navController)
-        }
-        composable(Scenes.Home.route) {
-            HomeScene(navController, tourVM = tourViewModel)
-        }
-        composable(Scenes.SignIn.route) {
-            SignInScene(navController)
-        }
-    }
 }
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun GreetingPreview() {
     RyokouMobileTheme {
-        Greeting()
+        MainScene()
     }
 }
