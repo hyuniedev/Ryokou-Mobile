@@ -1,6 +1,7 @@
 package com.example.ryokoumobile.view.scenes
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -80,9 +81,11 @@ fun HomeScene(
 
     Scaffold(
         topBar = {
-            Column {
+            Column(modifier = Modifier.animateContentSize()) {
                 MyTopBar()
-                BoxWelcome(onClick = { navController.navigate(Scenes.Login.route) })
+                if (stateScroll.value == 0) {
+                    BoxWelcome(onClick = { navController.navigate(Scenes.Login.route) })
+                }
             }
         }
     ) { innerPadding ->
