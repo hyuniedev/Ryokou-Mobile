@@ -76,3 +76,10 @@
 ## 6-1-2025
 ### Fixed
 - Fix top bar: hide 1 section on scroll
+
+## 7-1-2025
+### Added
+- Bottom Navigation Bar on Main Scenes
+
+### Fixed
+- Show BottomBar and TopBar (redistribution, NavHost move to inner of Scafford)
