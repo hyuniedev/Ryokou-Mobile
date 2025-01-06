@@ -51,6 +51,7 @@ import com.example.ryokoumobile.viewmodel.SignInViewModel
 
 @Composable
 fun SignInScene(
+    modifier: Modifier = Modifier,
     navController: NavController = rememberNavController(),
     viewModel: SignInViewModel = viewModel()
 ) {
@@ -60,93 +61,91 @@ fun SignInScene(
 
     LaunchedEffect(uiState.value.isSignInSuccess) {
         if (uiState.value.isSignInSuccess) {
-            navController.navigate(Scenes.Home.route) {
+            navController.navigate(Scenes.MainGroup.Home.route) {
                 popUpTo(0) { inclusive = true }
             }
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        Scaffold(
-            topBar = { MyTopBar() },
-            modifier = Modifier.clickable(
-                indication = null,
-                interactionSource = remember { MutableInteractionSource() }) { focusManager.clearFocus() }) { innerPadding ->
-            Column(
+    Box(modifier = modifier
+        .fillMaxSize()
+        .clickable(
+            indication = null,
+            interactionSource = remember { MutableInteractionSource() }) { focusManager.clearFocus() }) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(R.drawable.imgwelcome),
+                contentDescription = null,
                 modifier = Modifier
-                    .padding(innerPadding)
-                    .fillMaxWidth()
-                    .padding(16.dp)
-                    .verticalScroll(rememberScrollState()),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.imgwelcome),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .scale(2.5f)
-                        .padding(vertical = 40.dp)
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                SignInTextField(
-                    "Full name",
-                    uiState.value.name,
-                    uiState.value.nameError
-                ) { newValue -> viewModel.updateName(newValue) }
-                SignInTextField(
-                    "Email",
-                    uiState.value.email,
-                    uiState.value.emailError
-                ) { newValue -> viewModel.updateEmail(newValue) }
-                ChooseSex(
-                    uiState.value.sex,
-                    uiState.value.sexError
-                ) { newValue -> viewModel.updateSex(newValue) }
-                SignInTextField(
-                    "Number phone",
-                    uiState.value.numberPhone,
-                    uiState.value.numberPhoneError
-                ) { newValue -> viewModel.updateNumberPhone(newValue) }
-                SignInTextField(
-                    "Password",
-                    uiState.value.password,
-                    uiState.value.passwordError
-                ) { newValue -> viewModel.updatePassword(newValue) }
-                SignInTextField(
-                    "Confirm password",
-                    uiState.value.passwordConfirm,
-                    uiState.value.passwordConfirmError
-                ) { newValue -> viewModel.updatePasswordConfirm(newValue) }
-                Spacer(Modifier.height(5.dp))
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Checkbox(
-                        checked = uiState.value.cbService,
-                        colors = CheckboxDefaults.colors()
-                            .copy(uncheckedBorderColor = MaterialTheme.colorScheme.primary),
-                        onCheckedChange = { viewModel.updateCheckBoxService() })
-                    MyLineTextHaveTextButton(
-                        "I agree to the ",
-                        "Terms of Service & Privacy Policy",
-                        ".",
-                        Arrangement.Start
-                    ) {
-                        //TODO: Hiển thị ShowBottomSheet cho điều khoản & dịch vụ
-                    }
+                    .scale(2.5f)
+                    .padding(vertical = 40.dp)
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            SignInTextField(
+                "Full name",
+                uiState.value.name,
+                uiState.value.nameError
+            ) { newValue -> viewModel.updateName(newValue) }
+            SignInTextField(
+                "Email",
+                uiState.value.email,
+                uiState.value.emailError
+            ) { newValue -> viewModel.updateEmail(newValue) }
+            ChooseSex(
+                uiState.value.sex,
+                uiState.value.sexError
+            ) { newValue -> viewModel.updateSex(newValue) }
+            SignInTextField(
+                "Number phone",
+                uiState.value.numberPhone,
+                uiState.value.numberPhoneError
+            ) { newValue -> viewModel.updateNumberPhone(newValue) }
+            SignInTextField(
+                "Password",
+                uiState.value.password,
+                uiState.value.passwordError
+            ) { newValue -> viewModel.updatePassword(newValue) }
+            SignInTextField(
+                "Confirm password",
+                uiState.value.passwordConfirm,
+                uiState.value.passwordConfirmError
+            ) { newValue -> viewModel.updatePasswordConfirm(newValue) }
+            Spacer(Modifier.height(5.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Checkbox(
+                    checked = uiState.value.cbService,
+                    colors = CheckboxDefaults.colors()
+                        .copy(uncheckedBorderColor = MaterialTheme.colorScheme.primary),
+                    onCheckedChange = { viewModel.updateCheckBoxService() })
+                MyLineTextHaveTextButton(
+                    "I agree to the ",
+                    "Terms of Service & Privacy Policy",
+                    ".",
+                    Arrangement.Start
+                ) {
+                    //TODO: Hiển thị ShowBottomSheet cho điều khoản & dịch vụ
                 }
-                Spacer(modifier = Modifier.height(15.dp))
-                MyElevatedButton("Sign in") { viewModel.signIn(context) }
-                Spacer(modifier = Modifier.height(15.dp))
-                MyElevatedButton(
-                    painter = painterResource(R.drawable.logogoogle),
-                    title = "   " + stringResource(R.string.signInWithGG)
-                ) { viewModel.signInWithGG(context) }
-                Spacer(Modifier.height(20.dp))
             }
-        }
-        if (uiState.value.isLoading) {
-            MyProcessWait()
+            Spacer(modifier = Modifier.height(15.dp))
+            MyElevatedButton("Sign in") { viewModel.signIn(context) }
+            Spacer(modifier = Modifier.height(15.dp))
+            MyElevatedButton(
+                painter = painterResource(R.drawable.logogoogle),
+                title = "   " + stringResource(R.string.signInWithGG)
+            ) { viewModel.signInWithGG(context) }
+            Spacer(Modifier.height(20.dp))
         }
     }
+    if (uiState.value.isLoading) {
+        MyProcessWait()
+    }
+
 }
 
 @Composable

@@ -39,6 +39,7 @@ import com.example.ryokoumobile.viewmodel.LoginViewModel
 
 @Composable
 fun LoginScene(
+    modifier: Modifier = Modifier,
     navController: NavController = rememberNavController(),
     viewModel: LoginViewModel = viewModel()
 ) {
@@ -48,76 +49,73 @@ fun LoginScene(
 
     LaunchedEffect(uiState.value.isLoginSuccessful) {
         if (uiState.value.isLoginSuccessful) {
-            navController.navigate(Scenes.Home.route) {
+            navController.navigate(Scenes.MainGroup.Home.route) {
                 popUpTo(0) { inclusive = true }
             }
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        Scaffold(
-            topBar = { MyTopBar() },
-            modifier = Modifier.clickable(
-                indication = null,
-                interactionSource = remember { MutableInteractionSource() }) { focusManager.clearFocus() }
-        ) { innerPadding ->
+    Box(modifier = modifier
+        .fillMaxSize()
+        .clickable(
+            indication = null,
+            interactionSource = remember { MutableInteractionSource() }) { focusManager.clearFocus() }) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceAround
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.logologin),
+                contentDescription = "",
+                modifier = Modifier
+                    .size(300.dp)
+                    .weight(0.8f)
+            )
             Column(
                 modifier = Modifier
-                    .padding(innerPadding)
-                    .fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceAround
+                    .padding(horizontal = 20.dp)
+                    .weight(1f)
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.logologin),
-                    contentDescription = "",
-                    modifier = Modifier
-                        .size(300.dp)
-                        .weight(0.8f)
-                )
-                Column(
-                    modifier = Modifier
-                        .padding(horizontal = 20.dp)
-                        .weight(1f)
-                ) {
-                    MyInputTextField(
-                        stringResource(R.string.txtEmail),
-                        uiState.value.email,
-                        uiState.value.emailError
-                    ) { newValue -> viewModel.updateEmail(newValue) }
-                    Spacer(modifier = Modifier.height(10.dp))
-                    MyInputTextField(
-                        stringResource(R.string.txtPassword),
-                        uiState.value.password,
-                        uiState.value.passwordError
-                    ) { newValue -> viewModel.updatePassword(newValue) }
-                    Spacer(modifier = Modifier.height(10.dp))
-                    MyLineTextHaveTextButton(
-                        "",
-                        "Quên mật khẩu", "",
-                        Arrangement.End
-                    ) { viewModel.forgetPassword() }
-                    Spacer(modifier = Modifier.height(20.dp))
-                    MyElevatedButton("Login") { viewModel.login() }
-                    Spacer(modifier = Modifier.height(15.dp))
-                    MyElevatedButton(
-                        "   " + stringResource(R.string.loginWithGG),
-                        painter = painterResource(R.drawable.logogoogle)
-                    ) { viewModel.loginWithGG(currentContext) }
-                    Spacer(modifier = Modifier.height(10.dp))
-                    MyLineTextHaveTextButton(
-                        "Don't have an account? ",
-                        "Sign in.", "",
-                        Arrangement.Center
-                    ) { navController.navigate(Scenes.SignIn.route) }
-                }
-                Spacer(Modifier.height(20.dp))
+                MyInputTextField(
+                    stringResource(R.string.txtEmail),
+                    uiState.value.email,
+                    uiState.value.emailError
+                ) { newValue -> viewModel.updateEmail(newValue) }
+                Spacer(modifier = Modifier.height(10.dp))
+                MyInputTextField(
+                    stringResource(R.string.txtPassword),
+                    uiState.value.password,
+                    uiState.value.passwordError
+                ) { newValue -> viewModel.updatePassword(newValue) }
+                Spacer(modifier = Modifier.height(10.dp))
+                MyLineTextHaveTextButton(
+                    "",
+                    "Quên mật khẩu", "",
+                    Arrangement.End
+                ) { viewModel.forgetPassword() }
+                Spacer(modifier = Modifier.height(20.dp))
+                MyElevatedButton("Login") { viewModel.login() }
+                Spacer(modifier = Modifier.height(15.dp))
+                MyElevatedButton(
+                    "   " + stringResource(R.string.loginWithGG),
+                    painter = painterResource(R.drawable.logogoogle)
+                ) { viewModel.loginWithGG(currentContext) }
+                Spacer(modifier = Modifier.height(10.dp))
+                MyLineTextHaveTextButton(
+                    "Don't have an account? ",
+                    "Sign in.", "",
+                    Arrangement.Center
+                ) { navController.navigate(Scenes.AuthGroup.SignIn.route) }
             }
-        }
-        if (uiState.value.isLoading) {
-            MyProcessWait()
+            Spacer(Modifier.height(20.dp))
         }
     }
+    if (uiState.value.isLoading) {
+        MyProcessWait()
+    }
+
 }
 
 @Preview(showBackground = true, showSystemUi = true)

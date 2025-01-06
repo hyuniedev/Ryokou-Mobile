@@ -64,9 +64,10 @@ import java.time.LocalDateTime
 
 @Composable
 fun HomeScene(
+    modifier: Modifier = Modifier,
     navController: NavController,
     viewModel: HomeViewModel = viewModel(),
-    tourVM: TourViewModel = viewModel()
+    tourVM: TourViewModel = viewModel(),
 ) {
     val uiState = viewModel.uiState.collectAsState()
     val tourState = tourVM.uiState.collectAsState()
@@ -79,90 +80,86 @@ fun HomeScene(
     }
     val stateScroll = rememberScrollState()
 
-    Scaffold(
-        topBar = {
-            Column(modifier = Modifier.animateContentSize()) {
-                MyTopBar()
-                if (stateScroll.value == 0) {
-                    BoxWelcome(onClick = { navController.navigate(Scenes.Login.route) })
-                }
+    Column(
+        modifier = modifier
+            .verticalScroll(stateScroll)
+    ) {
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .animateContentSize()
+        ) {
+            if (stateScroll.value == 0) {
+                BoxWelcome { navController.navigate(Scenes.AuthGroup.Login.route) }
             }
         }
-    ) { innerPadding ->
-        Box(Modifier.padding(innerPadding), contentAlignment = Alignment.TopCenter) {
+        Spacer(Modifier.height(10.dp))
+        MyHorizontalPage(
+            lsLinkPicture = lsPager
+        )
+        Column(modifier = Modifier.padding(horizontal = 10.dp)) {
+            RangeTimeScale(uiState.value.startTime)
             Column(
                 modifier = Modifier
-                    .verticalScroll(stateScroll)
+                    .padding(horizontal = 10.dp, vertical = 10.dp)
+                    .height(350.dp),
+                verticalArrangement = Arrangement.SpaceBetween
             ) {
-                Spacer(Modifier.height(10.dp))
-                MyHorizontalPage(
-                    lsLinkPicture = lsPager
-                )
-                Column(modifier = Modifier.padding(horizontal = 10.dp)) {
-                    RangeTimeScale(uiState.value.startTime)
-                    Column(
-                        modifier = Modifier
-                            .padding(horizontal = 10.dp, vertical = 10.dp)
-                            .height(350.dp),
-                        verticalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        FlashSaleTimeCountDown(uiState.value.duration)
-                        LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                            items(tourState.value) { tour ->
-                                ItemTour(
-                                    tour,
-                                    isFavorite = tourVM.getIsFavoriteTour(tour),
-                                    onClick = {},
-                                    onClickFavorite = { DataController.updateFavoriteTour(tour) })
-                            }
-                        }
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .border(
-                                        width = 1.dp,
-                                        color = MaterialTheme.colorScheme.primary,
-                                        shape = RoundedCornerShape(20.dp)
-                                    )
-                                    .clip(RoundedCornerShape(20.dp))
-                                    .clickable { }) {
-                                Text(
-                                    "More",
-                                    style = TextStyle(
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = 21.sp,
-                                        color = MaterialTheme.colorScheme.primary
-                                    ),
-                                    modifier = Modifier.padding(horizontal = 30.dp, vertical = 5.dp)
-                                )
-                            }
-                        }
+                FlashSaleTimeCountDown(uiState.value.duration)
+                LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    items(tourState.value) { tour ->
+                        ItemTour(
+                            tour,
+                            isFavorite = tourVM.getIsFavoriteTour(tour),
+                            onClick = {},
+                            onClickFavorite = { DataController.updateFavoriteTour(tour) })
                     }
-                    Spacer(Modifier.height(10.dp))
-                    SuggestSection(
-                        title = stringResource(R.string.suggest2),
-                        lsTour = tourState.value,
-                        lsItemCapsule = uiState.value.lsSection1,
-                        selected = uiState.value.itemSelected1,
-                        onChange = { item -> viewModel.updateItemSelected1(item) },
-                        onClickFavorite = { tour -> DataController.updateFavoriteTour(tour) },
-                        onClick = {}
-                    )
-                    Spacer(Modifier.height(30.dp))
-                    SuggestSection(
-                        title = stringResource(R.string.suggest2),
-                        lsTour = tourState.value,
-                        lsItemCapsule = uiState.value.lsSection2,
-                        selected = uiState.value.itemSelected2,
-                        onChange = { item -> viewModel.updateItemSelected2(item) },
-                        onClickFavorite = { tour -> DataController.updateFavoriteTour(tour) },
-                        onClick = {}
-                    )
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .border(
+                                width = 1.dp,
+                                color = MaterialTheme.colorScheme.primary,
+                                shape = RoundedCornerShape(20.dp)
+                            )
+                            .clip(RoundedCornerShape(20.dp))
+                            .clickable { }) {
+                        Text(
+                            "More",
+                            style = TextStyle(
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 21.sp,
+                                color = MaterialTheme.colorScheme.primary
+                            ),
+                            modifier = Modifier.padding(horizontal = 30.dp, vertical = 5.dp)
+                        )
+                    }
                 }
             }
+            Spacer(Modifier.height(10.dp))
+            SuggestSection(
+                title = stringResource(R.string.suggest2),
+                lsTour = tourState.value,
+                lsItemCapsule = uiState.value.lsSection1,
+                selected = uiState.value.itemSelected1,
+                onChange = { item -> viewModel.updateItemSelected1(item) },
+                onClickFavorite = { tour -> DataController.updateFavoriteTour(tour) },
+                onClick = {}
+            )
+            Spacer(Modifier.height(30.dp))
+            SuggestSection(
+                title = stringResource(R.string.suggest2),
+                lsTour = tourState.value,
+                lsItemCapsule = uiState.value.lsSection2,
+                selected = uiState.value.itemSelected2,
+                onChange = { item -> viewModel.updateItemSelected2(item) },
+                onClickFavorite = { tour -> DataController.updateFavoriteTour(tour) },
+                onClick = {}
+            )
         }
     }
 }
