@@ -72,3 +72,7 @@
 ## 4-1-2025
 ### Added
 - Box navigation to Login on Home Scene
+
+## 6-1-2025
+### Fixed
+- Fix top bar: hide 1 section on scroll
