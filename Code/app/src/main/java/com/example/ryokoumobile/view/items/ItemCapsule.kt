@@ -23,7 +23,6 @@ import com.example.ryokoumobile.model.enumClass.EProvince
 
 @Composable
 fun <T> ItemCapsule(title: T, isSelected: Boolean, onClick: () -> Unit) {
-    Log.d("HyuNie", title.toString())
     Box(
         modifier = Modifier
             .width(
@@ -49,17 +48,14 @@ fun <T> ItemCapsule(title: T, isSelected: Boolean, onClick: () -> Unit) {
         Text(
             text = when (title) {
                 is EProvince -> {
-                    Log.d("HyuNie", title.nameProvince)
                     title.nameProvince
                 }
 
                 is EMonth -> {
-                    Log.d("HyuNie", title.monthName)
                     title.monthName
                 }
 
                 else -> {
-                    Log.d("HyuNie", "Baka")
                     ""
                 }
             },

@@ -22,10 +22,14 @@ class TourViewModel : ViewModel() {
         FirebaseController.firestore.collection("tours")
             .get()
             .addOnSuccessListener { result ->
-                for (doc in result) {
-                    val tour = doc.toObject(Tour::class.java)
-                    tour.id = doc.id
-                    lsTour.add(tour)
+                try {
+                    for (doc in result) {
+                        val tour = doc.toObject(Tour::class.java)
+                        tour.id = doc.id
+                        lsTour.add(tour)
+                    }
+                } catch (e: Exception) {
+                    Log.e("HyuNie", "Load a error tour")
                 }
                 _uiState.update { lsTour }
             }

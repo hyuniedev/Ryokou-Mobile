@@ -44,14 +44,14 @@ fun BoxWelcome(onClick: () -> Unit) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(40.dp)
+                .height(45.dp)
                 .clip(RoundedCornerShape(bottomStart = 40.dp, bottomEnd = 20.dp))
                 .background(color = MaterialTheme.colorScheme.primary)
         )
         Box(
             modifier = Modifier
                 .fillMaxWidth(0.9f)
-                .height(80.dp)
+                .height(90.dp)
                 .border(
                     width = 1.dp,
                     color = MaterialTheme.colorScheme.primary,
