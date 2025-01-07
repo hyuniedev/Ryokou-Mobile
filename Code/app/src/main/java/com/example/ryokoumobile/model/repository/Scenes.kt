@@ -21,8 +21,8 @@ import com.example.ryokoumobile.R
 
 sealed class Scenes(
     val route: String,
-    val icon: ImageVector = Icons.Outlined.Info,
-    val iconOnSelected: ImageVector = Icons.Filled.Info
+    var icon: ImageVector = Icons.Outlined.Info,
+    var iconOnSelected: ImageVector = Icons.Filled.Info
 ) {
     data object TourDetail : Scenes("TourDetail")
 

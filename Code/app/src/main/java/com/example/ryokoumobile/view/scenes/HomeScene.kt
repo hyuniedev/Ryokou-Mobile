@@ -160,6 +160,7 @@ fun HomeScene(
                 onClickFavorite = { tour -> DataController.updateFavoriteTour(tour) },
                 onClick = {}
             )
+            Spacer(modifier = Modifier.height(15.dp))
         }
     }
 }
