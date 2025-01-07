@@ -10,20 +10,24 @@ Cơ sở dữ liệu: Firebase.
 Backend: Firebase Cloud Functions.  
 Chức năng chính:  
     Tìm kiếm tour:  
-Lọc tour theo các tiêu chí: từ khóa, tỉnh/thành phố, khoảng giá.  
+Lọc tour theo các tiêu chí: giá, ngày khởi hành, địa điểm, số ngày, dịch vụ đi kèm.  
+Gợi ý các tour phổ biến hoặc phù hợp với sở thích người dùng.  
     Đặt tour:  
 Hiển thị thông tin chi tiết về từng tour: hành trình, giá cả, dịch vụ bao gồm.  
- 
+Tùy chỉnh dịch vụ kèm theo (ví dụ: chọn gói ăn uống, hướng dẫn viên).  
+  
 Quản lý thông tin cá nhân và lịch sử đặt tour:  
 Lưu trữ thông tin cá nhân và các tour đã đặt.  
 Đánh giá và chia sẻ trải nghiệm sau khi tham gia tour.  
   
 Quản lý dành cho nhà cung cấp dịch vụ:  
-Quản lý tour và quản lý khách hàng trong tour
+Đăng ký và cập nhật thông tin tour.  
+Theo dõi yêu cầu đặt tour từ khách hàng.  
+Báo cáo doanh thu và hiệu quả hoạt động.    
   
 **3. Mô tả về tính sử dụng, áp dụng, các thành phần người dùng**  
 Tính sử dụng:  
-Ứng dụng Ryokou tập trung vào giao diện thân thiện, dễ sử dụng, phù hợp cho cả khách hàng lần đầu trải nghiệm ứng dụng đặt tour và các nhà cung cấp chưa quen với công cụ kỹ thuật số. Tính năng tìm kiếm và đặt tour được tối ưu hóa để xử lý nhanh chóng và hiệu quả.
+Ứng dụng Ryokou tập trung vào giao diện thân thiện, dễ sử dụng, phù hợp cho cả khách hàng lần đầu trải nghiệm ứng dụng đặt tour và các nhà cung cấp chưa quen với công cụ kỹ thuật số. Tính năng tìm kiếm và đặt tour được tối ưu hóa để xử lý nhanh chóng và hiệu quả, đồng thời ứng dụng hỗ trợ đa ngôn ngữ (tiếng Nhật, tiếng Anh, tiếng Việt).  
 
 Các thành phần người dùng:  
   
@@ -32,8 +36,12 @@ Tìm kiếm, so sánh và đặt tour phù hợp với nhu cầu.
 Quản lý các chuyến đi đã đặt.  
   
 Nhà cung cấp dịch vụ du lịch:  
-Tạo và quản lý thông tin các tour/ quản lý khách hàng trong tour
+Tạo và quản lý thông tin các tour du lịch.  
+Theo dõi hiệu quả kinh doanh qua các công cụ phân tích.  
 
+Quản trị viên hệ thống:  
+Duyệt nội dung tour mới được thêm vào bởi nhà cung cấp.  
+Quản lý và xử lý các khiếu nại từ người dùng.  
   
 **4. Mô tả sơ về kết quả dự kiến/mong muốn**  
 Ứng dụng Ryokou được kỳ vọng mang lại các lợi ích sau:  
