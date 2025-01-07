@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ### Android ###
 *.iml
 .gradle/
@@ -47,3 +48,38 @@ build/
 .vscode/launch.json
 
 google-services.json
+=======
+# Gradle files
+.gradle/
+build/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Log/OS Files
+*.log
+
+# Android Studio generated files and folders
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+output.json
+
+# IntelliJ
+*.iml
+.idea/
+misc.xml
+deploymentTargetDropDown.xml
+render.experimental.xml
+
+# Keystore files
+*.jks
+*.keystore
+
+# Google Services (e.g. APIs or Firebase)
+google-services.json
+
+# Android Profiling
+*.hprof
+>>>>>>> 6a2d2dec6cfbafe9640ef5a5cb3ea5fedbb47c51

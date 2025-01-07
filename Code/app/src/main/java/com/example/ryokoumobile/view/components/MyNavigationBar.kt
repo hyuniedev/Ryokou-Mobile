@@ -11,12 +11,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.ryokoumobile.R
 import com.example.ryokoumobile.model.repository.Scenes
 import com.example.ryokoumobile.ui.theme.IndicatorColor
 
@@ -27,6 +30,11 @@ fun MyNavigationBar(navController: NavController) {
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.primary,
     ) {
+        Scenes.MainGroup.MyTour.apply {
+            this.icon = ImageVector.vectorResource(R.drawable.outline_tour)
+            this.iconOnSelected = ImageVector.vectorResource(R.drawable.filled_tour)
+        }
+        
         Scenes.MainGroup.getScenes().forEach { scene ->
             NavigationBarItem(
                 icon = {
