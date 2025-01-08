@@ -83,3 +83,7 @@
 
 ### Fixed
 - Show BottomBar and TopBar (redistribution, NavHost move to inner of Scafford)
+
+## 9-1-2025
+### Added
+- Add Favorite scene on not logged in
