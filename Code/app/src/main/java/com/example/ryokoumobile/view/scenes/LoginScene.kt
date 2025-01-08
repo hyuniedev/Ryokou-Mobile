@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -96,10 +97,12 @@ fun LoginScene(
                     Arrangement.End
                 ) { viewModel.forgetPassword() }
                 Spacer(modifier = Modifier.height(20.dp))
-                MyElevatedButton("Login") { viewModel.login() }
+                MyElevatedButton(modifier = Modifier.fillMaxWidth(), "Login") { viewModel.login() }
                 Spacer(modifier = Modifier.height(15.dp))
                 MyElevatedButton(
+                    modifier = Modifier.fillMaxWidth(),
                     "   " + stringResource(R.string.loginWithGG),
+                    isFilled = false,
                     painter = painterResource(R.drawable.logogoogle)
                 ) { viewModel.loginWithGG(currentContext) }
                 Spacer(modifier = Modifier.height(10.dp))

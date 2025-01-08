@@ -133,10 +133,14 @@ fun SignInScene(
                 }
             }
             Spacer(modifier = Modifier.height(15.dp))
-            MyElevatedButton("Sign in") { viewModel.signIn(context) }
+            MyElevatedButton(modifier = Modifier.fillMaxWidth(), "Sign in") {
+                viewModel.signIn(context)
+            }
             Spacer(modifier = Modifier.height(15.dp))
             MyElevatedButton(
+                modifier = Modifier.fillMaxWidth(),
                 painter = painterResource(R.drawable.logogoogle),
+                isFilled = false,
                 title = "   " + stringResource(R.string.signInWithGG)
             ) { viewModel.signInWithGG(context) }
             Spacer(Modifier.height(20.dp))
