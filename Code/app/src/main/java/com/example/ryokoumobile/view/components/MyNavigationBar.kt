@@ -34,14 +34,15 @@ fun MyNavigationBar(navController: NavController) {
             this.icon = ImageVector.vectorResource(R.drawable.outline_tour)
             this.iconOnSelected = ImageVector.vectorResource(R.drawable.filled_tour)
         }
-        
+
         Scenes.MainGroup.getScenes().forEach { scene ->
+            val isSelectedScene = currentRoute == scene.route
             NavigationBarItem(
                 icon = {
                     Icon(
-                        if (currentRoute == scene.route) scene.iconOnSelected else scene.icon,
+                        if (isSelectedScene) scene.iconOnSelected else scene.icon,
                         contentDescription = scene.route,
-                        modifier = Modifier.size(30.dp),
+                        modifier = Modifier.size(if (isSelectedScene) 30.dp else 27.dp),
                         tint = MaterialTheme.colorScheme.secondary
                     )
                 },
@@ -50,10 +51,11 @@ fun MyNavigationBar(navController: NavController) {
                         Text(
                             scene.route,
                             style = TextStyle(
-                                fontSize = 18.sp,
+                                fontSize = 16.sp,
                                 fontWeight = FontWeight.SemiBold,
                                 color = MaterialTheme.colorScheme.secondary
-                            )
+                            ),
+                            maxLines = 1
                         )
                     }
                 },
