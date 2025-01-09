@@ -86,4 +86,5 @@
 
 ## 9-1-2025
 ### Added
-- Add Favorite scene on not logged in
+- Add Favorite scene on not logged in (1h)
+- Completed Favorite scene (18h)
