@@ -41,4 +41,10 @@ class TourViewModel : ViewModel() {
             tour.id
         ) ?: false
     }
+
+    fun getTourFromID(idTour: String): Tour {
+        return _uiState.value.first {
+            it.id == idTour
+        }
+    }
 }

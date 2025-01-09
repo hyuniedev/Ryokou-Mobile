@@ -19,6 +19,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import com.example.ryokoumobile.model.controller.DataController
 import com.example.ryokoumobile.model.repository.Scenes
 import com.example.ryokoumobile.ui.theme.RyokouMobileTheme
 import com.example.ryokoumobile.view.components.MyNavigationBar
@@ -52,7 +53,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainScene() {
-    val tourViewModel = TourViewModel()
+//    val tourViewModel = TourViewModel()
 
     val navController = rememberNavController()
     val navBackStackEntry = navController.currentBackStackEntryAsState()
@@ -96,7 +97,7 @@ fun MainScene() {
                     HomeScene(
                         modifier = modifier,
                         navController,
-                        tourVM = tourViewModel
+                        tourVM = DataController.tourVM
                     )
                 }
                 composable(Scenes.MainGroup.Search.route) {

@@ -111,6 +111,3 @@ private fun OnNotLoggedIn(navController: NavController) {
 private fun OnLoggedIn() {
 
 }
-
-//@Composable
-//private fun MyButton

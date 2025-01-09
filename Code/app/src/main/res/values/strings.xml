@@ -14,4 +14,6 @@
     <string name="myTourNotLoggedIn">Log in or Register to manage your bookings easily. Use your registered account to log in to the app and manage your tours.</string>
     <string name="favoriteListIsEmpty">Your favorite tour is empty!</string>
     <string name="exploreAndChoose">Explore Ryokou and choose your favorite tour.</string>
+    <string name="yourFavoriteTour">Your favorite tour</string>
+    <string name="recommendedTours">Recommended Tours</string>
 </resources>

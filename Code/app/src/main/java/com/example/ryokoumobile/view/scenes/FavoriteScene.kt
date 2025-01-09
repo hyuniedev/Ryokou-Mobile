@@ -1,7 +1,10 @@
 package com.example.ryokoumobile.view.scenes
 
+import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +16,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,8 +38,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.ryokoumobile.R
 import com.example.ryokoumobile.model.controller.DataController
+import com.example.ryokoumobile.model.entity.User
 import com.example.ryokoumobile.model.repository.Scenes
 import com.example.ryokoumobile.view.components.MyElevatedButton
+import com.example.ryokoumobile.view.components.RecommendedTours
+import com.example.ryokoumobile.view.components.ShowGridTour
 
 @Composable
 fun FavoriteScene(modifier: Modifier = Modifier, navController: NavController) {
@@ -41,7 +51,7 @@ fun FavoriteScene(modifier: Modifier = Modifier, navController: NavController) {
     Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         when (userState.value) {
             null -> OnNotLoggedIn(navController)
-            else -> OnLoggedIn()
+            else -> OnLoggedIn(userState.value!!)
         }
     }
 }
@@ -107,6 +117,28 @@ private fun OnNotLoggedIn(navController: NavController) {
 }
 
 @Composable
-private fun OnLoggedIn() {
-
+private fun OnLoggedIn(user: User) {
+    val tours = DataController.tourVM.uiState.collectAsState()
+    val scrollState = rememberScrollState()
+    Column(
+        modifier = Modifier
+            .fillMaxWidth(0.98f)
+            .padding(horizontal = 15.dp)
+            .verticalScroll(scrollState),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.Start
+    ) {
+        Spacer(Modifier.height(15.dp))
+        Text(
+            stringResource(R.string.yourFavoriteTour),
+            style = TextStyle(
+                fontWeight = FontWeight.Bold,
+                fontSize = 25.sp,
+                color = MaterialTheme.colorScheme.primary
+            )
+        )
+        ShowGridTour(user.lsFavoriteTour.map { DataController.tourVM.getTourFromID(it) })
+        Spacer(Modifier.height(10.dp))
+        RecommendedTours(tours.value)
+    }
 }

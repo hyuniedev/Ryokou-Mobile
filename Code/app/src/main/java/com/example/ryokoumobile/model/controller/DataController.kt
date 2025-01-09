@@ -2,6 +2,7 @@ package com.example.ryokoumobile.model.controller
 
 import com.example.ryokoumobile.model.entity.Tour
 import com.example.ryokoumobile.model.entity.User
+import com.example.ryokoumobile.viewmodel.TourViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 
@@ -18,4 +19,6 @@ object DataController {
             it?.copy(lsFavoriteTour = ls)
         }
     }
+
+    val tourVM = TourViewModel()
 }
