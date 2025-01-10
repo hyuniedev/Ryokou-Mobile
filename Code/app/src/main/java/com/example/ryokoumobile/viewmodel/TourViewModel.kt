@@ -2,9 +2,11 @@ package com.example.ryokoumobile.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
 import com.example.ryokoumobile.model.controller.DataController
 import com.example.ryokoumobile.model.controller.FirebaseController
 import com.example.ryokoumobile.model.entity.Tour
+import com.example.ryokoumobile.model.repository.Scenes
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -46,5 +48,14 @@ class TourViewModel : ViewModel() {
         return _uiState.value.first {
             it.id == idTour
         }
+    }
+
+    fun navigationToTourDetail(navController: NavController, tour: Tour) {
+        navController.navigate(
+            Scenes.TourDetail.route.replace(
+                "{tourId}",
+                tour.id
+            )
+        )
     }
 }

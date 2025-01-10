@@ -14,11 +14,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.ryokoumobile.model.controller.DataController
 import com.example.ryokoumobile.model.repository.Scenes
 import com.example.ryokoumobile.ui.theme.RyokouMobileTheme
@@ -32,6 +34,7 @@ import com.example.ryokoumobile.view.scenes.LoginScene
 import com.example.ryokoumobile.view.scenes.MyTourScene
 import com.example.ryokoumobile.view.scenes.SearchScene
 import com.example.ryokoumobile.view.scenes.SignInScene
+import com.example.ryokoumobile.view.scenes.TourDetail
 import com.example.ryokoumobile.viewmodel.TourViewModel
 import com.google.firebase.FirebaseApp
 import kotlinx.coroutines.delay
@@ -66,10 +69,14 @@ fun MainScene() {
         Scenes.MainGroup.Account.route -> true
         else -> false
     }
+    val displayTopBar = when (currentRoute) {
+        Scenes.TourDetail.route -> false
+        else -> true
+    }
 
     BackHandleSpam()
 
-    Scaffold(topBar = { MyTopBar() },
+    Scaffold(topBar = { if (displayTopBar) MyTopBar() },
         bottomBar = {
             if (displayNavBar) {
                 MyNavigationBar(navController)
@@ -124,7 +131,16 @@ fun MainScene() {
                         navController
                     )
                 }
-
+            }
+            composable(
+                route = Scenes.TourDetail.route,
+                arguments = listOf(navArgument("tourId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val tour =
+                    DataController.tourVM.getTourFromID(
+                        backStackEntry.arguments?.getString("tourId") ?: ""
+                    )
+                TourDetail(tour, navController)
             }
         }
     }
