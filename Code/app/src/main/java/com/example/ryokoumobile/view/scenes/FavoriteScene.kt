@@ -96,24 +96,29 @@ private fun OnNotLoggedIn(navController: NavController) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val textStyle: TextStyle =
-                TextStyle(
-                    fontSize = 20.sp,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center,
-                )
-            Image(
-                painterResource(R.drawable.favo1),
-                contentDescription = null,
-                modifier = Modifier.size(200.dp)
-            )
-            Spacer(Modifier.height(15.dp))
-            Text(stringResource(R.string.favoriteListIsEmpty), style = textStyle)
-            Spacer(Modifier.height(15.dp))
-            Text(stringResource(R.string.exploreAndChoose), style = textStyle)
+            NotifyOnFavoriteEmpty()
         }
     }
+}
+
+@Composable
+private fun NotifyOnFavoriteEmpty() {
+    val textStyle: TextStyle =
+        TextStyle(
+            fontSize = 20.sp,
+            color = MaterialTheme.colorScheme.primary,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center,
+        )
+    Image(
+        painterResource(R.drawable.favo1),
+        contentDescription = null,
+        modifier = Modifier.size(200.dp)
+    )
+    Spacer(Modifier.height(15.dp))
+    Text(stringResource(R.string.favoriteListIsEmpty), style = textStyle)
+    Spacer(Modifier.height(15.dp))
+    Text(stringResource(R.string.exploreAndChoose), style = textStyle)
 }
 
 @Composable
@@ -137,7 +142,18 @@ private fun OnLoggedIn(user: User) {
                 color = MaterialTheme.colorScheme.primary
             )
         )
-        ShowGridTour(user.lsFavoriteTour.map { DataController.tourVM.getTourFromID(it) })
+        if (user.lsFavoriteTour.isNotEmpty()) {
+            ShowGridTour(user.lsFavoriteTour.map { DataController.tourVM.getTourFromID(it) })
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(15.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                NotifyOnFavoriteEmpty()
+            }
+        }
         Spacer(Modifier.height(10.dp))
         RecommendedTours(tours.value)
     }

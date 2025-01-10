@@ -29,7 +29,7 @@ fun <T> SuggestSection(
     lsTour: List<Tour>,
     onChange: (item: T) -> Unit,
     onClickFavorite: (tour: Tour) -> Unit,
-    onClick: () -> Unit
+    onClick: (tour: Tour) -> Unit
 ) {
     Column(modifier = Modifier.height(340.dp), verticalArrangement = Arrangement.SpaceBetween) {
         Text(
@@ -52,7 +52,7 @@ fun <T> SuggestSection(
             items(lsTour) { tour ->
                 ItemTour(
                     tour,
-                    onClick = onClick,
+                    onClick = { onClick(tour) },
                     isFavorite = DataController.user.value?.lsFavoriteTour?.contains(tour.id)
                         ?: false,
                     onClickFavorite = { onClickFavorite(tour) }

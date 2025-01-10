@@ -101,17 +101,21 @@ fun HomeScene(
             RangeTimeScale(uiState.value.startTime)
             Column(
                 modifier = Modifier
-                    .padding(horizontal = 10.dp, vertical = 10.dp)
+                    .padding(vertical = 10.dp)
                     .height(350.dp),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
                 FlashSaleTimeCountDown(uiState.value.duration)
-                LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
                     items(tourState.value) { tour ->
                         ItemTour(
                             tour,
                             isFavorite = tourVM.getIsFavoriteTour(tour),
-                            onClick = {},
+                            onClick = {
+                                tourVM.navigationToTourDetail(navController, tour)
+                            },
                             onClickFavorite = { DataController.updateFavoriteTour(tour) })
                     }
                 }
@@ -148,7 +152,12 @@ fun HomeScene(
                 selected = uiState.value.itemSelected1,
                 onChange = { item -> viewModel.updateItemSelected1(item) },
                 onClickFavorite = { tour -> DataController.updateFavoriteTour(tour) },
-                onClick = {}
+                onClick = { tour ->
+                    DataController.tourVM.navigationToTourDetail(
+                        navController,
+                        tour
+                    )
+                }
             )
             Spacer(Modifier.height(30.dp))
             SuggestSection(
@@ -158,7 +167,12 @@ fun HomeScene(
                 selected = uiState.value.itemSelected2,
                 onChange = { item -> viewModel.updateItemSelected2(item) },
                 onClickFavorite = { tour -> DataController.updateFavoriteTour(tour) },
-                onClick = {}
+                onClick = { tour ->
+                    DataController.tourVM.navigationToTourDetail(
+                        navController,
+                        tour
+                    )
+                }
             )
             Spacer(modifier = Modifier.height(15.dp))
         }
