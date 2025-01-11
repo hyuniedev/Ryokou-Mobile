@@ -88,3 +88,13 @@
 ### Added
 - Add Favorite scene on not logged in (1h)
 - Completed Favorite scene (18h)
+
+## 11-1-2025
+### Fixed 
+- signIn don't save id user
+
+## 12-1-2025
+### Added
+- update tour detail screen
+- add button log out temporary
+- update data user on firebase when add favorite tour
