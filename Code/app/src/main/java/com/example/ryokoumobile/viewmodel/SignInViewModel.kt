@@ -49,8 +49,8 @@ class SignInViewModel : ViewModel() {
     }
 
     fun signIn(context: Context) {
-        _uiState.update { it.copy(isLoading = true) }
         if (!checkFields(context)) return
+        _uiState.update { it.copy(isLoading = true) }
         if (_uiState.value.cbService) {
             val user = User(
                 email = _uiState.value.email,
@@ -62,7 +62,6 @@ class SignInViewModel : ViewModel() {
             viewModelScope.launch {
                 FirebaseController.SignIn(user).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        DataController.user.value = user
                         _uiState.update { it.copy(isSignInSuccess = true) }
                     } else {
                         when (task.exception) {
