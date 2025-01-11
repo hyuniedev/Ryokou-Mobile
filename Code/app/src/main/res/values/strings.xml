@@ -19,4 +19,9 @@
     <string name="chuyenDiThuViTrongTamTay">An exciting trip at your fingertips</string>
     <string name="giaTu">Price from</string>
     <string name="reviews">( From %d reviews )</string>
+    <string name="overview">Overview</string>
+    <string name="durationTour">Duration tour</string>
+    <string name="meetingPlace">Meeting place</string>
+    <string name="tourSchedule">Tour schedule</string>
+    <string name="showDetailedSchedule">See detailed schedule</string>
 </resources>
