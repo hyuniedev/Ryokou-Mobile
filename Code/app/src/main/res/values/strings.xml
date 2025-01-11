@@ -18,4 +18,5 @@
     <string name="recommendedTours">Recommended Tours</string>
     <string name="chuyenDiThuViTrongTamTay">An exciting trip at your fingertips</string>
     <string name="giaTu">Price from</string>
+    <string name="reviews">( From %d reviews )</string>
 </resources>
