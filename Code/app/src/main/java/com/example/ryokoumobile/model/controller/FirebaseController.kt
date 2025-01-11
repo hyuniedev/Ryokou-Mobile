@@ -37,9 +37,9 @@ object FirebaseController {
     fun SignIn(user: User): Task<AuthResult> {
         val newAccount = auth.createUserWithEmailAndPassword(user.email, user.password)
         newAccount.addOnSuccessListener { result ->
-            DataController.user.value = user
-            DataController.user.update { it?.copy(id = result.user!!.uid) }
-            firestore.collection("users").add(user)
+            val userWithId = user.copy(id = result.user!!.uid)
+            DataController.user.value = userWithId
+            firestore.collection("users").document(result.user!!.uid).set(userWithId)
         }
         return newAccount
     }

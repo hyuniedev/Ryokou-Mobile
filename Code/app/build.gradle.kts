@@ -81,9 +81,9 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.4.0")
 
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
-    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-analytics:22.1.2")
     implementation("com.google.firebase:firebase-appcheck-playintegrity:18.0.0")
-    implementation("com.google.firebase:firebase-firestore-ktx")
-    implementation("com.google.firebase:firebase-storage-ktx")
-    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-firestore-ktx:25.1.1")
+    implementation("com.google.firebase:firebase-storage-ktx:21.0.1")
+    implementation("com.google.firebase:firebase-auth-ktx:23.1.0")
 }
