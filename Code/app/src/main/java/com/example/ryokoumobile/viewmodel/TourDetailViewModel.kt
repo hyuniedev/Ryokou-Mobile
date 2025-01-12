@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ryokoumobile.model.controller.FirebaseController
 import com.example.ryokoumobile.model.entity.Company
+import com.example.ryokoumobile.model.entity.Schedule
 import com.example.ryokoumobile.model.uistate.TourDetailUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -31,5 +32,13 @@ class TourDetailViewModel : ViewModel() {
                     Log.e("HyuNie", "Bug on load company: ${it.message}")
                 }
         }
+    }
+
+    fun updateShowSchedule() {
+        _uiState.update { it.copy(isShowSchedule = !it.isShowSchedule) }
+    }
+
+    fun updateSelectedDayOnSchedule(schedule: Schedule) {
+        _uiState.update { it.copy(selectedDayOnSchedule = schedule) }
     }
 }
