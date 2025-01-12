@@ -99,3 +99,6 @@
 - update tour detail screen
 - update data user on firebase when add favorite tour
 - show tour schedule on tour detail screen
+
+### Fixed
+- fix re-set data when login with gg account
