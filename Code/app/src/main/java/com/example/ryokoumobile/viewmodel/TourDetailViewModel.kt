@@ -1,17 +1,22 @@
 package com.example.ryokoumobile.viewmodel
 
 import android.util.Log
+import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ryokoumobile.model.controller.FirebaseController
 import com.example.ryokoumobile.model.entity.Company
+import com.example.ryokoumobile.model.entity.Rate
 import com.example.ryokoumobile.model.entity.Schedule
+import com.example.ryokoumobile.model.entity.Tour
 import com.example.ryokoumobile.model.uistate.TourDetailUiState
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class TourDetailViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(TourDetailUiState())
@@ -34,11 +39,42 @@ class TourDetailViewModel : ViewModel() {
         }
     }
 
+    fun getUserNameWithUID(uid: String): StateFlow<String> {
+        val name = MutableStateFlow("")
+        FirebaseController.firestore.collection("users")
+            .document(uid)
+            .get()
+            .addOnSuccessListener {
+                name.value = it["fullName"].toString()
+            }
+            .addOnFailureListener {
+                name.value = uid.substring(0, 5)
+            }
+        return name
+    }
+
+    fun loadRateOfTour(tour: Tour) {
+        viewModelScope.launch {
+            var lsRate = listOf<Rate>()
+            FirebaseController.firestore.collection("rates").whereEqualTo("tourId", tour.id).get()
+                .addOnSuccessListener {
+                    lsRate = it.toObjects(Rate::class.java)
+                }
+            _uiState.update {
+                it.copy(lsRate = lsRate)
+            }
+        }
+    }
+
     fun updateShowSchedule() {
         _uiState.update { it.copy(isShowSchedule = !it.isShowSchedule) }
     }
 
     fun updateSelectedDayOnSchedule(schedule: Schedule) {
         _uiState.update { it.copy(selectedDayOnSchedule = schedule) }
+    }
+
+    fun updateExtend() {
+        _uiState.update { it.copy(isExtend = !it.isExtend) }
     }
 }
