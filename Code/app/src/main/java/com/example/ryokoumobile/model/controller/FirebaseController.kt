@@ -59,13 +59,19 @@ object FirebaseController {
             val result = buildCredentialRequest(context)
             val handle = handleSignIn(result)
             if (auth.currentUser != null) {
-                val newUser = User(
-                    id = auth.currentUser!!.uid,
-                    fullName = auth.currentUser!!.displayName ?: "",
-                    email = auth.currentUser!!.email ?: "",
-                    numberPhone = auth.currentUser!!.phoneNumber ?: ""
-                )
-                firestore.collection("users").document(auth.currentUser!!.uid).set(newUser)
+                firestore.collection("users").document(auth.currentUser!!.uid).get()
+                    .addOnSuccessListener { doc ->
+                        if (!doc.exists()) {
+                            val newUser = User(
+                                id = auth.currentUser!!.uid,
+                                fullName = auth.currentUser!!.displayName ?: "",
+                                email = auth.currentUser!!.email ?: "",
+                                numberPhone = auth.currentUser!!.phoneNumber ?: ""
+                            )
+                            firestore.collection("users").document(auth.currentUser!!.uid)
+                                .set(newUser)
+                        }
+                    }
                 LoadDataUser()
             }
             return handle
