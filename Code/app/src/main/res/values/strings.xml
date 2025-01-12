@@ -24,4 +24,15 @@
     <string name="meetingPlace">Meeting place</string>
     <string name="tourSchedule">Tour schedule</string>
     <string name="showDetailedSchedule">See detailed schedule</string>
+    <string name="highlight">Highlights</string>
+    <string name="rateAndReview">Rating &amp; review</string>
+    <string name="noReviewsYet">No reviews yet</string>
+    <string name="excellent">Excellent</string>
+    <string name="good">Good</string>
+    <string name="average">Average</string>
+    <string name="poor">Poor</string>
+    <string name="veryPoor">Very Poor</string>
+    <string name="termsAndServices">Terms and Services</string>
+    <string name="moreInformation">More information</string>
+    <string name="contactServiceProvider">Contact service provider</string>
 </resources>
