@@ -92,9 +92,10 @@
 ## 11-1-2025
 ### Fixed 
 - signIn don't save id user
+- add button log out temporary
 
 ## 12-1-2025
 ### Added
 - update tour detail screen
-- add button log out temporary
 - update data user on firebase when add favorite tour
+- show tour schedule on tour detail screen
