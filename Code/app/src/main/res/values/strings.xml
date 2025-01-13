@@ -35,4 +35,5 @@
     <string name="termsAndServices">Terms and Services</string>
     <string name="moreInformation">More information</string>
     <string name="contactServiceProvider">Contact service provider</string>
+    <string name="pleaseRateTheNumberOfStar">Please rate the number of stars</string>
 </resources>

@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -37,6 +38,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
+import com.example.ryokoumobile.R
 import com.example.ryokoumobile.model.entity.Tour
 
 @Composable
@@ -108,23 +110,33 @@ fun ItemTour(tour: Tour, isFavorite: Boolean, onClick: () -> Unit, onClickFavori
                 style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp)
             )
             Spacer(modifier = Modifier.height(5.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            if (tour.lsRate.isEmpty()) {
                 Text(
-                    "${tour.getTotalRate()}/5 ",
-                    style = TextStyle(
-                        color = MaterialTheme.colorScheme.primary,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                )
-                Text(
-                    "(${tour.lsRate.size})",
-                    style = TextStyle(
+                    stringResource(R.string.noReviewsYet), style = TextStyle(
                         color = Color.DarkGray.copy(alpha = 0.8f),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.SemiBold
                     )
                 )
+            } else {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        "${tour.getTotalRate()}/5 ",
+                        style = TextStyle(
+                            color = MaterialTheme.colorScheme.primary,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    )
+                    Text(
+                        "(${tour.lsRate.size})",
+                        style = TextStyle(
+                            color = Color.DarkGray.copy(alpha = 0.8f),
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    )
+                }
             }
             Spacer(modifier = Modifier.height(5.dp))
             Text(

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.example.ryokoumobile.model.controller.DataController
 import com.example.ryokoumobile.model.controller.FirebaseController
+import com.example.ryokoumobile.model.entity.Rate
 import com.example.ryokoumobile.model.entity.Tour
 import com.example.ryokoumobile.model.repository.Scenes
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,6 +29,11 @@ class TourViewModel : ViewModel() {
                     for (doc in result) {
                         val tour = doc.toObject(Tour::class.java)
                         tour.id = doc.id
+                        FirebaseController.firestore.collection("rates")
+                            .whereEqualTo("tourId", tour.id).get()
+                            .addOnSuccessListener {
+                                tour.lsRate = it.toObjects(Rate::class.java)
+                            }
                         lsTour.add(tour)
                     }
                 } catch (e: Exception) {
@@ -36,6 +42,14 @@ class TourViewModel : ViewModel() {
                 _uiState.update { lsTour }
             }
             .addOnFailureListener { e -> Log.e("HyuNie", "Error on $e") }
+    }
+
+    fun addRate(tour: Tour, rate: Rate) {
+        val index = _uiState.value.indexOfFirst { tour.id == it.id }
+        val lsTour = _uiState.value.toMutableList()
+        lsTour[index].lsRate += rate
+        FirebaseController.firestore.collection("rates").document(rate.id).set(rate)
+        _uiState.update { lsTour.toList() }
     }
 
     fun getIsFavoriteTour(tour: Tour): Boolean {
@@ -57,5 +71,11 @@ class TourViewModel : ViewModel() {
                 tour.id
             )
         )
+    }
+
+    fun getRate(tour: Tour): List<Rate> {
+        val ls = _uiState.value.toMutableList()
+        val index = ls.indexOfFirst { it.id == tour.id }
+        return ls[index].lsRate
     }
 }

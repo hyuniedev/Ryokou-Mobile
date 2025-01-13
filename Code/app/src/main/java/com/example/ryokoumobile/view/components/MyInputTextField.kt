@@ -11,7 +11,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun MyInputTextField(title: String, value: String,isError: Boolean ,onValueChange: (String) -> Unit) {
+fun MyInputTextField(
+    title: String,
+    value: String,
+    isError: Boolean,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    onValueChange: (String) -> Unit
+) {
     OutlinedTextField(
         value = value,
         onValueChange = { onValueChange(it) },
@@ -19,6 +25,7 @@ fun MyInputTextField(title: String, value: String,isError: Boolean ,onValueChang
         label = { Text(text = title) },
         singleLine = true,
         isError = isError,
+        trailingIcon = trailingIcon,
         colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = MaterialTheme.colorScheme.primary,
             unfocusedBorderColor = MaterialTheme.colorScheme.primary,

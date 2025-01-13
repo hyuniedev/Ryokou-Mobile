@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -43,23 +44,37 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -69,21 +84,28 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.min
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.ryokoumobile.R
 import com.example.ryokoumobile.model.controller.DataController
+import com.example.ryokoumobile.model.controller.FirebaseController
 import com.example.ryokoumobile.model.entity.Rate
 import com.example.ryokoumobile.model.entity.Schedule
 import com.example.ryokoumobile.model.entity.ToDoOnDay
 import com.example.ryokoumobile.model.entity.Tour
+import com.example.ryokoumobile.model.entity.User
 import com.example.ryokoumobile.model.uistate.TourDetailUiState
 import com.example.ryokoumobile.view.components.MyElevatedButton
+import com.example.ryokoumobile.view.components.MyInputTextField
 import com.example.ryokoumobile.view.components.MyLineTextHaveTextButton
 import com.example.ryokoumobile.viewmodel.TourDetailViewModel
+import com.example.ryokoumobile.viewmodel.TourViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.tasks.await
 
 @Composable
 fun TourDetail(
@@ -94,7 +116,15 @@ fun TourDetail(
     val scrollState = rememberScrollState()
     tourDetailVM.loadCompanyWithId(tour.company)
     tourDetailVM.loadRateOfTour(tour)
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
+
+    val focus = LocalFocusManager.current
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .clickable(interactionSource = null, indication = null) { focus.clearFocus() },
+        contentAlignment = Alignment.TopCenter
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -114,6 +144,7 @@ private fun BodyTourDetail(
     scrollState: ScrollState,
     tourDetailVM: TourDetailViewModel
 ) {
+    val user = DataController.user.collectAsState()
     val uiState = tourDetailVM.uiState.collectAsState()
     Column(
         modifier = Modifier
@@ -129,7 +160,7 @@ private fun BodyTourDetail(
         HorizontalDivider(thickness = 2.dp)
         HighlightsSection(tour, uiState.value, tourDetailVM)
         HorizontalDivider(thickness = 2.dp)
-        CommentOfTour(tour, tourDetailVM)
+        CommentOfTour(tour, uiState.value, tourDetailVM, user.value)
         HorizontalDivider(thickness = 2.dp)
         ServicesSection(tour)
         // TODO("Them goi y tour tuong tu")
@@ -172,7 +203,7 @@ private fun ButtonMoreInformation(@StringRes title: Int, onClick: () -> Unit) {
             .clip(
                 RoundedCornerShape(15.dp)
             )
-            .clickable { }
+            .clickable { onClick() }
     ) {
         Row(
             modifier = Modifier
@@ -196,7 +227,12 @@ private fun ButtonMoreInformation(@StringRes title: Int, onClick: () -> Unit) {
 }
 
 @Composable
-private fun CommentOfTour(tour: Tour, tourDetailVM: TourDetailViewModel) {
+private fun CommentOfTour(
+    tour: Tour,
+    uiState: TourDetailUiState,
+    tourDetailVM: TourDetailViewModel,
+    user: User?
+) {
     Column(modifier = Modifier.padding(horizontal = 10.dp)) {
         Text(
             stringResource(R.string.rateAndReview),
@@ -236,25 +272,138 @@ private fun CommentOfTour(tour: Tour, tourDetailVM: TourDetailViewModel) {
                 )
             )
         }
-        tour.lsRate.forEach {
-            ItemComment(it, tourDetailVM)
+        uiState.lsRate.subList(
+            0,
+            if (uiState.lsRate.size <= 2) uiState.lsRate.size else uiState.numShowRate
+        ).forEach { rate ->
+            ItemComment(rate)
         }
-//        TODO("Them khu vuc de nhap danh gia cho nguoi dung")
+        if (uiState.lsRate.isNotEmpty())
+            HorizontalDivider(
+                thickness = 1.dp,
+                modifier = Modifier.padding(vertical = 10.dp)
+            )
+        if (uiState.lsRate.size > 2 && uiState.numShowRate < uiState.lsRate.size) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { tourDetailVM.updateNumShowRate() },
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    "More",
+                    style = TextStyle(fontSize = 18.sp, color = MaterialTheme.colorScheme.primary),
+                    modifier = Modifier.padding(vertical = 10.dp)
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(10.dp))
+        if (user != null) {
+            FieldUserComment(tour, uiState, tourDetailVM, user)
+        }
     }
 }
 
 @Composable
-private fun ItemComment(rate: Rate, tourDetailVM: TourDetailViewModel) {
-    val name = tourDetailVM.getUserNameWithUID(rate.userId).collectAsState()
+private fun FieldUserComment(
+    tour: Tour,
+    uiState: TourDetailUiState,
+    tourDetailVM: TourDetailViewModel,
+    user: User?
+) {
+    val context = LocalContext.current
+    Card(
+        colors = CardDefaults.cardColors().copy(containerColor = Color.Transparent)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp)
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    Icons.Default.AccountCircle,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(40.dp)
+                )
+                Spacer(Modifier.width(10.dp))
+                repeat(5) { curRate ->
+                    Box(
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .clickable { tourDetailVM.updateNumRateOfUser(curRate + 1) }
+                            .padding(horizontal = 2.dp)) {
+                        Icon(
+                            if (curRate + 1 <= uiState.numRateOfUser)
+                                painterResource(R.drawable.star)
+                            else painterResource(
+                                R.drawable.star_outline
+                            ),
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(30.dp)
+                        )
+                    }
+                }
+            }
+            MyInputTextField(
+                title = "Your comment",
+                value = uiState.userComment,
+                isError = false,
+                onValueChange = { tourDetailVM.updateUserComment(it) },
+                trailingIcon = {
+                    IconButton(onClick = {
+                        tourDetailVM.sendComment(
+                            user = user!!,
+                            tour = tour,
+                            context = context
+                        )
+                    }) {
+                        Icon(
+                            painterResource(R.drawable.send),
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
+            )
+
+        }
+    }
+}
+
+@Composable
+private fun ItemComment(rate: Rate) {
+    var userName by remember { mutableStateOf("") }
+    LaunchedEffect(rate.userId) {
+        try {
+            val doc = FirebaseController.firestore.collection("users")
+                .document(rate.userId)
+                .get()
+                .await()
+            userName = doc["fullName"].toString()
+        } catch (e: Exception) {
+            userName = rate.userId.substring(0, 5)
+        }
+    }
+    HorizontalDivider(thickness = 1.dp, modifier = Modifier.padding(vertical = 10.dp))
     Column {
         Row {
             Icon(
                 Icons.Default.AccountCircle,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(28.dp)
             )
-            Text(name.value)
+            Spacer(Modifier.width(5.dp))
+            if (userName.isEmpty()) {
+                CircularProgressIndicator()
+            } else {
+                Text(userName)
+            }
         }
+        Spacer(Modifier.height(3.dp))
         Row {
             repeat(rate.star) {
                 Icon(
@@ -265,6 +414,7 @@ private fun ItemComment(rate: Rate, tourDetailVM: TourDetailViewModel) {
                 )
             }
         }
+        Spacer(Modifier.height(6.dp))
         Text(rate.comment, style = TextStyle(fontSize = 18.sp), maxLines = Int.MAX_VALUE)
     }
 }
@@ -275,11 +425,18 @@ private fun HighlightsSection(
     uiState: TourDetailUiState,
     tourDetailVM: TourDetailViewModel
 ) {
-    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.BottomCenter) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth(),
+        contentAlignment = Alignment.BottomCenter
+    ) {
         Column(
             modifier = Modifier
+                .fillMaxWidth()
                 .padding(horizontal = 10.dp)
+                .heightIn(min = 100.dp)
                 .animateContentSize(),
+            horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Text(
