@@ -108,3 +108,11 @@
 - complete tour detail screen 90%
 - load fullname with uid (on rate of tour detail)
 - rate caculate (division rate)
+
+## 14-1-2024
+### Added
+- Complete Rate UI on Tour Detail
+- Save data of rate to firebase
+
+### Fixed
+- Caculate num star of rate
