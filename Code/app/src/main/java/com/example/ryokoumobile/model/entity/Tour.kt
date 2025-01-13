@@ -22,7 +22,7 @@ data class Tour(
     val kisoku: String = "",
     val schedule: List<Schedule> = listOf(),
     val lsFile: List<String> = listOf(),
-    val lsRate: List<Rate> = listOf(),
+    var lsRate: List<Rate> = listOf(),
     val company: String = "",
     val end: Timestamp = Timestamp.now(),
 ) {

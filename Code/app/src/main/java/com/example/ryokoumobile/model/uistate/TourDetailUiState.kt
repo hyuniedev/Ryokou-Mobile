@@ -8,5 +8,8 @@ data class TourDetailUiState(
     var isShowSchedule: Boolean = false,
     var selectedDayOnSchedule: Schedule = Schedule(),
     var isExtend: Boolean = false,
-    var lsRate: List<Rate> = listOf()
+    var lsRate: List<Rate> = listOf(),
+    var numRateOfUser: Int = 0,
+    var userComment: String = "",
+    var numShowRate: Int = 2
 )

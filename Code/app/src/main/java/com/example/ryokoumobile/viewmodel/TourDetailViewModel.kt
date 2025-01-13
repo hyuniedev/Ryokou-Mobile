@@ -1,16 +1,22 @@
 package com.example.ryokoumobile.viewmodel
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.ryokoumobile.R
+import com.example.ryokoumobile.model.controller.DataController
 import com.example.ryokoumobile.model.controller.FirebaseController
 import com.example.ryokoumobile.model.entity.Company
 import com.example.ryokoumobile.model.entity.Rate
 import com.example.ryokoumobile.model.entity.Schedule
 import com.example.ryokoumobile.model.entity.Tour
+import com.example.ryokoumobile.model.entity.User
 import com.example.ryokoumobile.model.uistate.TourDetailUiState
+import com.example.ryokoumobile.view.components.MyShowToast
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -39,30 +45,53 @@ class TourDetailViewModel : ViewModel() {
         }
     }
 
-    fun getUserNameWithUID(uid: String): StateFlow<String> {
-        val name = MutableStateFlow("")
-        FirebaseController.firestore.collection("users")
-            .document(uid)
-            .get()
-            .addOnSuccessListener {
-                name.value = it["fullName"].toString()
+    fun sendComment(context: Context, tour: Tour, user: User) {
+        viewModelScope.launch {
+            if (_uiState.value.numRateOfUser == 0) {
+                MyShowToast(context, "Please rate the number of stars")
+                return@launch
+            } else if (_uiState.value.userComment.isEmpty()) {
+                MyShowToast(context, "Please enter your comment")
+                return@launch
+            } else {
+                val rate = Rate(
+                    tourId = tour.id,
+                    comment = _uiState.value.userComment,
+                    userId = user.id!!,
+                    star = _uiState.value.numRateOfUser
+                )
+                val newRate = FirebaseController.firestore.collection("rates").document()
+                rate.id = newRate.id
+                DataController.tourVM.addRate(tour, rate)
+                _uiState.update {
+                    it.copy(
+                        lsRate = listOf<Rate>() + rate + it.lsRate,
+                        numRateOfUser = 0,
+                        userComment = ""
+                    )
+                }
             }
-            .addOnFailureListener {
-                name.value = uid.substring(0, 5)
-            }
-        return name
+        }
+    }
+
+    fun updateNumShowRate() {
+        var newValue = _uiState.value.numShowRate + 2
+        newValue =
+            if (newValue < _uiState.value.lsRate.size) newValue else _uiState.value.lsRate.size
+        _uiState.update { it.copy(numShowRate = newValue) }
+    }
+
+    fun updateUserComment(value: String) {
+        _uiState.update { it.copy(userComment = value) }
+    }
+
+    fun updateNumRateOfUser(num: Int) {
+        _uiState.update { it.copy(numRateOfUser = num) }
     }
 
     fun loadRateOfTour(tour: Tour) {
         viewModelScope.launch {
-            var lsRate = listOf<Rate>()
-            FirebaseController.firestore.collection("rates").whereEqualTo("tourId", tour.id).get()
-                .addOnSuccessListener {
-                    lsRate = it.toObjects(Rate::class.java)
-                }
-            _uiState.update {
-                it.copy(lsRate = lsRate)
-            }
+            _uiState.update { it.copy(lsRate = DataController.tourVM.getRate(tour)) }
         }
     }
 

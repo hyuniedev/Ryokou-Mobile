@@ -202,7 +202,7 @@ private fun SignInTextField(
     isError: Boolean,
     onChange: (String) -> Unit
 ) {
-    MyInputTextField(title, value, isError, onChange)
+    MyInputTextField(title, value, isError, onValueChange = onChange)
     Spacer(modifier = Modifier.height(10.dp))
 }
 
