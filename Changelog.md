@@ -116,3 +116,10 @@
 
 ### Fixed
 - Caculate num star of rate
+
+## 15-1-2025
+### Added
+- Content on Account scene
+
+### Fixed
+- List item on account scene
