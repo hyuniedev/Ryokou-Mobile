@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ryokoumobile.R
@@ -112,7 +113,9 @@ fun BoxWelcome(onClick: () -> Unit) {
                                 fontSize = 30.sp,
                                 fontWeight = FontWeight.SemiBold,
                                 color = MaterialTheme.colorScheme.primary
-                            )
+                            ),
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1
                         )
                     }
                 }

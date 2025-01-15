@@ -51,7 +51,7 @@ fun FavoriteScene(modifier: Modifier = Modifier, navController: NavController) {
     Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         when (userState.value) {
             null -> OnNotLoggedIn(navController)
-            else -> OnLoggedIn(userState.value!!)
+            else -> OnLoggedIn(userState.value!!, navController)
         }
     }
 }
@@ -73,7 +73,7 @@ private fun OnNotLoggedIn(navController: NavController) {
                 Modifier
                     .weight(0.3f)
                     .padding(horizontal = 20.dp),
-                "Login",
+                "Đăng nhập",
                 isFilled = false
             ) {
                 navController.navigate(
@@ -86,7 +86,7 @@ private fun OnNotLoggedIn(navController: NavController) {
                     .padding(
                         horizontal = 20.dp
                     ),
-                "Sign in"
+                "Đăng ký"
             ) { navController.navigate(Scenes.AuthGroup.SignIn.route) }
         }
         Column(
@@ -103,13 +103,12 @@ private fun OnNotLoggedIn(navController: NavController) {
 
 @Composable
 private fun NotifyOnFavoriteEmpty() {
-    val textStyle: TextStyle =
-        TextStyle(
-            fontSize = 20.sp,
-            color = MaterialTheme.colorScheme.primary,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center,
-        )
+    val textStyle = TextStyle(
+        fontSize = 20.sp,
+        color = MaterialTheme.colorScheme.primary,
+        fontWeight = FontWeight.Bold,
+        textAlign = TextAlign.Center,
+    )
     Image(
         painterResource(R.drawable.favo1),
         contentDescription = null,
@@ -122,7 +121,7 @@ private fun NotifyOnFavoriteEmpty() {
 }
 
 @Composable
-private fun OnLoggedIn(user: User) {
+private fun OnLoggedIn(user: User, navController: NavController) {
     val tours = DataController.tourVM.uiState.collectAsState()
     val scrollState = rememberScrollState()
     Column(
@@ -143,7 +142,9 @@ private fun OnLoggedIn(user: User) {
             )
         )
         if (user.lsFavoriteTour.isNotEmpty()) {
-            ShowGridTour(user.lsFavoriteTour.map { DataController.tourVM.getTourFromID(it) })
+            ShowGridTour(
+                navController = navController,
+                lsTour = user.lsFavoriteTour.map { DataController.tourVM.getTourFromID(it) })
         } else {
             Column(
                 modifier = Modifier
@@ -155,6 +156,6 @@ private fun OnLoggedIn(user: User) {
             }
         }
         Spacer(Modifier.height(10.dp))
-        RecommendedTours(tours.value)
+        RecommendedTours(tours.value, navController)
     }
 }

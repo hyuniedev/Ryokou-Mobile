@@ -48,16 +48,6 @@ fun <T> SuggestSection(
                 ) { onChange(it) }
             }
         }
-        LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            items(lsTour) { tour ->
-                ItemTour(
-                    tour,
-                    onClick = { onClick(tour) },
-                    isFavorite = DataController.user.value?.lsFavoriteTour?.contains(tour.id)
-                        ?: false,
-                    onClickFavorite = { onClickFavorite(tour) }
-                )
-            }
-        }
+        ShowHorizontalListTour(lsTour, onClick, onClickFavorite)
     }
 }

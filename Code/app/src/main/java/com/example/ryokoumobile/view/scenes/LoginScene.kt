@@ -97,7 +97,10 @@ fun LoginScene(
                     Arrangement.End
                 ) { viewModel.forgetPassword() }
                 Spacer(modifier = Modifier.height(20.dp))
-                MyElevatedButton(modifier = Modifier.fillMaxWidth(), "Login") { viewModel.login() }
+                MyElevatedButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    "Đăng nhập"
+                ) { viewModel.login() }
                 Spacer(modifier = Modifier.height(15.dp))
                 MyElevatedButton(
                     modifier = Modifier.fillMaxWidth(),
@@ -107,8 +110,8 @@ fun LoginScene(
                 ) { viewModel.loginWithGG(currentContext) }
                 Spacer(modifier = Modifier.height(10.dp))
                 MyLineTextHaveTextButton(
-                    "Don't have an account? ",
-                    "Sign in.", "",
+                    "Bạn chưa có tài khoản? ",
+                    "Đăng ký.", "",
                     Arrangement.Center
                 ) { navController.navigate(Scenes.AuthGroup.SignIn.route) }
             }

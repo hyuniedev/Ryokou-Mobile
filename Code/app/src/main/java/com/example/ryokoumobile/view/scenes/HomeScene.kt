@@ -133,7 +133,7 @@ fun HomeScene(
                             .clip(RoundedCornerShape(20.dp))
                             .clickable { }) {
                         Text(
-                            "More",
+                            "Xem thêm",
                             style = TextStyle(
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 21.sp,

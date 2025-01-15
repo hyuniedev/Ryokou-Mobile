@@ -16,12 +16,13 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.ryokoumobile.R
 import com.example.ryokoumobile.model.controller.DataController
 import com.example.ryokoumobile.model.entity.Tour
 
 @Composable
-fun RecommendedTours(lsTour: List<Tour>) {
+fun RecommendedTours(lsTour: List<Tour>, navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -36,6 +37,6 @@ fun RecommendedTours(lsTour: List<Tour>) {
                 color = MaterialTheme.colorScheme.primary
             )
         )
-        ShowGridTour(lsTour)
+        ShowGridTour(lsTour, navController)
     }
 }
