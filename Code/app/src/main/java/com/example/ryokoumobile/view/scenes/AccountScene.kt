@@ -44,6 +44,19 @@ fun AccountScene(modifier: Modifier = Modifier, navController: NavController) {
         ItemAccount(
             icon = {
                 Icon(
+                    imageVector = Icons.Default.AccountCircle,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(30.dp)
+                )
+            },
+            title = "Thông tin tài khoản",
+            descriptor = "Nhấn để thay đổi",
+            onClick = {}
+        ),
+        ItemAccount(
+            icon = {
+                Icon(
                     painter = painterResource(R.drawable.language),
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary,
@@ -99,22 +112,7 @@ fun AccountScene(modifier: Modifier = Modifier, navController: NavController) {
     Column(modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         when (user.value) {
             null -> BoxWelcome { navController.navigate(Scenes.AuthGroup.Login.route) }
-            else -> {
-                lsItem.add(index = 0, element = ItemAccount(
-                    icon = {
-                        Icon(
-                            imageVector = Icons.Default.AccountCircle,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(30.dp)
-                        )
-                    },
-                    title = "Thông tin tài khoản",
-                    descriptor = "Nhấn để thay đổi",
-                    onClick = {}
-                ))
-                lsItem = lsItem.toMutableSet().toMutableList()
-            }
+            else -> {}
         }
         Icon(
             painter = painterResource(R.drawable.manage_accounts),
@@ -137,12 +135,14 @@ fun AccountScene(modifier: Modifier = Modifier, navController: NavController) {
                     shape = RoundedCornerShape(15.dp)
                 )
             ) {
-                lsItem.forEachIndexed { index, _ ->
+                lsItem.forEachIndexed { index, value ->
+                    if (user.value == null && index == 0)
+                        return@forEachIndexed
                     ItemSetting(
-                        icon = lsItem[index].icon,
-                        title = lsItem[index].title,
-                        descriptor = lsItem[index].descriptor,
-                        onClick = lsItem[index].onClick
+                        icon = value.icon,
+                        title = value.title,
+                        descriptor = value.descriptor,
+                        onClick = value.onClick
                     )
                     if (index != lsItem.size - 1) {
                         HorizontalDivider(
