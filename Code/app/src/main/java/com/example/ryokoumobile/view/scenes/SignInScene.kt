@@ -88,7 +88,7 @@ fun SignInScene(
             )
             Spacer(modifier = Modifier.height(10.dp))
             SignInTextField(
-                "Full name",
+                "Họ và Tên",
                 uiState.value.name,
                 uiState.value.nameError
             ) { newValue -> viewModel.updateName(newValue) }
@@ -102,17 +102,17 @@ fun SignInScene(
                 uiState.value.sexError
             ) { newValue -> viewModel.updateSex(newValue) }
             SignInTextField(
-                "Number phone",
+                "Số điện thoại",
                 uiState.value.numberPhone,
                 uiState.value.numberPhoneError
             ) { newValue -> viewModel.updateNumberPhone(newValue) }
             SignInTextField(
-                "Password",
+                "Mật khẩu",
                 uiState.value.password,
                 uiState.value.passwordError
             ) { newValue -> viewModel.updatePassword(newValue) }
             SignInTextField(
-                "Confirm password",
+                "Xác thực mật khẩu",
                 uiState.value.passwordConfirm,
                 uiState.value.passwordConfirmError
             ) { newValue -> viewModel.updatePasswordConfirm(newValue) }
@@ -124,8 +124,8 @@ fun SignInScene(
                         .copy(uncheckedBorderColor = MaterialTheme.colorScheme.primary),
                     onCheckedChange = { viewModel.updateCheckBoxService() })
                 MyLineTextHaveTextButton(
-                    "I agree to the ",
-                    "Terms of Service & Privacy Policy",
+                    "Tôi đồng ý với ",
+                    "Điều khoản & chính sách bảo mật",
                     ".",
                     Arrangement.Start
                 ) {
@@ -133,7 +133,7 @@ fun SignInScene(
                 }
             }
             Spacer(modifier = Modifier.height(15.dp))
-            MyElevatedButton(modifier = Modifier.fillMaxWidth(), "Sign in") {
+            MyElevatedButton(modifier = Modifier.fillMaxWidth(), "Đăng ký") {
                 viewModel.signIn(context)
             }
             Spacer(modifier = Modifier.height(15.dp))
@@ -160,20 +160,20 @@ private fun ChooseSex(sexSelected: ESex, isError: Boolean, onChange: (ESex) -> U
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            "Your sex:",
+            "Giới tính:",
             style = MaterialTheme.typography.bodyLarge,
             color = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
         )
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                "Male",
+                "Nam",
                 style = MaterialTheme.typography.bodyLarge,
                 color = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
             )
             MyRadioButton(selected = sexSelected == ESex.Male, isError) { onChange(ESex.Male) }
             Spacer(Modifier.width(15.dp))
             Text(
-                "Female",
+                "Nữ",
                 style = MaterialTheme.typography.bodyLarge,
                 color = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
             )

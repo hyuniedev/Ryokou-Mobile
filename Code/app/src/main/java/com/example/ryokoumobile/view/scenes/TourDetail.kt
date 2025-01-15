@@ -101,6 +101,8 @@ import com.example.ryokoumobile.model.uistate.TourDetailUiState
 import com.example.ryokoumobile.view.components.MyElevatedButton
 import com.example.ryokoumobile.view.components.MyInputTextField
 import com.example.ryokoumobile.view.components.MyLineTextHaveTextButton
+import com.example.ryokoumobile.view.components.RecommendedTours
+import com.example.ryokoumobile.view.components.ShowHorizontalListTour
 import com.example.ryokoumobile.viewmodel.TourDetailViewModel
 import com.example.ryokoumobile.viewmodel.TourViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -131,7 +133,7 @@ fun TourDetail(
                 .navigationBarsPadding(),
             contentAlignment = Alignment.BottomCenter
         ) {
-            BodyTourDetail(tour, scrollState, tourDetailVM)
+            BodyTourDetail(tour, scrollState, tourDetailVM, navController)
             BottomBarTourDetail(tour)
         }
         TopBarTourDetail(navController)
@@ -142,7 +144,8 @@ fun TourDetail(
 private fun BodyTourDetail(
     tour: Tour,
     scrollState: ScrollState,
-    tourDetailVM: TourDetailViewModel
+    tourDetailVM: TourDetailViewModel,
+    navController: NavController
 ) {
     val user = DataController.user.collectAsState()
     val uiState = tourDetailVM.uiState.collectAsState()
@@ -163,9 +166,37 @@ private fun BodyTourDetail(
         CommentOfTour(tour, uiState.value, tourDetailVM, user.value)
         HorizontalDivider(thickness = 2.dp)
         ServicesSection(tour)
-        // TODO("Them goi y tour tuong tu")
+        HorizontalDivider(thickness = 2.dp)
+        SimilarToursSection(navController = navController)
         Spacer(Modifier.height(100.dp))
     }
+}
+
+@Composable
+fun SimilarToursSection(navController: NavController) {
+    val tours = DataController.tourVM.uiState.collectAsState()
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp)
+    ) {
+        Text(
+            stringResource(R.string.similarTours),
+            style = TextStyle(fontSize = 22.sp, fontWeight = FontWeight.SemiBold)
+        )
+        Spacer(Modifier.height(10.dp))
+        ShowHorizontalListTour(
+            lsTour = tours.value,
+            onClick = { tour ->
+                DataController.tourVM.navigationToTourDetail(
+                    tour = tour,
+                    navController = navController
+                )
+            },
+            onClickFavorite = { tour -> DataController.updateFavoriteTour(tour) }
+        )
+    }
+
 }
 
 @Composable
@@ -198,10 +229,10 @@ private fun ButtonMoreInformation(@StringRes title: Int, onClick: () -> Unit) {
             .border(
                 width = 1.dp,
                 color = MaterialTheme.colorScheme.primary,
-                shape = RoundedCornerShape(15.dp)
+                shape = RoundedCornerShape(10.dp)
             )
             .clip(
-                RoundedCornerShape(15.dp)
+                RoundedCornerShape(10.dp)
             )
             .clickable { onClick() }
     ) {

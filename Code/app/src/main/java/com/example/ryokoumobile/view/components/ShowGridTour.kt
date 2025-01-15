@@ -17,12 +17,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.ryokoumobile.model.controller.DataController
 import com.example.ryokoumobile.model.entity.Tour
 import com.example.ryokoumobile.view.items.ItemTour
 
 @Composable
-fun ShowGridTour(lsTour: List<Tour>) {
+fun ShowGridTour(lsTour: List<Tour>, navController: NavController) {
     val tours = DataController.tourVM
     Column(
         Modifier
@@ -40,7 +41,12 @@ fun ShowGridTour(lsTour: List<Tour>) {
                     ItemTour(
                         tour = tour,
                         isFavorite = tours.getIsFavoriteTour(tour),
-                        onClick = {},
+                        onClick = {
+                            DataController.tourVM.navigationToTourDetail(
+                                navController = navController,
+                                tour = tour
+                            )
+                        },
                         onClickFavorite = { DataController.updateFavoriteTour(tour) })
                 }
                 if (it.size == 1) {

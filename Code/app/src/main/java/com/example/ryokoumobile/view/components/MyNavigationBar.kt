@@ -46,19 +46,18 @@ fun MyNavigationBar(navController: NavController) {
                         tint = MaterialTheme.colorScheme.secondary
                     )
                 },
-                label = {
-                    if (currentRoute == scene.route) {
-                        Text(
-                            scene.route,
-                            style = TextStyle(
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                color = MaterialTheme.colorScheme.secondary
-                            ),
-                            maxLines = 1
-                        )
-                    }
-                },
+//                label = {
+//                    if (currentRoute == scene.route) {
+//                        Text(
+//                            scene.route,
+//                            style = TextStyle(
+//                                fontSize = 16.sp,
+//                                fontWeight = FontWeight.SemiBold,
+//                                color = MaterialTheme.colorScheme.secondary
+//                            ),
+//                        )
+//                    }
+//                },
                 colors = NavigationBarItemDefaults.colors()
                     .copy(selectedIndicatorColor = IndicatorColor),
                 onClick = {

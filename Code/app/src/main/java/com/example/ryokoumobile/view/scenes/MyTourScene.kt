@@ -41,7 +41,7 @@ fun MyTourScene(modifier: Modifier = Modifier, navController: NavController) {
     val user = DataController.user.collectAsState()
     Box(modifier = modifier) {
         when (user.value) {
-            null -> OnNotLoggedIn(navController)
+//            null -> OnNotLoggedIn(navController)
 
             else -> OnLoggedIn()
         }
@@ -109,5 +109,5 @@ private fun OnNotLoggedIn(navController: NavController) {
 
 @Composable
 private fun OnLoggedIn() {
-
+    
 }
