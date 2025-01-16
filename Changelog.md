@@ -123,3 +123,11 @@
 
 ### Fixed
 - List item on account scene
+
+## 16-1-2025
+### Added
+- Booked tour on tour detail
+- Add collection bookedTour on Firebase, connect to project on book tour
+
+### Fixed
+- Type data booked tour
