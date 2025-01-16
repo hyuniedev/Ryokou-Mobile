@@ -11,5 +11,5 @@ data class User(
     val password: String = "",
     val sex: ESex = ESex.None,
     @PropertyName("favoriteTour") var lsFavoriteTour: List<String> = listOf(),
-    @PropertyName("myTour") var lsMyTour: List<TourBooked> = listOf()
+    var lsMyTour: List<String> = listOf()
 )
