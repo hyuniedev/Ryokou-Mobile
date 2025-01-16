@@ -96,6 +96,7 @@ import com.example.ryokoumobile.model.entity.Rate
 import com.example.ryokoumobile.model.entity.Schedule
 import com.example.ryokoumobile.model.entity.ToDoOnDay
 import com.example.ryokoumobile.model.entity.Tour
+import com.example.ryokoumobile.model.entity.TourBooked
 import com.example.ryokoumobile.model.entity.User
 import com.example.ryokoumobile.model.uistate.TourDetailUiState
 import com.example.ryokoumobile.view.components.MyElevatedButton
@@ -134,7 +135,7 @@ fun TourDetail(
             contentAlignment = Alignment.BottomCenter
         ) {
             BodyTourDetail(tour, scrollState, tourDetailVM, navController)
-            BottomBarTourDetail(tour)
+            BottomBarTourDetail(tour, user = DataController.user.collectAsState().value)
         }
         TopBarTourDetail(navController)
     }
@@ -728,7 +729,7 @@ private fun CompanyName(companyName: String) {
 }
 
 @Composable
-private fun BottomBarTourDetail(tour: Tour) {
+private fun BottomBarTourDetail(tour: Tour, user: User?) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Box(
             modifier = Modifier
@@ -769,7 +770,11 @@ private fun BottomBarTourDetail(tour: Tour) {
                     )
                 )
             }
-            MyElevatedButton(title = "Select") { }
+            MyElevatedButton(title = "Select") {
+                if (user == null) return@MyElevatedButton
+                val tourBooked = TourBooked(numPerson = 1, idTour = tour.id)
+                DataController.updateBookedTour(tourBooked = tourBooked)
+            }
         }
     }
 }
