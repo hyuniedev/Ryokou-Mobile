@@ -2,6 +2,7 @@ package com.example.ryokoumobile.model.uistate
 
 import com.example.ryokoumobile.model.entity.Rate
 import com.example.ryokoumobile.model.entity.Schedule
+import com.google.firebase.Timestamp
 
 data class TourDetailUiState(
     var companyName: String = "",
@@ -11,5 +12,9 @@ data class TourDetailUiState(
     var lsRate: List<Rate> = listOf(),
     var numRateOfUser: Int = 0,
     var userComment: String = "",
-    var numShowRate: Int = 2
+    var numShowRate: Int = 2,
+    var isSelectTour: Boolean = false,
+    var isShowDatePicker: Boolean = false,
+    var dateSelected: Timestamp? = null,
+    var numTicket: Int = 0
 )

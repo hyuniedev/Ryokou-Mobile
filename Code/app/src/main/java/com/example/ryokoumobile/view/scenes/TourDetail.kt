@@ -39,6 +39,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.PlayArrow
@@ -49,6 +50,8 @@ import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -58,8 +61,10 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -78,13 +83,11 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.min
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -93,22 +96,22 @@ import com.example.ryokoumobile.R
 import com.example.ryokoumobile.model.controller.DataController
 import com.example.ryokoumobile.model.controller.FirebaseController
 import com.example.ryokoumobile.model.entity.Rate
-import com.example.ryokoumobile.model.entity.Schedule
 import com.example.ryokoumobile.model.entity.ToDoOnDay
 import com.example.ryokoumobile.model.entity.Tour
 import com.example.ryokoumobile.model.entity.TourBooked
 import com.example.ryokoumobile.model.entity.User
+import com.example.ryokoumobile.model.repository.Scenes
 import com.example.ryokoumobile.model.uistate.TourDetailUiState
 import com.example.ryokoumobile.view.components.MyElevatedButton
 import com.example.ryokoumobile.view.components.MyInputTextField
 import com.example.ryokoumobile.view.components.MyLineTextHaveTextButton
-import com.example.ryokoumobile.view.components.RecommendedTours
+import com.example.ryokoumobile.view.components.MyShowToast
 import com.example.ryokoumobile.view.components.ShowHorizontalListTour
 import com.example.ryokoumobile.viewmodel.TourDetailViewModel
-import com.example.ryokoumobile.viewmodel.TourViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import com.google.firebase.Timestamp
 import kotlinx.coroutines.tasks.await
+import java.util.Calendar
+import java.util.Date
 
 @Composable
 fun TourDetail(
@@ -135,7 +138,12 @@ fun TourDetail(
             contentAlignment = Alignment.BottomCenter
         ) {
             BodyTourDetail(tour, scrollState, tourDetailVM, navController)
-            BottomBarTourDetail(tour, user = DataController.user.collectAsState().value)
+            BottomBarTourDetail(
+                tour,
+                user = DataController.user.collectAsState().value,
+                tourDetailVM,
+                navController
+            )
         }
         TopBarTourDetail(navController)
     }
@@ -728,8 +736,17 @@ private fun CompanyName(companyName: String) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun BottomBarTourDetail(tour: Tour, user: User?) {
+private fun BottomBarTourDetail(
+    tour: Tour,
+    user: User?,
+    tourDetailVM: TourDetailViewModel,
+    navController: NavController
+) {
+    val context = LocalContext.current
+    val datePickerState = rememberDatePickerState()
+    val uiState = tourDetailVM.uiState.collectAsState()
     Column(modifier = Modifier.fillMaxWidth()) {
         Box(
             modifier = Modifier
@@ -770,11 +787,187 @@ private fun BottomBarTourDetail(tour: Tour, user: User?) {
                     )
                 )
             }
-            MyElevatedButton(title = "Select") {
-                if (user == null) return@MyElevatedButton
-                val tourBooked = TourBooked(numPerson = 1, idTour = tour.id)
-                DataController.updateBookedTour(tourBooked = tourBooked)
+            MyElevatedButton(title = "Chọn") {
+                if (user == null) {
+                    navController.navigate(Scenes.AuthGroup.Login.route)
+                } else {
+                    tourDetailVM.updateIsSelectTour()
+                }
             }
+        }
+    }
+    if (uiState.value.isSelectTour) {
+        ModalBottomSheet(
+            onDismissRequest = { tourDetailVM.updateIsSelectTour() },
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 15.dp)
+                    .padding(bottom = 15.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        "Chọn ngày đi: ",
+                        style = TextStyle(
+                            fontSize = 18.sp,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.Bold
+                        )
+                    )
+                    IconButton(onClick = { tourDetailVM.updateIsShowDatePicker() }) {
+                        Icon(
+                            Icons.Default.DateRange,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(30.dp)
+                        )
+                    }
+                }
+                if (uiState.value.dateSelected != null) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth(0.6f)
+                            .padding(horizontal = 15.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                "Ngày đi: ",
+                                style = TextStyle(
+                                    fontSize = 16.sp,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            )
+                            Text(
+                                tourDetailVM.formatDate(uiState.value.dateSelected!!),
+                                style = TextStyle(
+                                    fontSize = 16.sp,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            )
+                        }
+                        Spacer(Modifier.height(5.dp))
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                "Ngày về: ",
+                                style = TextStyle(
+                                    fontSize = 16.sp,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            )
+                            Text(
+                                tourDetailVM.formatDate(tourDetailVM.getEndDay(tour.durations)),
+                                style = TextStyle(
+                                    fontSize = 16.sp,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            )
+                        }
+                    }
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        "Số lượng vé: ",
+                        style = TextStyle(
+                            fontSize = 18.sp,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.Bold
+                        )
+                    )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        IconButton(onClick = { tourDetailVM.updateNumTicket(uiState.value.numTicket - 1) }) {
+                            Text(
+                                "-",
+                                style = TextStyle(
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    fontSize = 22.sp
+                                )
+                            )
+                        }
+                        Box {
+                            Text(
+                                uiState.value.numTicket.toString(),
+                                style = TextStyle(
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 22.sp,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            )
+                        }
+                        IconButton(onClick = { tourDetailVM.updateNumTicket(uiState.value.numTicket + 1) }) {
+                            Text(
+                                "+",
+                                style = TextStyle(
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    fontSize = 22.sp
+                                )
+                            )
+                        }
+                    }
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    MyElevatedButton(title = "Thanh toán", modifier = Modifier.fillMaxWidth(0.5f)) {
+                        tourDetailVM.thanhToan(context, tour)
+                    }
+                }
+            }
+        }
+    }
+    if (uiState.value.isShowDatePicker) {
+        DatePickerDialog(
+            onDismissRequest = { tourDetailVM.updateIsShowDatePicker() },
+            confirmButton = {
+                TextButton(onClick = {
+                    datePickerState.selectedDateMillis?.let { milis ->
+                        val selectTime = Timestamp(Date(milis))
+                        if (selectTime.toDate().after(Calendar.getInstance().time)) {
+                            tourDetailVM.updateSelectedDate(Timestamp(Date(milis)))
+                            tourDetailVM.updateIsShowDatePicker()
+                        } else {
+                            MyShowToast(context, "Ngày chọn không hợp lệ!")
+                        }
+                    }
+                }) {
+                    Text(
+                        "Chọn",
+                        style = TextStyle(
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { tourDetailVM.updateIsShowDatePicker() }) {
+                    Text(
+                        "Hủy",
+                        style = TextStyle(color = MaterialTheme.colorScheme.primary)
+                    )
+                }
+            }
+        ) {
+            DatePicker(state = datePickerState)
         }
     }
 }
