@@ -131,3 +131,10 @@
 
 ### Fixed
 - Type data booked tour
+
+## 18-1-2025
+### Added
+- Ui on select day start + num ticket (on book tour - Tour detail scene)
+- book day on TourBooked
+### Fixed
+- Fix data booked tour on push to Firebase
