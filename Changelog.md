@@ -138,3 +138,10 @@
 - book day on TourBooked
 ### Fixed
 - Fix data booked tour on push to Firebase
+
+## 19-1-2025
+### Added
+- Tour Pay Ui
+
+### Fixed
+- Fix Calculate price of tour division sale x2
