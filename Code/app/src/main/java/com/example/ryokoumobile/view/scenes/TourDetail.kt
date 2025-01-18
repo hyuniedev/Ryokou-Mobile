@@ -928,7 +928,7 @@ private fun BottomBarTourDetail(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     MyElevatedButton(title = "Thanh toán", modifier = Modifier.fillMaxWidth(0.5f)) {
-                        tourDetailVM.thanhToan(context, tour)
+                        tourDetailVM.thanhToan(context, tour, navController)
                     }
                 }
             }

@@ -108,7 +108,7 @@ fun BoxWelcome(onClick: () -> Unit) {
                             tint = MaterialTheme.colorScheme.primary
                         )
                         Text(
-                            "Welcome ${userState.value?.fullName}",
+                            "Xin chào ${userState.value?.fullName}",
                             style = TextStyle(
                                 fontSize = 30.sp,
                                 fontWeight = FontWeight.SemiBold,

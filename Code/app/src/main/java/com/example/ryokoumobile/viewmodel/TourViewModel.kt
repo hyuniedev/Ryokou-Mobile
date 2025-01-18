@@ -7,6 +7,7 @@ import com.example.ryokoumobile.model.controller.DataController
 import com.example.ryokoumobile.model.controller.FirebaseController
 import com.example.ryokoumobile.model.entity.Rate
 import com.example.ryokoumobile.model.entity.Tour
+import com.example.ryokoumobile.model.entity.TourBooked
 import com.example.ryokoumobile.model.repository.Scenes
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -70,6 +71,15 @@ class TourViewModel : ViewModel() {
                 "{tourId}",
                 tour.id
             )
+        )
+    }
+
+    fun navigationToTourPay(navController: NavController, tourBooked: TourBooked) {
+        navController.navigate(
+            Scenes.TourPay.route
+                .replace("{numTicket}", tourBooked.numPerson.toString())
+                .replace("{dayStart}", tourBooked.startDay.seconds.toString())
+                .replace("{idTour}", tourBooked.idTour)
         )
     }
 
