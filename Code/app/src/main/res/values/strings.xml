@@ -44,4 +44,10 @@
     <string name="des_supportCenter">Nơi giải đáp mọi thắc mắc của bạn</string>
     <string name="des_contactUs">Yêu cầu hỗ trợ từ dịch vụ khách hàng</string>
     <string name="des_setting">Xem và tùy chỉnh cài đặt tài khoản</string>
+    <string name="tourInformation">Thông tin tour</string>
+    <string name="thoiGian">Thời gian</string>
+    <string name="soLuongKhach">Số lượng khách</string>
+    <string name="tongTien">Tổng tiền</string>
+    <string name="phuongThucThanhToan">Phương thức thanh toán</string>
+    
 </resources>

@@ -7,6 +7,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.example.ryokoumobile.R
 import com.example.ryokoumobile.model.controller.DataController
 import com.example.ryokoumobile.model.controller.FirebaseController
@@ -16,6 +17,7 @@ import com.example.ryokoumobile.model.entity.Schedule
 import com.example.ryokoumobile.model.entity.Tour
 import com.example.ryokoumobile.model.entity.TourBooked
 import com.example.ryokoumobile.model.entity.User
+import com.example.ryokoumobile.model.repository.Scenes
 import com.example.ryokoumobile.model.uistate.TourDetailUiState
 import com.example.ryokoumobile.view.components.MyShowToast
 import com.google.firebase.Timestamp
@@ -142,7 +144,7 @@ class TourDetailViewModel : ViewModel() {
         return format.format(date.toDate())
     }
 
-    fun thanhToan(context: Context, tour: Tour) {
+    fun thanhToan(context: Context, tour: Tour, navController: NavController) {
         if (uiState.value.dateSelected != null) {
             if (uiState.value.numTicket > 0) {
                 val bookedTour = TourBooked(
@@ -150,7 +152,8 @@ class TourDetailViewModel : ViewModel() {
                     startDay = uiState.value.dateSelected!!,
                     idTour = tour.id
                 )
-                DataController.updateBookedTour(bookedTour)
+                DataController.tourVM.navigationToTourPay(navController, tourBooked = bookedTour)
+//                DataController.updateBookedTour(bookedTour)
             } else {
                 MyShowToast(context, "Vui lòng chọn số vé!")
             }

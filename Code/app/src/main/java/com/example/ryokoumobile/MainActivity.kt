@@ -22,6 +22,7 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.ryokoumobile.model.controller.DataController
+import com.example.ryokoumobile.model.entity.TourBooked
 import com.example.ryokoumobile.model.repository.Scenes
 import com.example.ryokoumobile.ui.theme.RyokouMobileTheme
 import com.example.ryokoumobile.view.components.MyNavigationBar
@@ -35,11 +36,15 @@ import com.example.ryokoumobile.view.scenes.MyTourScene
 import com.example.ryokoumobile.view.scenes.SearchScene
 import com.example.ryokoumobile.view.scenes.SignInScene
 import com.example.ryokoumobile.view.scenes.TourDetail
+import com.example.ryokoumobile.view.scenes.TourPay
 import com.example.ryokoumobile.viewmodel.TourViewModel
 import com.google.firebase.FirebaseApp
+import com.google.firebase.Timestamp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -141,6 +146,29 @@ fun MainScene() {
                         backStackEntry.arguments?.getString("tourId") ?: ""
                     )
                 TourDetail(tour, navController)
+            }
+            composable(
+                route = Scenes.TourPay.route,
+                arguments = listOf(
+                    navArgument("numTicket") { type = NavType.IntType },
+                    navArgument("dayStart") { type = NavType.LongType },
+                    navArgument("idTour") { type = NavType.StringType })
+            ) { backStackEntry ->
+                // Lấy giá trị `dayStart` từ arguments
+                val dayStartSeconds = backStackEntry.arguments?.getLong("dayStart")
+
+                // Xử lý trường hợp `null` và chuyển đổi sang mili giây
+                val dayStartMillis = when {
+                    dayStartSeconds != null -> dayStartSeconds * 1000 // Chuyển đổi seconds sang milliseconds
+                    else -> System.currentTimeMillis() // Sử dụng thời gian hiện tại nếu `dayStart` là null
+                }
+
+                val tourBooked = TourBooked(
+                    numPerson = backStackEntry.arguments?.getInt("numTicket") ?: 1,
+                    startDay = Timestamp(Date(dayStartMillis)),
+                    idTour = backStackEntry.arguments?.getString("idTour") ?: ""
+                )
+                TourPay(tourBooked, navController)
             }
         }
     }

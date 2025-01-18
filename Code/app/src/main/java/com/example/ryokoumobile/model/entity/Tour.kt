@@ -14,7 +14,7 @@ data class Tour(
     val durations: Int = 0,
     val start: Timestamp = Timestamp.now(),
     val maintainTime: Int = 0,
-    val cost: String = "",
+    var cost: String = "",
     val sale: Int = 0,
     val gatheringPlace: String = "",
     val freeService: Boolean = false,
