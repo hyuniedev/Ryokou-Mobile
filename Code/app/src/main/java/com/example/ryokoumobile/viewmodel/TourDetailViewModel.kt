@@ -14,15 +14,20 @@ import com.example.ryokoumobile.model.entity.Company
 import com.example.ryokoumobile.model.entity.Rate
 import com.example.ryokoumobile.model.entity.Schedule
 import com.example.ryokoumobile.model.entity.Tour
+import com.example.ryokoumobile.model.entity.TourBooked
 import com.example.ryokoumobile.model.entity.User
 import com.example.ryokoumobile.model.uistate.TourDetailUiState
 import com.example.ryokoumobile.view.components.MyShowToast
+import com.google.firebase.Timestamp
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class TourDetailViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(TourDetailUiState())
@@ -105,5 +110,52 @@ class TourDetailViewModel : ViewModel() {
 
     fun updateExtend() {
         _uiState.update { it.copy(isExtend = !it.isExtend) }
+    }
+
+    fun updateIsSelectTour() {
+        _uiState.update { it.copy(isSelectTour = !it.isSelectTour) }
+    }
+
+    fun updateIsShowDatePicker() {
+        _uiState.update { it.copy(isShowDatePicker = !it.isShowDatePicker) }
+    }
+
+    fun updateSelectedDate(time: Timestamp?) {
+        _uiState.update { it.copy(dateSelected = time) }
+    }
+
+    fun updateNumTicket(value: Int) {
+        if (value < 0) return
+        _uiState.update { it.copy(numTicket = value) }
+    }
+
+    fun getEndDay(duration: Int): Timestamp {
+        val startDay = uiState.value.dateSelected?.toDate()
+        val calendar = Calendar.getInstance()
+        calendar.time = startDay!!
+        calendar.add(Calendar.DAY_OF_MONTH, duration)
+        return Timestamp(calendar.time)
+    }
+
+    fun formatDate(date: Timestamp): String {
+        val format = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        return format.format(date.toDate())
+    }
+
+    fun thanhToan(context: Context, tour: Tour) {
+        if (uiState.value.dateSelected != null) {
+            if (uiState.value.numTicket > 0) {
+                val bookedTour = TourBooked(
+                    numPerson = uiState.value.numTicket,
+                    startDay = uiState.value.dateSelected!!,
+                    idTour = tour.id
+                )
+                DataController.updateBookedTour(bookedTour)
+            } else {
+                MyShowToast(context, "Vui lòng chọn số vé!")
+            }
+        } else {
+            MyShowToast(context, "Vui lòng chọn ngày đi!")
+        }
     }
 }
