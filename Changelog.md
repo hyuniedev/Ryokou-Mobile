@@ -103,7 +103,7 @@
 ### Fixed
 - fix re-set data when login with gg account
 
-##13-1-2025
+## 13-1-2025
 ### Added
 - complete tour detail screen 90%
 - load fullname with uid (on rate of tour detail)
@@ -145,3 +145,7 @@
 
 ### Fixed
 - Fix Calculate price of tour division sale x2
+
+## 22-1-2025
+### Added
+- add user info scene 
