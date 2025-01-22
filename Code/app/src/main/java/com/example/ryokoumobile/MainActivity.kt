@@ -31,6 +31,7 @@ import com.example.ryokoumobile.view.components.MyTopBar
 import com.example.ryokoumobile.view.scenes.AccountScene
 import com.example.ryokoumobile.view.scenes.FavoriteScene
 import com.example.ryokoumobile.view.scenes.HomeScene
+import com.example.ryokoumobile.view.scenes.InfoUserScene
 import com.example.ryokoumobile.view.scenes.LoginScene
 import com.example.ryokoumobile.view.scenes.MyTourScene
 import com.example.ryokoumobile.view.scenes.SearchScene
@@ -169,6 +170,14 @@ fun MainScene() {
                     idTour = backStackEntry.arguments?.getString("idTour") ?: ""
                 )
                 TourPay(tourBooked, navController)
+            }
+            navigation(
+                route = Scenes.AccountGroup.route,
+                startDestination = Scenes.AccountGroup.InfoUser.route
+            ) {
+                composable(Scenes.AccountGroup.InfoUser.route) {
+                    InfoUserScene()
+                }
             }
         }
     }

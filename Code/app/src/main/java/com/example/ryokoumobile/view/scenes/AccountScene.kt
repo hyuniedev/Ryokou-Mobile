@@ -52,7 +52,7 @@ fun AccountScene(modifier: Modifier = Modifier, navController: NavController) {
             },
             title = "Thông tin tài khoản",
             descriptor = "Nhấn để thay đổi",
-            onClick = {}
+            onClick = { navController.navigate(Scenes.AccountGroup.InfoUser.route) }
         ),
         ItemAccount(
             icon = {
