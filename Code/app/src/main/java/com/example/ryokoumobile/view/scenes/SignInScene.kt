@@ -42,6 +42,7 @@ import com.example.ryokoumobile.R
 import com.example.ryokoumobile.model.enumClass.ESex
 import com.example.ryokoumobile.model.repository.Scenes
 import com.example.ryokoumobile.ui.theme.RyokouMobileTheme
+import com.example.ryokoumobile.view.components.ChooseSex
 import com.example.ryokoumobile.view.components.MyElevatedButton
 import com.example.ryokoumobile.view.components.MyInputTextField
 import com.example.ryokoumobile.view.components.MyLineTextHaveTextButton
@@ -150,49 +151,6 @@ fun SignInScene(
         MyProcessWait()
     }
 
-}
-
-@Composable
-private fun ChooseSex(sexSelected: ESex, isError: Boolean, onChange: (ESex) -> Unit) {
-    Row(
-        Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(
-            "Giới tính:",
-            style = MaterialTheme.typography.bodyLarge,
-            color = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
-        )
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                "Nam",
-                style = MaterialTheme.typography.bodyLarge,
-                color = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
-            )
-            MyRadioButton(selected = sexSelected == ESex.Male, isError) { onChange(ESex.Male) }
-            Spacer(Modifier.width(15.dp))
-            Text(
-                "Nữ",
-                style = MaterialTheme.typography.bodyLarge,
-                color = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
-            )
-            MyRadioButton(selected = sexSelected == ESex.Female, isError) { onChange(ESex.Female) }
-        }
-    }
-    Spacer(Modifier.height(10.dp))
-}
-
-@Composable
-private fun MyRadioButton(selected: Boolean, isError: Boolean, onClick: () -> Unit) {
-    RadioButton(
-        selected = selected,
-        onClick = onClick,
-        colors = RadioButtonDefaults.colors().copy(
-            selectedColor = MaterialTheme.colorScheme.tertiary,
-            unselectedColor = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
-        )
-    )
 }
 
 @Composable
