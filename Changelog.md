@@ -148,4 +148,11 @@
 
 ## 22-1-2025
 ### Added
-- add user info scene 
+- add user info scene
+
+## 24-1-2025
+### Added
+- Add save data user
+
+### Fixed
+- Fix ui change info user
