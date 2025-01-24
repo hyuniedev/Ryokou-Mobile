@@ -176,7 +176,7 @@ fun MainScene() {
                 startDestination = Scenes.AccountGroup.InfoUser.route
             ) {
                 composable(Scenes.AccountGroup.InfoUser.route) {
-                    InfoUserScene()
+                    InfoUserScene(navController = navController)
                 }
             }
         }
