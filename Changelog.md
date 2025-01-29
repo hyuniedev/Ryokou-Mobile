@@ -156,3 +156,7 @@
 
 ### Fixed
 - Fix ui change info user
+
+## 29-1-2025
+### Added
++ base view my tour screen
