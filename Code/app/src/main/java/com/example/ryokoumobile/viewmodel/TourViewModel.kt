@@ -79,7 +79,7 @@ class TourViewModel : ViewModel() {
             Scenes.TourPay.route
                 .replace("{numTicket}", tourBooked.numPerson.toString())
                 .replace("{dayStart}", tourBooked.startDay.seconds.toString())
-                .replace("{idTour}", tourBooked.idTour)
+                .replace("{tourId}", tourBooked.tourId)
         )
     }
 

@@ -20,10 +20,16 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.ryokoumobile.model.controller.DataController
 import com.example.ryokoumobile.model.entity.Tour
+import com.example.ryokoumobile.model.entity.TourBooked
+import com.example.ryokoumobile.view.items.ItemBookedTour
 import com.example.ryokoumobile.view.items.ItemTour
 
 @Composable
-fun ShowGridTour(lsTour: List<Tour>, navController: NavController) {
+fun <T> ShowGridTour(
+    lsTour: List<T>,
+    navController: NavController? = null,
+    onClick: (T) -> Unit = {}
+) {
     val tours = DataController.tourVM
     Column(
         Modifier
@@ -38,16 +44,27 @@ fun ShowGridTour(lsTour: List<Tour>, navController: NavController) {
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
                 it.forEach { tour ->
-                    ItemTour(
-                        tour = tour,
-                        isFavorite = tours.getIsFavoriteTour(tour),
-                        onClick = {
-                            DataController.tourVM.navigationToTourDetail(
-                                navController = navController,
-                                tour = tour
-                            )
-                        },
-                        onClickFavorite = { DataController.updateFavoriteTour(tour) })
+                    when (tour) {
+                        is Tour -> {
+                            ItemTour(
+                                tour = tour,
+                                isFavorite = tours.getIsFavoriteTour(tour),
+                                onClick = {
+                                    DataController.tourVM.navigationToTourDetail(
+                                        navController = navController!!,
+                                        tour = tour
+                                    )
+                                },
+                                onClickFavorite = { DataController.updateFavoriteTour(tour) })
+                        }
+
+                        is TourBooked -> {
+                            ItemBookedTour(bookedTour = tour) { onClick(tour) }
+                        }
+
+                        else -> {}
+                    }
+
                 }
                 if (it.size == 1) {
                     Spacer(Modifier.width(170.dp))

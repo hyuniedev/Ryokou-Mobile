@@ -25,7 +25,7 @@ sealed class Scenes(
     var iconOnSelected: ImageVector = Icons.Filled.Info
 ) {
     data object TourDetail : Scenes("TourDetail/{tourId}")
-    data object TourPay : Scenes("TourPay/{numTicket}/{dayStart}/{idTour}")
+    data object TourPay : Scenes("TourPay/{numTicket}/{dayStart}/{tourId}")
     data object AccountGroup : Scenes("AccountGroup") {
         data object InfoUser : Scenes("InfoUser")
     }
