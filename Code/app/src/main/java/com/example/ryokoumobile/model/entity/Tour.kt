@@ -4,6 +4,8 @@ import android.util.Log
 import com.google.firebase.Timestamp
 import java.text.DecimalFormat
 import java.time.LocalDateTime
+import java.util.Calendar
+import java.util.Date
 import kotlin.math.cos
 import kotlin.math.round
 
@@ -24,7 +26,6 @@ data class Tour(
     val lsFile: List<String> = listOf(),
     var lsRate: List<Rate> = listOf(),
     val company: String = "",
-    val end: Timestamp = Timestamp.now(),
 ) {
     fun getTotalRate(): Double {
         var total = 0.0
@@ -52,5 +53,11 @@ data class Tour(
     private fun formatNumber(number: String): String {
         val formatter = DecimalFormat("#,###")
         return formatter.format(number.toLong()).replace(",", ".")
+    }
+
+    fun getEndDay(): Date {
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_MONTH, durations)
+        return calendar.time
     }
 }

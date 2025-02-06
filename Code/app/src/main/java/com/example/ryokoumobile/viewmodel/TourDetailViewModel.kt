@@ -150,7 +150,7 @@ class TourDetailViewModel : ViewModel() {
                 val bookedTour = TourBooked(
                     numPerson = uiState.value.numTicket,
                     startDay = uiState.value.dateSelected!!,
-                    idTour = tour.id
+                    tourId = tour.id
                 )
                 DataController.tourVM.navigationToTourPay(navController, tourBooked = bookedTour)
 //                DataController.updateBookedTour(bookedTour)

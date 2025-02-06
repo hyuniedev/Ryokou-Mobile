@@ -45,7 +45,7 @@ import com.example.ryokoumobile.view.components.MyTopBar
 
 @Composable
 fun TourPay(tourBooked: TourBooked, navController: NavController) {
-    val tour = DataController.tourVM.getTourFromID(tourBooked.idTour)
+    val tour = DataController.tourVM.getTourFromID(tourBooked.tourId)
     val styleTitle = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp)
     val styleMedium = TextStyle(fontSize = 18.sp)
     val scrollState = rememberScrollState()

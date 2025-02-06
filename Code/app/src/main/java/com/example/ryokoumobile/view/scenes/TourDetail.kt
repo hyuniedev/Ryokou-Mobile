@@ -779,7 +779,7 @@ private fun BottomBarTourDetail(
             Column {
                 Text(stringResource(R.string.giaTu), style = TextStyle(fontSize = 18.sp))
                 Text(
-                    tour.getPriceWithFormatted(),
+                    "${tour.getPriceWithFormatted()}đ",
                     style = TextStyle(
                         fontSize = 30.sp,
                         color = MaterialTheme.colorScheme.tertiary,
@@ -814,10 +814,9 @@ private fun BottomBarTourDetail(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        "Chọn ngày đi: ",
+                        "Chọn ngày bắt đầu đi: ",
                         style = TextStyle(
                             fontSize = 18.sp,
-                            color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.Bold
                         )
                     )
@@ -843,15 +842,13 @@ private fun BottomBarTourDetail(
                             Text(
                                 "Ngày đi: ",
                                 style = TextStyle(
-                                    fontSize = 16.sp,
-                                    color = MaterialTheme.colorScheme.primary
+                                    fontSize = 16.sp
                                 )
                             )
                             Text(
                                 tourDetailVM.formatDate(uiState.value.dateSelected!!),
                                 style = TextStyle(
-                                    fontSize = 16.sp,
-                                    color = MaterialTheme.colorScheme.primary
+                                    fontSize = 16.sp
                                 )
                             )
                         }
@@ -863,15 +860,13 @@ private fun BottomBarTourDetail(
                             Text(
                                 "Ngày về: ",
                                 style = TextStyle(
-                                    fontSize = 16.sp,
-                                    color = MaterialTheme.colorScheme.primary
+                                    fontSize = 16.sp
                                 )
                             )
                             Text(
                                 tourDetailVM.formatDate(tourDetailVM.getEndDay(tour.durations)),
                                 style = TextStyle(
-                                    fontSize = 16.sp,
-                                    color = MaterialTheme.colorScheme.primary
+                                    fontSize = 16.sp
                                 )
                             )
                         }
@@ -886,7 +881,6 @@ private fun BottomBarTourDetail(
                         "Số lượng vé: ",
                         style = TextStyle(
                             fontSize = 18.sp,
-                            color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.Bold
                         )
                     )
@@ -896,7 +890,6 @@ private fun BottomBarTourDetail(
                                 "-",
                                 style = TextStyle(
                                     fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.primary,
                                     fontSize = 22.sp
                                 )
                             )
@@ -906,8 +899,7 @@ private fun BottomBarTourDetail(
                                 uiState.value.numTicket.toString(),
                                 style = TextStyle(
                                     fontWeight = FontWeight.Bold,
-                                    fontSize = 22.sp,
-                                    color = MaterialTheme.colorScheme.primary
+                                    fontSize = 22.sp
                                 )
                             )
                         }
@@ -916,12 +908,26 @@ private fun BottomBarTourDetail(
                                 "+",
                                 style = TextStyle(
                                     fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.primary,
                                     fontSize = 22.sp
                                 )
                             )
                         }
                     }
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 5.dp)
+                        .padding(bottom = 10.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text("Giá:", style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp))
+                    val tmpTourBooked =
+                        TourBooked(numPerson = uiState.value.numTicket, tourId = tour.id)
+                    Text(
+                        "${tmpTourBooked.getTotalPay()}đ",
+                        style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                    )
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth(),

@@ -42,22 +42,33 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.ryokoumobile.R
 import com.example.ryokoumobile.model.controller.DataController
 import com.example.ryokoumobile.model.entity.TourBooked
 import com.example.ryokoumobile.model.repository.Scenes
+import com.example.ryokoumobile.model.uistate.MyTourUIState
 import com.example.ryokoumobile.view.components.MyElevatedButton
+import com.example.ryokoumobile.view.components.ShowGridTour
+import com.example.ryokoumobile.view.items.ItemBookedTour
+import com.example.ryokoumobile.viewmodel.MyTourViewModel
+import com.google.firebase.Timestamp
 import kotlinx.coroutines.flow.MutableStateFlow
+import java.util.Date
 
 @Composable
-fun MyTourScene(modifier: Modifier = Modifier, navController: NavController) {
+fun MyTourScene(
+    modifier: Modifier = Modifier,
+    myTourVM: MyTourViewModel = viewModel(),
+    navController: NavController
+) {
     val user = DataController.user.collectAsState()
     Box(modifier = modifier.padding(vertical = 15.dp)) {
         when (user.value) {
             null -> OnNotLoggedIn(navController)
 
-            else -> OnLoggedIn()
+            else -> OnLoggedIn(myTourVM)
         }
     }
 }
@@ -122,31 +133,45 @@ private fun OnNotLoggedIn(navController: NavController) {
 }
 
 @Composable
-private fun OnLoggedIn() {
-    val indexSelected = remember { MutableStateFlow(0) }
+private fun OnLoggedIn(myTourVM: MyTourViewModel) {
     val scrollState = rememberScrollState()
+    val uiState = myTourVM.uiState.collectAsState()
+    val currentDate = Timestamp.now()
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .verticalScroll(scrollState)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(scrollState)
+    ) {
         SectionTour(
             title = "Tour đang diễn ra",
             index = 0,
-            indexSelected = indexSelected.collectAsState().value,
-            lsTour = listOf()
-        ) { index -> indexSelected.value = index }
+            indexSelected = uiState.value.indexSelected,
+            myTourVM = myTourVM,
+            lsTour = DataController.lsBookedTour.filter {
+                currentDate.toDate().before(it.startDay.toDate()) && currentDate.toDate()
+                    .after(DataController.tourVM.getTourFromID(it.tourId).getEndDay())
+            }
+        ) { index -> myTourVM.updateIndexSelected(index) }
         SectionTour(
             title = "Tour sắp diễn ra",
             index = 1,
-            indexSelected = indexSelected.collectAsState().value,
-            lsTour = listOf()
-        ) { index -> indexSelected.value = index }
+            indexSelected = uiState.value.indexSelected,
+            myTourVM = myTourVM,
+            lsTour = DataController.lsBookedTour.filter {
+                currentDate.toDate().before(it.startDay.toDate())
+            }
+        ) { index -> myTourVM.updateIndexSelected(index) }
         SectionTour(
             title = "Tour đã hoàn thành",
             index = 2,
-            indexSelected = indexSelected.collectAsState().value,
-            lsTour = listOf()
-        ) { index -> indexSelected.value = index }
+            indexSelected = uiState.value.indexSelected,
+            myTourVM = myTourVM,
+            lsTour = DataController.lsBookedTour.filter {
+                currentDate.toDate()
+                    .after(DataController.tourVM.getTourFromID(it.tourId).getEndDay())
+            }
+        ) { index -> myTourVM.updateIndexSelected(index) }
     }
 }
 
@@ -156,6 +181,7 @@ private fun SectionTour(
     index: Int,
     indexSelected: Int,
     lsTour: List<TourBooked>,
+    myTourVM: MyTourViewModel,
     onClick: (Int) -> Unit
 ) {
     Card(
@@ -186,13 +212,15 @@ private fun SectionTour(
                 modifier = Modifier.size(31.dp)
             )
         }
-        when (index) {
-            0 -> {
-                // TODO: Thêm ItemTourBooked và View cho Tour đang diễn ra
-            }
+        if (lsTour.isNotEmpty() && index == indexSelected) {
+            when (index) {
+                0 -> {
+                    ItemBookedTour(bookedTour = lsTour[0]) { myTourVM.onClick(lsTour[0]) }
+                }
 
-            else -> {
-                // TODO: Thực hiện hiển thị list các tourBooked
+                else -> {
+                    ShowGridTour(lsTour) { tour -> myTourVM.onClick(tour) }
+                }
             }
         }
     }

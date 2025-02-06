@@ -8,7 +8,8 @@ import java.util.Locale
 data class TourBooked(
     var id: String = "",
     var numPerson: Int = 0,
-    var idTour: String = "",
+    var tourId: String = "",
+    var userId: String = "",
     val bookedDay: Timestamp = Timestamp.now(),
     var startDay: Timestamp = Timestamp.now()
 ) {
@@ -18,7 +19,7 @@ data class TourBooked(
     }
 
     fun getTotalPay(): String {
-        val tour = DataController.tourVM.getTourFromID(idTour).copy()
+        val tour = DataController.tourVM.getTourFromID(tourId).copy()
         tour.cost = (tour.cost.replace(".", "").toInt() * numPerson).toString()
         return tour.getPriceWithFormatted()
     }

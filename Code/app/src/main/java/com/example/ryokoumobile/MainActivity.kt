@@ -128,7 +128,7 @@ fun MainScene() {
                 composable(Scenes.MainGroup.MyTour.route) {
                     MyTourScene(
                         modifier = modifier,
-                        navController
+                        navController = navController
                     )
                 }
                 composable(Scenes.MainGroup.Account.route) {
@@ -153,7 +153,7 @@ fun MainScene() {
                 arguments = listOf(
                     navArgument("numTicket") { type = NavType.IntType },
                     navArgument("dayStart") { type = NavType.LongType },
-                    navArgument("idTour") { type = NavType.StringType })
+                    navArgument("tourId") { type = NavType.StringType })
             ) { backStackEntry ->
                 // Lấy giá trị `dayStart` từ arguments
                 val dayStartSeconds = backStackEntry.arguments?.getLong("dayStart")
@@ -167,7 +167,7 @@ fun MainScene() {
                 val tourBooked = TourBooked(
                     numPerson = backStackEntry.arguments?.getInt("numTicket") ?: 1,
                     startDay = Timestamp(Date(dayStartMillis)),
-                    idTour = backStackEntry.arguments?.getString("idTour") ?: ""
+                    tourId = backStackEntry.arguments?.getString("tourId") ?: ""
                 )
                 TourPay(tourBooked, navController)
             }
