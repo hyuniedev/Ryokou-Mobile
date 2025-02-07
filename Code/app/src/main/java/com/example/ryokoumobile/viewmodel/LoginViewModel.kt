@@ -7,6 +7,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.ryokoumobile.model.controller.DataController
 import com.example.ryokoumobile.model.controller.FirebaseController
 import com.example.ryokoumobile.model.uistate.LoginUiState
 import com.google.firebase.auth.AuthResult
@@ -44,13 +45,23 @@ class LoginViewModel : ViewModel() {
                 FirebaseController.LoginWithEmailAndPassword(
                     email = _uiState.value.email,
                     password = _uiState.value.password
-                ).await()
-                _uiState.value.isLoginSuccessful = true
+                ).addOnSuccessListener {
+                    DataController.loadInitDataBookedTour()
+                    _uiState.update { it.copy(isLoading = false, isLoginSuccessful = true) }
+                }.addOnFailureListener {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            emailError = true,
+                            passwordError = true
+                        )
+                    }
+                }
             } catch (e: Exception) {
                 Log.e("HyuNie", "Error: " + e.message)
                 e.printStackTrace()
             }
-            _uiState.update { it.copy(isLoading = false) }
+
         }
     }
 
@@ -63,6 +74,7 @@ class LoginViewModel : ViewModel() {
                     _uiState.update { it.copy(isLoginSuccessful = false) }
                 }
                 if (FirebaseController.LoginWithGoogleAccount(context)) {
+                    DataController.loadInitDataBookedTour()
                     _uiState.update { it.copy(isLoading = false, isLoginSuccessful = true) }
                 } else {
                     _uiState.update { it.copy(isLoading = false) }

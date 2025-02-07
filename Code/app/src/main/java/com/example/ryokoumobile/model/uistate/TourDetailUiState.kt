@@ -16,5 +16,5 @@ data class TourDetailUiState(
     var isSelectTour: Boolean = false,
     var isShowDatePicker: Boolean = false,
     var dateSelected: Timestamp? = null,
-    var numTicket: Int = 0
+    var numTicket: Int = 1
 )

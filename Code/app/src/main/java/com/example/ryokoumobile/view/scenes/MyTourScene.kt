@@ -1,6 +1,7 @@
 package com.example.ryokoumobile.view.scenes
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.scrollable
@@ -22,6 +23,9 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -64,7 +68,7 @@ fun MyTourScene(
     navController: NavController
 ) {
     val user = DataController.user.collectAsState()
-    Box(modifier = modifier.padding(vertical = 15.dp)) {
+    Box(modifier = modifier) {
         when (user.value) {
             null -> OnNotLoggedIn(navController)
 
@@ -141,7 +145,9 @@ private fun OnLoggedIn(myTourVM: MyTourViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(scrollState)
+            .padding(top = 20.dp)
+            .verticalScroll(scrollState),
+        verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
         SectionTour(
             title = "Tour đang diễn ra",
@@ -189,6 +195,9 @@ private fun SectionTour(
             .fillMaxWidth()
             .animateContentSize()
             .padding(horizontal = 10.dp),
+        colors = CardDefaults.cardColors()
+            .copy(containerColor = Color.LightGray.copy(alpha = 0.2f)),
+        border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary),
         onClick = { onClick(index) }) {
         Row(
             modifier = Modifier
@@ -212,15 +221,30 @@ private fun SectionTour(
                 modifier = Modifier.size(31.dp)
             )
         }
-        if (lsTour.isNotEmpty() && index == indexSelected) {
-            when (index) {
-                0 -> {
-                    ItemBookedTour(bookedTour = lsTour[0]) { myTourVM.onClick(lsTour[0]) }
-                }
+        if (index == indexSelected) {
+            HorizontalDivider(color = MaterialTheme.colorScheme.primary)
+            if (lsTour.isNotEmpty()) {
+                when (index) {
+                    0 -> {
+                        ItemBookedTour(bookedTour = lsTour[0]) { myTourVM.onClick(lsTour[0]) }
+                    }
 
-                else -> {
-                    ShowGridTour(lsTour) { tour -> myTourVM.onClick(tour) }
+                    else -> {
+                        ShowGridTour(lsTour) { tour -> myTourVM.onClick(tour) }
+                    }
                 }
+            } else {
+                Text(
+                    "Danh sách rỗng.",
+                    style = TextStyle(
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 18.sp,
+                        color = Color.Black
+                    ),
+                    modifier = Modifier
+                        .padding(vertical = 10.dp)
+                        .align(Alignment.CenterHorizontally)
+                )
             }
         }
     }

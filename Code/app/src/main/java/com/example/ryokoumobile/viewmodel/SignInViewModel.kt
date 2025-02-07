@@ -76,6 +76,7 @@ class SignInViewModel : ViewModel() {
                             )
                         }
                     }
+                    DataController.loadInitDataBookedTour()
                     _uiState.update { it.copy(isLoading = false) }
                 }
             }
@@ -145,6 +146,7 @@ class SignInViewModel : ViewModel() {
                     _uiState.update { it.copy(isLoading = false) }
                 }
                 if (FirebaseController.LoginWithGoogleAccount(context)) {
+                    DataController.loadInitDataBookedTour()
                     _uiState.update { it.copy(isLoading = false, isSignInSuccess = true) }
                 } else {
                     _uiState.update { it.copy(isLoading = false) }

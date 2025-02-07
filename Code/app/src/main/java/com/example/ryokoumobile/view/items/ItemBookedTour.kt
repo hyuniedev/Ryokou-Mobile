@@ -116,18 +116,19 @@ fun ItemBookedTour(
                 overflow = TextOverflow.Ellipsis,
                 style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp)
             )
-            Spacer(modifier = Modifier.height(5.dp))
+            Spacer(modifier = Modifier.height(3.dp))
             Text(
                 "Ngày đi: ${bookedTour.formatDate(bookedTour.startDay)}",
                 style = TextStyle(
                     fontSize = 16.sp
                 )
             )
-            Spacer(modifier = Modifier.height(5.dp))
+            Spacer(modifier = Modifier.height(3.dp))
             Text(
                 "Số vé: ${bookedTour.numPerson} vé",
                 style = TextStyle(fontSize = 16.sp),
             )
+            Spacer(modifier = Modifier.height(3.dp))
             Text(
                 "${bookedTour.getTotalPay()}đ",
                 style = TextStyle(

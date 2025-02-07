@@ -152,13 +152,34 @@ class TourDetailViewModel : ViewModel() {
                     startDay = uiState.value.dateSelected!!,
                     tourId = tour.id
                 )
-                DataController.tourVM.navigationToTourPay(navController, tourBooked = bookedTour)
-//                DataController.updateBookedTour(bookedTour)
+                if (checkValidBookedTour(bookedTour)) {
+                    DataController.tourVM.navigationToTourPay(
+                        navController,
+                        tourBooked = bookedTour
+                    )
+                } else {
+                    MyShowToast(context, "Thời gian trùng với 1 tour khác.")
+                }
             } else {
                 MyShowToast(context, "Vui lòng chọn số vé!")
             }
         } else {
             MyShowToast(context, "Vui lòng chọn ngày đi!")
         }
+    }
+
+    private fun checkValidBookedTour(booked: TourBooked): Boolean {
+        Log.d("HyuNie", DataController.lsBookedTour.size.toString())
+        for (bt in DataController.lsBookedTour) {
+            Log.d("HyuNie", "${bt.id} : ${bt.startDay.toDate().toString()}")
+            if (!(booked.startDay.toDate().before(
+                    DataController.tourVM.getTourFromID(bt.tourId).getEndDay()
+                ) && DataController.tourVM.getTourFromID(booked.tourId).getEndDay()
+                    .after(bt.startDay.toDate())) || booked.startDay.compareTo(bt.startDay) == 0
+            ) {
+                return false
+            }
+        }
+        return true
     }
 }
