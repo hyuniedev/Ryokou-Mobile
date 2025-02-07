@@ -166,10 +166,20 @@
 - Fix ui on: Tour detail (On choose tour when to pay), Tour Pay, Account setting
 - fix bug dont change state ui when save and back to display ui (User info)
 
-## 7-2-2025
+## 6-2-2025
 ### Added
 - new collection: booked tour
 - show item on section my tour
 
 ### Fixed
 - fix field of any tour entity
+
+## 7-2-2025
+### Added
+- load booked tour of user when login and signIn
+- check duplicate book tour
+
+### Fixed
+- default number of ticket on book tour
+- spacer of components on ItemBookedTour
+- color of card item and notifier when empty list
