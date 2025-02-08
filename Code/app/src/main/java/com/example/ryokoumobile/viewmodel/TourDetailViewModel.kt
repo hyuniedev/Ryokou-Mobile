@@ -169,13 +169,10 @@ class TourDetailViewModel : ViewModel() {
     }
 
     private fun checkValidBookedTour(booked: TourBooked): Boolean {
-        Log.d("HyuNie", DataController.lsBookedTour.size.toString())
         for (bt in DataController.lsBookedTour) {
-            Log.d("HyuNie", "${bt.id} : ${bt.startDay.toDate().toString()}")
-            if (!(booked.startDay.toDate().before(
-                    DataController.tourVM.getTourFromID(bt.tourId).getEndDay()
-                ) && DataController.tourVM.getTourFromID(booked.tourId).getEndDay()
-                    .after(bt.startDay.toDate())) || booked.startDay.compareTo(bt.startDay) == 0
+            if (!(booked.startDay.toDate().after(bt.getEndDay()) || booked.getEndDay()
+                    .before(bt.startDay.toDate())) || booked.startDay.compareTo(bt.startDay) == 0 || booked.startDay.toDate()
+                    .compareTo(bt.getEndDay()) == 0
             ) {
                 return false
             }

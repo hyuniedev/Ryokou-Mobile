@@ -3,6 +3,8 @@ package com.example.ryokoumobile.model.entity
 import com.example.ryokoumobile.model.controller.DataController
 import com.google.firebase.Timestamp
 import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 data class TourBooked(
@@ -22,5 +24,13 @@ data class TourBooked(
         val tour = DataController.tourVM.getTourFromID(tourId).copy()
         tour.cost = (tour.cost.replace(".", "").toInt() * numPerson).toString()
         return tour.getPriceWithFormatted()
+    }
+
+    fun getEndDay(): Date {
+        val calendar = Calendar.getInstance().apply {
+            time = startDay.toDate()
+            add(Calendar.DAY_OF_MONTH, DataController.tourVM.getTourFromID(tourId).durations)
+        }
+        return calendar.time
     }
 }

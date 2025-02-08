@@ -1,5 +1,6 @@
 package com.example.ryokoumobile.view.scenes
 
+import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -141,7 +142,6 @@ private fun OnLoggedIn(myTourVM: MyTourViewModel) {
     val scrollState = rememberScrollState()
     val uiState = myTourVM.uiState.collectAsState()
     val currentDate = Timestamp.now()
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -155,8 +155,11 @@ private fun OnLoggedIn(myTourVM: MyTourViewModel) {
             indexSelected = uiState.value.indexSelected,
             myTourVM = myTourVM,
             lsTour = DataController.lsBookedTour.filter {
-                currentDate.toDate().before(it.startDay.toDate()) && currentDate.toDate()
-                    .after(DataController.tourVM.getTourFromID(it.tourId).getEndDay())
+                myTourVM.checkGoingTour(
+                    currentDate.toDate(),
+                    it.startDay.toDate(),
+                    it.getEndDay()
+                )
             }
         ) { index -> myTourVM.updateIndexSelected(index) }
         SectionTour(
@@ -175,7 +178,7 @@ private fun OnLoggedIn(myTourVM: MyTourViewModel) {
             myTourVM = myTourVM,
             lsTour = DataController.lsBookedTour.filter {
                 currentDate.toDate()
-                    .after(DataController.tourVM.getTourFromID(it.tourId).getEndDay())
+                    .after(it.getEndDay())
             }
         ) { index -> myTourVM.updateIndexSelected(index) }
     }
@@ -226,7 +229,9 @@ private fun SectionTour(
             if (lsTour.isNotEmpty()) {
                 when (index) {
                     0 -> {
-                        ItemBookedTour(bookedTour = lsTour[0]) { myTourVM.onClick(lsTour[0]) }
+                        Box(modifier = Modifier.padding(15.dp)) {
+                            ItemBookedTour(bookedTour = lsTour[0]) { myTourVM.onClick(lsTour[0]) }
+                        }
                     }
 
                     else -> {

@@ -55,9 +55,4 @@ data class Tour(
         return formatter.format(number.toLong()).replace(",", ".")
     }
 
-    fun getEndDay(): Date {
-        val calendar = Calendar.getInstance()
-        calendar.add(Calendar.DAY_OF_MONTH, durations)
-        return calendar.time
-    }
 }
