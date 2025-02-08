@@ -183,3 +183,9 @@
 - default number of ticket on book tour
 - spacer of components on ItemBookedTour
 - color of card item and notifier when empty list
+
+## 8-2-2025
+### Fixed
+- move function getEndDay from Tour to BookedTour (Fix get end day of booked tour)
+- fix get going tour
+- fix check book tour - compare date with other booked tour (completed)
