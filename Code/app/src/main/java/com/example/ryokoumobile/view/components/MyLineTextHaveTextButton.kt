@@ -9,10 +9,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 
 @Composable
 fun MyLineTextHaveTextButton(
+    modifier: Modifier = Modifier,
     text1: String,
     textButton: String,
     text2: String,
@@ -20,7 +22,7 @@ fun MyLineTextHaveTextButton(
     onClick: () -> Unit
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         horizontalArrangement = position,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -33,7 +35,8 @@ fun MyLineTextHaveTextButton(
             text = textButton,
             style = MaterialTheme.typography.labelSmall.copy(
                 color = MaterialTheme.colorScheme.tertiary,
-                textDecoration = TextDecoration.Underline
+                textDecoration = TextDecoration.Underline,
+                fontWeight = FontWeight.W400
             ),
             modifier = Modifier.clickable { onClick() }
         )

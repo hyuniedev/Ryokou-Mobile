@@ -25,12 +25,22 @@ class MyTourViewModel : ViewModel() {
         _uiState.update { it.copy(indexSelected = if (value == it.indexSelected) -1 else value) }
     }
 
+    fun updateIsScheduleShow(value: Boolean) {
+        _uiState.update { it.copy(isScheduleShow = value) }
+    }
+
     fun onClick(bookedTour: TourBooked) {
         _uiState.update { it.copy(bookedTourFocus = bookedTour) }
     }
 
     fun unfocusBookedTour() {
-        _uiState.update { it.copy(bookedTourFocus = null, selectedDayOnSchedule = Schedule()) }
+        _uiState.update {
+            it.copy(
+                bookedTourFocus = null,
+                selectedDayOnSchedule = Schedule(),
+                isScheduleShow = true
+            )
+        }
     }
 
     fun updateSelectedDayOnSchedule(schedule: Schedule) {

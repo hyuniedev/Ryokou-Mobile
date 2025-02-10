@@ -92,9 +92,10 @@ fun LoginScene(
                 ) { newValue -> viewModel.updatePassword(newValue) }
                 Spacer(modifier = Modifier.height(10.dp))
                 MyLineTextHaveTextButton(
-                    "",
-                    "Quên mật khẩu", "",
-                    Arrangement.End
+
+                    text1 = "",
+                    textButton = "Quên mật khẩu", text2 = "",
+                    position = Arrangement.End
                 ) { viewModel.forgetPassword() }
                 Spacer(modifier = Modifier.height(20.dp))
                 MyElevatedButton(
@@ -110,9 +111,9 @@ fun LoginScene(
                 ) { viewModel.loginWithGG(currentContext) }
                 Spacer(modifier = Modifier.height(10.dp))
                 MyLineTextHaveTextButton(
-                    "Bạn chưa có tài khoản? ",
-                    "Đăng ký.", "",
-                    Arrangement.Center
+                    text1 = "Bạn chưa có tài khoản? ",
+                    textButton = "Đăng ký.", text2 = "",
+                    position = Arrangement.Center
                 ) { navController.navigate(Scenes.AuthGroup.SignIn.route) }
             }
             Spacer(Modifier.height(20.dp))

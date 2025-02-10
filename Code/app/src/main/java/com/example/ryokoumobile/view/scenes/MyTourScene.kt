@@ -15,9 +15,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Card
@@ -46,8 +48,8 @@ import com.example.ryokoumobile.R
 import com.example.ryokoumobile.model.controller.DataController
 import com.example.ryokoumobile.model.entity.TourBooked
 import com.example.ryokoumobile.model.repository.Scenes
-import com.example.ryokoumobile.view.components.BottomSheetShowTourSchedule
 import com.example.ryokoumobile.view.components.MyElevatedButton
+import com.example.ryokoumobile.view.components.MyLineTextHaveTextButton
 import com.example.ryokoumobile.view.components.RecommendedTours
 import com.example.ryokoumobile.view.components.ShowGridTour
 import com.example.ryokoumobile.view.components.SubModalBottomSheetShowTourSchedule
@@ -174,20 +176,74 @@ private fun OnLoggedIn(myTourVM: MyTourViewModel, navController: NavController) 
         if (uiState.value.selectedDayOnSchedule.day.isEmpty())
             myTourVM.updateSelectedDayOnSchedule(tour.schedule[0])
         ModalBottomSheet(onDismissRequest = { myTourVM.unfocusBookedTour() }) {
-            Column(modifier = Modifier.fillMaxHeight(0.6f)) {
-                Row {
-                    
+            Column {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    MyElevatedButton(
+                        title = "Lịch trình",
+                        isFilled = uiState.value.isScheduleShow
+                    ) {
+                        myTourVM.updateIsScheduleShow(true)
+                    }
+                    Spacer(Modifier.width(20.dp))
+                    MyElevatedButton(
+                        title = "Thông tin vé",
+                        isFilled = !uiState.value.isScheduleShow
+                    ) {
+                        myTourVM.updateIsScheduleShow(false)
+                    }
                 }
-                SubModalBottomSheetShowTourSchedule(
-                    tour = tour,
-                    selectedDayOnSchedule = uiState.value.selectedDayOnSchedule,
-                    updateSelectedDayOnSchedule = { schedule ->
-                        myTourVM.updateSelectedDayOnSchedule(schedule)
-                    })
+                if (uiState.value.isScheduleShow) {
+                    SubModalBottomSheetShowTourSchedule(
+                        tour = tour,
+                        selectedDayOnSchedule = uiState.value.selectedDayOnSchedule,
+                        showIcon = false,
+                        updateSelectedDayOnSchedule = { schedule ->
+                            myTourVM.updateSelectedDayOnSchedule(schedule)
+                        })
+                    MyLineTextHaveTextButton(
+                        modifier = Modifier.padding(end = 15.dp, bottom = 10.dp),
+                        "",
+                        "Xem chi tiết tour",
+                        "",
+                        position = Arrangement.End
+                    ) {
+                        DataController.tourVM.navigationToTourDetail(navController, tour)
+                    }
+                } else {
+                    ShowInfoTicket(uiState.value.bookedTourFocus!!)
+                }
             }
         }
     }
 }
+
+@Composable
+private fun ShowInfoTicket(bookedTour: TourBooked) {
+    val tour = DataController.tourVM.getTourFromID(bookedTour.tourId)
+    Column(
+        modifier = Modifier.padding(15.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        RowInfoTicket("Người đặt vé: ", DataController.user.collectAsState().value!!.fullName)
+        RowInfoTicket("Số lượng: ", "${bookedTour.numPerson} vé")
+        RowInfoTicket("Địa điểm tập hợp: ", tour.gatheringPlace)
+        RowInfoTicket("Ngày đi: ", bookedTour.formatDate(bookedTour.startDay.toDate()))
+        RowInfoTicket("Ngày về: ", bookedTour.formatDate(bookedTour.getEndDay()))
+        RowInfoTicket("Tổng tiền: ", "${bookedTour.getTotalPay()}đ")
+    }
+}
+
+@Composable
+private fun RowInfoTicket(title: String, info: String) {
+    Row {
+        Text(title, style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp))
+        Text(info, style = TextStyle(fontWeight = FontWeight.Normal, fontSize = 20.sp))
+    }
+}
+
 
 @Composable
 private fun SectionTour(

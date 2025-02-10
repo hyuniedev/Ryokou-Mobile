@@ -44,7 +44,6 @@ fun BottomSheetShowTourSchedule(
     ModalBottomSheet(
         onDismissRequest = { onDismissRequest() },
         modifier = Modifier
-            .fillMaxHeight(0.5f)
             .fillMaxWidth()
     ) {
         SubModalBottomSheetShowTourSchedule(
@@ -59,6 +58,7 @@ fun BottomSheetShowTourSchedule(
 fun SubModalBottomSheetShowTourSchedule(
     tour: Tour,
     selectedDayOnSchedule: Schedule,
+    showIcon: Boolean = true,
     updateSelectedDayOnSchedule: (schedule: Schedule) -> Unit
 ) {
     Column(
@@ -66,12 +66,14 @@ fun SubModalBottomSheetShowTourSchedule(
             .padding(horizontal = 10.dp)
             .padding(bottom = 10.dp)
     ) {
-        Icon(
-            Icons.Default.DateRange,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.size(30.dp)
-        )
+        if (showIcon) {
+            Icon(
+                Icons.Default.DateRange,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(30.dp)
+            )
+        }
         Spacer(Modifier.height(10.dp))
         Row(modifier = Modifier.fillMaxWidth()) {
             LazyColumn {
@@ -96,7 +98,8 @@ fun SubModalBottomSheetShowTourSchedule(
             }
             Box(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.3f)
                     .border(
                         width = 1.dp,
                         color = MaterialTheme.colorScheme.primary

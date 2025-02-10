@@ -9,5 +9,6 @@ data class MyTourUIState(
     var lsGoneTour: List<TourBooked> = listOf(),
     var lsWaitTour: List<TourBooked> = listOf(),
     var bookedTourFocus: TourBooked? = null,
-    var selectedDayOnSchedule: Schedule = Schedule()
+    var selectedDayOnSchedule: Schedule = Schedule(),
+    var isScheduleShow: Boolean = true
 )

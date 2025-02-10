@@ -529,9 +529,9 @@ private fun TourSchedule(
             style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
         )
         MyLineTextHaveTextButton(
-            "",
-            stringResource(R.string.showDetailedSchedule),
-            "",
+            text1 = "",
+            textButton = stringResource(R.string.showDetailedSchedule),
+            text2 = "",
             position = Arrangement.End
         ) {
             tourDetailVM.updateShowSchedule()

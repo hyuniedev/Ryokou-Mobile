@@ -125,10 +125,10 @@ fun SignInScene(
                         .copy(uncheckedBorderColor = MaterialTheme.colorScheme.primary),
                     onCheckedChange = { viewModel.updateCheckBoxService() })
                 MyLineTextHaveTextButton(
-                    "Tôi đồng ý với ",
-                    "Điều khoản & chính sách bảo mật",
-                    ".",
-                    Arrangement.Start
+                    text1 = "Tôi đồng ý với ",
+                    textButton = "Điều khoản & chính sách bảo mật",
+                    text2 = ".",
+                    position = Arrangement.Start
                 ) {
                     //TODO: Hiển thị ShowBottomSheet cho điều khoản & dịch vụ
                 }

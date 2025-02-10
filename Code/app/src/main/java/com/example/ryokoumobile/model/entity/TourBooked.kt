@@ -15,9 +15,9 @@ data class TourBooked(
     val bookedDay: Timestamp = Timestamp.now(),
     var startDay: Timestamp = Timestamp.now()
 ) {
-    fun formatDate(date: Timestamp): String {
+    fun formatDate(date: Date): String {
         val format = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        return format.format(date.toDate())
+        return format.format(date)
     }
 
     fun getTotalPay(): String {
