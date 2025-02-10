@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.ryokoumobile.model.controller.DataController
 import com.example.ryokoumobile.model.controller.FirebaseController
-import com.example.ryokoumobile.model.entity.User
 import com.example.ryokoumobile.model.enumClass.ESex
 import com.example.ryokoumobile.model.repository.Scenes
 import com.example.ryokoumobile.model.uistate.InfoUserUIState

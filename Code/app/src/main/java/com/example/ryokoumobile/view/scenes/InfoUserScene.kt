@@ -32,14 +32,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.ryokoumobile.model.controller.DataController
-import com.example.ryokoumobile.model.repository.Scenes
-import com.example.ryokoumobile.ui.theme.RyokouMobileTheme
 import com.example.ryokoumobile.view.components.ChooseSex
 import com.example.ryokoumobile.view.components.MyElevatedButton
 import com.example.ryokoumobile.view.components.MyInputTextField

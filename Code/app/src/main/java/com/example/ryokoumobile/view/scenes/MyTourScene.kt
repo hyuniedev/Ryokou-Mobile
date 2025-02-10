@@ -1,11 +1,9 @@
 package com.example.ryokoumobile.view.scenes
 
-import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,19 +20,16 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,8 +38,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -53,14 +46,13 @@ import com.example.ryokoumobile.R
 import com.example.ryokoumobile.model.controller.DataController
 import com.example.ryokoumobile.model.entity.TourBooked
 import com.example.ryokoumobile.model.repository.Scenes
-import com.example.ryokoumobile.model.uistate.MyTourUIState
+import com.example.ryokoumobile.view.components.BottomSheetShowTourSchedule
 import com.example.ryokoumobile.view.components.MyElevatedButton
+import com.example.ryokoumobile.view.components.RecommendedTours
 import com.example.ryokoumobile.view.components.ShowGridTour
+import com.example.ryokoumobile.view.components.SubModalBottomSheetShowTourSchedule
 import com.example.ryokoumobile.view.items.ItemBookedTour
 import com.example.ryokoumobile.viewmodel.MyTourViewModel
-import com.google.firebase.Timestamp
-import kotlinx.coroutines.flow.MutableStateFlow
-import java.util.Date
 
 @Composable
 fun MyTourScene(
@@ -69,11 +61,11 @@ fun MyTourScene(
     navController: NavController
 ) {
     val user = DataController.user.collectAsState()
-    Box(modifier = modifier) {
+    Column(modifier = modifier.fillMaxSize()) {
         when (user.value) {
             null -> OnNotLoggedIn(navController)
 
-            else -> OnLoggedIn(myTourVM)
+            else -> OnLoggedIn(myTourVM, navController)
         }
     }
 }
@@ -137,50 +129,63 @@ private fun OnNotLoggedIn(navController: NavController) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun OnLoggedIn(myTourVM: MyTourViewModel) {
+private fun OnLoggedIn(myTourVM: MyTourViewModel, navController: NavController) {
     val scrollState = rememberScrollState()
     val uiState = myTourVM.uiState.collectAsState()
-    val currentDate = Timestamp.now()
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 20.dp)
             .verticalScroll(scrollState),
         verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
+        Spacer(modifier = Modifier.height(5.dp))
         SectionTour(
             title = "Tour đang diễn ra",
             index = 0,
             indexSelected = uiState.value.indexSelected,
             myTourVM = myTourVM,
-            lsTour = DataController.lsBookedTour.filter {
-                myTourVM.checkGoingTour(
-                    currentDate.toDate(),
-                    it.startDay.toDate(),
-                    it.getEndDay()
-                )
-            }
+            lsTour = uiState.value.lsGoingTour
         ) { index -> myTourVM.updateIndexSelected(index) }
         SectionTour(
             title = "Tour sắp diễn ra",
             index = 1,
             indexSelected = uiState.value.indexSelected,
             myTourVM = myTourVM,
-            lsTour = DataController.lsBookedTour.filter {
-                currentDate.toDate().before(it.startDay.toDate())
-            }
+            lsTour = uiState.value.lsWaitTour
         ) { index -> myTourVM.updateIndexSelected(index) }
         SectionTour(
             title = "Tour đã hoàn thành",
             index = 2,
             indexSelected = uiState.value.indexSelected,
             myTourVM = myTourVM,
-            lsTour = DataController.lsBookedTour.filter {
-                currentDate.toDate()
-                    .after(it.getEndDay())
-            }
+            lsTour = uiState.value.lsGoneTour
         ) { index -> myTourVM.updateIndexSelected(index) }
+
+        // Recommend Tours Section
+        val lsRecommendTour = DataController.tourVM.uiState.collectAsState()
+        Box(modifier = Modifier.padding(horizontal = 10.dp)) {
+            RecommendedTours(lsRecommendTour.value, navController)
+        }
+    }
+    if (uiState.value.bookedTourFocus != null) {
+        val tour = DataController.tourVM.getTourFromID(uiState.value.bookedTourFocus!!.tourId)
+        if (uiState.value.selectedDayOnSchedule.day.isEmpty())
+            myTourVM.updateSelectedDayOnSchedule(tour.schedule[0])
+        ModalBottomSheet(onDismissRequest = { myTourVM.unfocusBookedTour() }) {
+            Column(modifier = Modifier.fillMaxHeight(0.6f)) {
+                Row {
+                    
+                }
+                SubModalBottomSheetShowTourSchedule(
+                    tour = tour,
+                    selectedDayOnSchedule = uiState.value.selectedDayOnSchedule,
+                    updateSelectedDayOnSchedule = { schedule ->
+                        myTourVM.updateSelectedDayOnSchedule(schedule)
+                    })
+            }
+        }
     }
 }
 
