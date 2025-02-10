@@ -189,3 +189,12 @@
 - move function getEndDay from Tour to BookedTour (Fix get end day of booked tour)
 - fix get going tour
 - fix check book tour - compare date with other booked tour (completed)
+
+## 10-2-2025
+### Added
++ Show info tour schedule
+
+### Fixed
+~ Fix load init data booked tour on login
+~ Fix property name on entity user 
+~ split tour list into multiple small tour lists
