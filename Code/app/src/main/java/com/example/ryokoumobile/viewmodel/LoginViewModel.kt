@@ -42,11 +42,11 @@ class LoginViewModel : ViewModel() {
                 it.copy(isLoading = true)
             }
             try {
+                if (FirebaseController.isSignedIn()) FirebaseController.SignOut()
                 FirebaseController.LoginWithEmailAndPassword(
                     email = _uiState.value.email,
                     password = _uiState.value.password
                 ).addOnSuccessListener {
-                    DataController.loadInitDataBookedTour()
                     _uiState.update { it.copy(isLoading = false, isLoginSuccessful = true) }
                 }.addOnFailureListener {
                     _uiState.update {
@@ -74,7 +74,6 @@ class LoginViewModel : ViewModel() {
                     _uiState.update { it.copy(isLoginSuccessful = false) }
                 }
                 if (FirebaseController.LoginWithGoogleAccount(context)) {
-                    DataController.loadInitDataBookedTour()
                     _uiState.update { it.copy(isLoading = false, isLoginSuccessful = true) }
                 } else {
                     _uiState.update { it.copy(isLoading = false) }

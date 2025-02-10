@@ -102,6 +102,7 @@ import com.example.ryokoumobile.model.entity.TourBooked
 import com.example.ryokoumobile.model.entity.User
 import com.example.ryokoumobile.model.repository.Scenes
 import com.example.ryokoumobile.model.uistate.TourDetailUiState
+import com.example.ryokoumobile.view.components.BottomSheetShowTourSchedule
 import com.example.ryokoumobile.view.components.MyElevatedButton
 import com.example.ryokoumobile.view.components.MyInputTextField
 import com.example.ryokoumobile.view.components.MyLineTextHaveTextButton
@@ -516,7 +517,6 @@ private fun HighlightsSection(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TourSchedule(
     tour: Tour,
@@ -540,72 +540,16 @@ private fun TourSchedule(
     if (uiState.isShowSchedule) {
         if (uiState.selectedDayOnSchedule.day.isEmpty())
             tourDetailVM.updateSelectedDayOnSchedule(tour.schedule[0])
-        ModalBottomSheet(
+        BottomSheetShowTourSchedule(
             onDismissRequest = { tourDetailVM.updateShowSchedule() },
-            modifier = Modifier
-                .fillMaxHeight(0.5f)
-                .fillMaxWidth()
-        ) {
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = 10.dp)
-                    .padding(bottom = 10.dp)
-            ) {
-                Icon(
-                    Icons.Default.DateRange,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(30.dp)
+            tour = tour,
+            selectedDayOnSchedule = uiState.selectedDayOnSchedule,
+            updateSelectedDayOnSchedule = { schedule ->
+                tourDetailVM.updateSelectedDayOnSchedule(
+                    schedule
                 )
-                Spacer(Modifier.height(10.dp))
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    LazyColumn {
-                        items(tour.schedule) { schedule ->
-                            Box(
-                                modifier = Modifier
-                                    .padding(bottom = 10.dp)
-                                    .border(width = 1.dp, color = MaterialTheme.colorScheme.primary)
-                                    .background(if (uiState.selectedDayOnSchedule == schedule) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary)
-                                    .clickable { tourDetailVM.updateSelectedDayOnSchedule(schedule) }
-                                    .padding(horizontal = 10.dp, vertical = 5.dp)
-                            ) {
-                                Text(
-                                    schedule.day,
-                                    style = TextStyle(
-                                        fontWeight = FontWeight.SemiBold,
-                                        fontSize = 18.sp
-                                    )
-                                )
-                            }
-                        }
-                    }
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .border(
-                                width = 1.dp,
-                                color = MaterialTheme.colorScheme.primary
-                            )
-                            .padding(5.dp)
-                    ) {
-                        LazyColumn {
-                            items(uiState.selectedDayOnSchedule.lsTodo) { toDo ->
-                                LineToDo(toDo)
-                            }
-                        }
-                    }
-                }
             }
-        }
-    }
-}
-
-@Composable
-private fun LineToDo(toDo: ToDoOnDay) {
-    Row(modifier = Modifier.padding(bottom = 8.dp)) {
-        Text("${toDo.hour}:${toDo.minute}")
-        Spacer(Modifier.width(5.dp))
-        Text(toDo.content, maxLines = Int.MAX_VALUE)
+        )
     }
 }
 
