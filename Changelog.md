@@ -192,9 +192,10 @@
 
 ## 10-2-2025
 ### Added
-+ Show info tour schedule
+- update show schedule and info ticket
+- Show info tour schedule
 
 ### Fixed
-~ Fix load init data booked tour on login
-~ Fix property name on entity user 
-~ split tour list into multiple small tour lists
+- Fix load init data booked tour on login
+- Fix property name on entity user 
+- split tour list into multiple small tour lists
