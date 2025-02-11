@@ -19,11 +19,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -35,6 +38,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -48,10 +52,13 @@ import com.example.ryokoumobile.R
 import com.example.ryokoumobile.model.controller.DataController
 import com.example.ryokoumobile.model.entity.TourBooked
 import com.example.ryokoumobile.model.repository.Scenes
+import com.example.ryokoumobile.model.uistate.MyTourUIState
 import com.example.ryokoumobile.view.components.MyElevatedButton
 import com.example.ryokoumobile.view.components.MyLineTextHaveTextButton
 import com.example.ryokoumobile.view.components.RecommendedTours
+import com.example.ryokoumobile.view.components.ShowConfirmDialog
 import com.example.ryokoumobile.view.components.ShowGridTour
+import com.example.ryokoumobile.view.components.ShowInfoDialog
 import com.example.ryokoumobile.view.components.SubModalBottomSheetShowTourSchedule
 import com.example.ryokoumobile.view.items.ItemBookedTour
 import com.example.ryokoumobile.viewmodel.MyTourViewModel
@@ -134,6 +141,7 @@ private fun OnNotLoggedIn(navController: NavController) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun OnLoggedIn(myTourVM: MyTourViewModel, navController: NavController) {
+    val context = LocalContext.current
     val scrollState = rememberScrollState()
     val uiState = myTourVM.uiState.collectAsState()
     Column(
@@ -213,18 +221,41 @@ private fun OnLoggedIn(myTourVM: MyTourViewModel, navController: NavController) 
                         DataController.tourVM.navigationToTourDetail(navController, tour)
                     }
                 } else {
-                    ShowInfoTicket(uiState.value.bookedTourFocus!!)
+                    ShowInfoTicket(
+                        uiState.value.bookedTourFocus!!,
+                        uiState.value,
+                        onSupportRequest = { myTourVM.updateIsShowSupportRequestDialog(true) },
+                        onCancelTicket = { myTourVM.updateIsShowCancelTourDialog(true) })
                 }
             }
         }
+        ShowInfoDialog(
+            showDialog = uiState.value.isShowSupportRequestDialog,
+            text = "Đã gửi thông báo đến hệ thống. Bạn sẽ sớm nhận được cuộc gọi từ chúng tôi"
+        ) { myTourVM.updateIsShowSupportRequestDialog(false) }
+        ShowConfirmDialog(
+            uiState.value.isShowCancelTourDialog,
+            text = "Bạn có chắc chắn muốn xóa tour này?",
+            onAccept = {
+                myTourVM.cancelTicket(context, uiState.value.bookedTourFocus!!)
+            },
+            onDismiss = { myTourVM.updateIsShowCancelTourDialog(false) }
+        )
     }
 }
 
 @Composable
-private fun ShowInfoTicket(bookedTour: TourBooked) {
+private fun ShowInfoTicket(
+    bookedTour: TourBooked,
+    uiState: MyTourUIState,
+    onSupportRequest: () -> Unit,
+    onCancelTicket: () -> Unit
+) {
     val tour = DataController.tourVM.getTourFromID(bookedTour.tourId)
     Column(
-        modifier = Modifier.padding(15.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(15.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         RowInfoTicket("Người đặt vé: ", DataController.user.collectAsState().value!!.fullName)
@@ -233,6 +264,37 @@ private fun ShowInfoTicket(bookedTour: TourBooked) {
         RowInfoTicket("Ngày đi: ", bookedTour.formatDate(bookedTour.startDay.toDate()))
         RowInfoTicket("Ngày về: ", bookedTour.formatDate(bookedTour.getEndDay()))
         RowInfoTicket("Tổng tiền: ", "${bookedTour.getTotalPay()}đ")
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(30.dp)
+            ) {
+                ElevatedButton(onClick = { onSupportRequest() }) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                        Icon(Icons.Default.Call, contentDescription = null)
+                        Text(
+                            "Hỗ trợ",
+                            style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+                        )
+                    }
+                }
+                if (uiState.lsWaitTour.contains(bookedTour)) {
+                    ElevatedButton(
+                        onClick = { onCancelTicket() },
+                        colors = ButtonDefaults.elevatedButtonColors()
+                            .copy(containerColor = MaterialTheme.colorScheme.errorContainer)
+                    ) {
+                        Text(
+                            "Hủy vé",
+                            style = TextStyle(
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 16.sp,
+                                color = Color.Red.copy(alpha = 0.65f),
+                            )
+                        )
+                    }
+                }
+            }
+        }
     }
 }
 
