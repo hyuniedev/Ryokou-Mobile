@@ -199,3 +199,7 @@
 - Fix load init data booked tour on login
 - Fix property name on entity user 
 - split tour list into multiple small tour lists
+
+## 11-2-2025
+### Added
+- Dialog system
