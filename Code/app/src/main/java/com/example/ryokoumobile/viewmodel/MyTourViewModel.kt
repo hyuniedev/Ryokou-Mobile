@@ -1,11 +1,14 @@
 package com.example.ryokoumobile.viewmodel
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.ryokoumobile.model.controller.DataController
+import com.example.ryokoumobile.model.controller.FirebaseController
 import com.example.ryokoumobile.model.entity.Schedule
 import com.example.ryokoumobile.model.entity.TourBooked
 import com.example.ryokoumobile.model.uistate.MyTourUIState
+import com.example.ryokoumobile.view.components.MyShowToast
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,6 +30,27 @@ class MyTourViewModel : ViewModel() {
 
     fun updateIsScheduleShow(value: Boolean) {
         _uiState.update { it.copy(isScheduleShow = value) }
+    }
+
+    fun updateIsShowCancelTourDialog(isShow: Boolean) {
+        _uiState.update { it.copy(isShowCancelTourDialog = isShow) }
+    }
+
+    fun updateIsShowSupportRequestDialog(isShow: Boolean) {
+        _uiState.update { it.copy(isShowSupportRequestDialog = isShow) }
+    }
+
+    fun cancelTicket(context: Context, bookedTour: TourBooked) {
+        FirebaseController.firestore.collection("bookedTours").document(bookedTour.id).delete()
+            .addOnSuccessListener {
+                unfocusBookedTour()
+                DataController.lsBookedTour.remove(bookedTour)
+                funListTour()
+                MyShowToast(context, "Hủy thành công!")
+            }
+            .addOnFailureListener {
+                Log.e("HyuNie", "${it.message}")
+            }
     }
 
     fun onClick(bookedTour: TourBooked) {
@@ -51,6 +75,13 @@ class MyTourViewModel : ViewModel() {
         val dateFormatter = SimpleDateFormat("yyyy-MM-dd")
         val now = Timestamp.now()
         val current = LocalDate.parse(dateFormatter.format(now.toDate()))
+        _uiState.update {
+            it.copy(
+                lsGoneTour = listOf(),
+                lsWaitTour = listOf(),
+                lsGoingTour = listOf()
+            )
+        }
         DataController.lsBookedTour.forEach { bookedTour ->
             val s = LocalDate.parse(dateFormatter.format(bookedTour.startDay.toDate()))
             val e = LocalDate.parse(dateFormatter.format(bookedTour.getEndDay()))
