@@ -33,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -83,6 +84,25 @@ private fun SearchResult(
         if (uiState.lsResult.isEmpty()) {
             RecommendedTours(DataController.tourVM.uiState.collectAsState().value, navController)
         } else {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    "Kết quả tìm kiếm:",
+                    style = TextStyle(
+                        fontSize = 25.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.primary
+                    ),
+                    modifier = Modifier.padding(end = 5.dp)
+                )
+                Text(
+                    "(${uiState.lsResult.size} tours)",
+                    style = TextStyle(
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.LightGray
+                    )
+                )
+            }
             ShowGridTour(
                 uiState.lsResult,
                 navController

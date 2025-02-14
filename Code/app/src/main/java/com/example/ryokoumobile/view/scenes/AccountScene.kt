@@ -78,7 +78,7 @@ fun AccountScene(modifier: Modifier = Modifier, navController: NavController) {
             },
             title = "Trung tâm hỗ trợ",
             descriptor = "Nơi giải đáp mọi thắc mắc của bạn",
-            onClick = {}
+            onClick = { MyShowToast(context, "Tính năng đang được phát triển") }
         ),
         ItemAccount(
             icon = {
@@ -91,7 +91,7 @@ fun AccountScene(modifier: Modifier = Modifier, navController: NavController) {
             },
             title = "Liên hệ với chúng tôi",
             descriptor = "Yêu cầu hỗ trợ từ dịch vụ chăm sóc khách hàng",
-            onClick = {}
+            onClick = { MyShowToast(context, "Tính năng đang được phát triển") }
         ),
         ItemAccount(
             icon = {
@@ -104,7 +104,7 @@ fun AccountScene(modifier: Modifier = Modifier, navController: NavController) {
             },
             title = "Cài đặt",
             descriptor = "Xem và tùy chỉnh cài đặt cho tài khoản",
-            onClick = {}
+            onClick = { MyShowToast(context, "Tính năng đang được phát triển") }
         ),
     )
 

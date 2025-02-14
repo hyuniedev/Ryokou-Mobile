@@ -1,6 +1,8 @@
 package com.example.ryokoumobile.viewmodel
 
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
+import com.example.ryokoumobile.model.controller.DataController
 import com.example.ryokoumobile.model.enumClass.EMonth
 import com.example.ryokoumobile.model.enumClass.EProvince
 import com.example.ryokoumobile.model.uistate.HomeUIState

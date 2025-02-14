@@ -259,6 +259,7 @@ private fun ShowInfoTicket(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         RowInfoTicket("Người đặt vé: ", DataController.user.collectAsState().value!!.fullName)
+        RowInfoTicket("Ngày đặt vé: ", bookedTour.formatDate(bookedTour.bookedDay.toDate()))
         RowInfoTicket("Số lượng: ", "${bookedTour.numPerson} vé")
         RowInfoTicket("Địa điểm tập hợp: ", tour.gatheringPlace)
         RowInfoTicket("Ngày đi: ", bookedTour.formatDate(bookedTour.startDay.toDate()))

@@ -24,6 +24,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -88,7 +89,8 @@ fun LoginScene(
                 MyInputTextField(
                     stringResource(R.string.txtPassword),
                     uiState.value.password,
-                    uiState.value.passwordError
+                    uiState.value.passwordError,
+                    keyboardType = KeyboardType.Password
                 ) { newValue -> viewModel.updatePassword(newValue) }
                 Spacer(modifier = Modifier.height(10.dp))
                 MyLineTextHaveTextButton(
@@ -101,7 +103,7 @@ fun LoginScene(
                 MyElevatedButton(
                     modifier = Modifier.fillMaxWidth(),
                     "Đăng nhập"
-                ) { viewModel.login() }
+                ) { viewModel.login(context = currentContext) }
                 Spacer(modifier = Modifier.height(15.dp))
                 MyElevatedButton(
                     modifier = Modifier.fillMaxWidth(),

@@ -28,6 +28,7 @@ sealed class Scenes(
     data object TourPay : Scenes("TourPay/{numTicket}/{dayStart}/{tourId}")
     data object AccountGroup : Scenes("AccountGroup") {
         data object InfoUser : Scenes("InfoUser")
+        data object ChangePassword : Scenes("ChangePassword")
     }
 
     data object AuthGroup : Scenes("AuthGroup") {

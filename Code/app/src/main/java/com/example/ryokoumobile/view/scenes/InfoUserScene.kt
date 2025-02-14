@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.ryokoumobile.model.controller.DataController
+import com.example.ryokoumobile.model.repository.Scenes
 import com.example.ryokoumobile.view.components.ChooseSex
 import com.example.ryokoumobile.view.components.MyElevatedButton
 import com.example.ryokoumobile.view.components.MyInputTextField
@@ -140,7 +141,7 @@ fun InfoUserScene(infoUserVM: InfoUserViewModel = viewModel(), navController: Na
                 ItemSetting(
                     title = "Đổi mật khẩu",
                     descriptor = "Nhấn để thay đổi mật khẩu",
-                    onClick = {})
+                    onClick = { navController.navigate(Scenes.AccountGroup.ChangePassword.route) })
             }
             Spacer(Modifier.height(20.dp))
             MyElevatedButton(title = "Đăng xuất") { infoUserVM.logout(navController) }
