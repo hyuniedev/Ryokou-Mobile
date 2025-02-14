@@ -33,6 +33,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -110,12 +111,14 @@ fun SignInScene(
             SignInTextField(
                 "Mật khẩu",
                 uiState.value.password,
-                uiState.value.passwordError
+                uiState.value.passwordError,
+                keyboardType = KeyboardType.Password
             ) { newValue -> viewModel.updatePassword(newValue) }
             SignInTextField(
                 "Xác thực mật khẩu",
                 uiState.value.passwordConfirm,
-                uiState.value.passwordConfirmError
+                uiState.value.passwordConfirmError,
+                keyboardType = KeyboardType.Password
             ) { newValue -> viewModel.updatePasswordConfirm(newValue) }
             Spacer(Modifier.height(5.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -158,9 +161,10 @@ private fun SignInTextField(
     title: String,
     value: String,
     isError: Boolean,
+    keyboardType: KeyboardType = KeyboardType.Unspecified,
     onChange: (String) -> Unit
 ) {
-    MyInputTextField(title, value, isError, onValueChange = onChange)
+    MyInputTextField(title, value, isError, onValueChange = onChange, keyboardType = keyboardType)
     Spacer(modifier = Modifier.height(10.dp))
 }
 

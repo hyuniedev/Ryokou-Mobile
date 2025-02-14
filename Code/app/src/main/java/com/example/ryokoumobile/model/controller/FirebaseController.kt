@@ -46,7 +46,9 @@ object FirebaseController {
 
     fun LoginWithEmailAndPassword(email: String, password: String): Task<AuthResult> {
         val authResult = auth.signInWithEmailAndPassword(email, password)
-        LoadDataUser()
+        authResult.addOnCompleteListener {
+            LoadDataUser()
+        }
         return authResult
     }
 

@@ -29,6 +29,7 @@ import com.example.ryokoumobile.view.components.MyNavigationBar
 import com.example.ryokoumobile.view.components.MyShowToast
 import com.example.ryokoumobile.view.components.MyTopBar
 import com.example.ryokoumobile.view.scenes.AccountScene
+import com.example.ryokoumobile.view.scenes.ChangePasswordScene
 import com.example.ryokoumobile.view.scenes.FavoriteScene
 import com.example.ryokoumobile.view.scenes.HomeScene
 import com.example.ryokoumobile.view.scenes.InfoUserScene
@@ -177,6 +178,9 @@ fun MainScene() {
             ) {
                 composable(Scenes.AccountGroup.InfoUser.route) {
                     InfoUserScene(navController = navController)
+                }
+                composable(Scenes.AccountGroup.ChangePassword.route) {
+                    ChangePasswordScene(navController)
                 }
             }
         }
