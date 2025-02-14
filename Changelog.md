@@ -208,3 +208,13 @@
 ### Added
 - Search ui
 - search tour
+
+## 14-2-2025
+### Added
+- add change password scene ui
+- myInputTextField add keyboardType for password
+- add booked Day on detail ticket
+- show error dialog to notifi for user
+
+### Fixed
+- fix login with email/password is not load data (bug coroutine)
