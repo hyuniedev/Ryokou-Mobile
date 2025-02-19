@@ -218,3 +218,14 @@
 
 ### Fixed
 - fix login with email/password is not load data (bug coroutine)
+
+## 17-2-2025
+### Fixed
+- Fix textfield of password ->  hide text
+
+## 19-2-2025
+### Added
+- add ticket limit
+### Fixed
+- transient to password
+- city on tour -> list city
