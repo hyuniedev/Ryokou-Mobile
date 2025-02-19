@@ -147,6 +147,13 @@ class TourDetailViewModel : ViewModel() {
     fun thanhToan(context: Context, tour: Tour, navController: NavController) {
         if (uiState.value.dateSelected != null) {
             if (uiState.value.numTicket > 0) {
+                if (tour.ticketLimit.numCurrentTicket + uiState.value.numTicket > tour.ticketLimit.numLimitTicket) {
+                    MyShowToast(
+                        context,
+                        "Số vé còn lại: ${tour.ticketLimit.numLimitTicket - tour.ticketLimit.numCurrentTicket}"
+                    )
+                    return
+                }
                 val bookedTour = TourBooked(
                     numPerson = uiState.value.numTicket,
                     startDay = uiState.value.dateSelected!!,

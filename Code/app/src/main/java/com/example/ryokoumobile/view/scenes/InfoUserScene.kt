@@ -32,6 +32,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -110,12 +111,14 @@ fun InfoUserScene(infoUserVM: InfoUserViewModel = viewModel(), navController: Na
                         MyInputTextField(
                             title = "Số điện thoại",
                             value = uiState.value.numberPhone,
-                            isError = uiState.value.isNumberPhoneError
+                            isError = uiState.value.isNumberPhoneError,
+                            keyboardType = KeyboardType.Phone
                         ) { value -> infoUserVM.updateNumberPhone(value) }
                         MyInputTextField(
                             title = "Email",
                             value = uiState.value.email,
-                            isError = uiState.value.isEmailError
+                            isError = uiState.value.isEmailError,
+                            keyboardType = KeyboardType.Email
                         ) { value -> infoUserVM.updateEmail(value) }
                         ChooseSex(
                             sexSelected = uiState.value.sex,

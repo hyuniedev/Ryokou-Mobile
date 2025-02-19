@@ -79,7 +79,7 @@ class SearchViewModel : ViewModel() {
 
     private fun checkLocation(tour: Tour): Boolean {
         if (_uiState.value.selectedProvince == "Tất cả") return true
-        return tour.city == _uiState.value.selectedProvince
+        return tour.city.contains(_uiState.value.selectedProvince)
     }
 
     private fun checkCompany(tour: Tour): Boolean {

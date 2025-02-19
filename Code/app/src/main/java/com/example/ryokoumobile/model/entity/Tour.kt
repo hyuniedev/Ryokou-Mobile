@@ -1,18 +1,13 @@
 package com.example.ryokoumobile.model.entity
 
-import android.util.Log
 import com.google.firebase.Timestamp
 import java.text.DecimalFormat
-import java.time.LocalDateTime
-import java.util.Calendar
-import java.util.Date
-import kotlin.math.cos
 import kotlin.math.round
 
 data class Tour(
     var id: String = "",
     val name: String = "",
-    val city: String = "",
+    val city: List<String> = listOf(),
     val durations: Int = 0,
     val start: Timestamp = Timestamp.now(),
     val maintainTime: Int = 0,
@@ -26,6 +21,7 @@ data class Tour(
     val lsFile: List<String> = listOf(),
     var lsRate: List<Rate> = listOf(),
     val company: String = "",
+    var ticketLimit: TicketLimit
 ) {
     fun getTotalRate(): Double {
         var total = 0.0

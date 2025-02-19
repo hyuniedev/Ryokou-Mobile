@@ -7,7 +7,7 @@ data class User(
     val email: String = "",
     val fullName: String = "",
     val numberPhone: String = "",
-    val password: String = "",
+    @Transient val password: String = "",
     val sex: ESex = ESex.None,
     var lsFavoriteTour: List<String> = listOf()
 )

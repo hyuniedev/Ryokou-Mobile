@@ -7,6 +7,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.example.ryokoumobile.model.controller.DataController
 import com.example.ryokoumobile.model.controller.FirebaseController
 import com.example.ryokoumobile.model.uistate.LoginUiState
@@ -89,7 +90,7 @@ class LoginViewModel : ViewModel() {
         }
     }
 
-    fun forgetPassword() {
+    fun forgetPassword(navController: NavController) {
 
     }
 
