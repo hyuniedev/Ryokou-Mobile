@@ -126,8 +126,15 @@ class TourDetailViewModel : ViewModel() {
         _uiState.update { it.copy(dateSelected = time) }
     }
 
-    fun updateNumTicket(value: Int) {
-        if (value < 0) return
+    fun updateNumTicket(context: Context, value: Int, maxValue: Int) {
+        if (value < 1) {
+            MyShowToast(context, "Số vé tối thiểu: 1")
+            return
+        }
+        if (value > maxValue) {
+            MyShowToast(context, "Số vé khả dụng: $maxValue")
+            return
+        }
         _uiState.update { it.copy(numTicket = value) }
     }
 
@@ -150,7 +157,7 @@ class TourDetailViewModel : ViewModel() {
                 if (tour.ticketLimit.numCurrentTicket + uiState.value.numTicket > tour.ticketLimit.numLimitTicket) {
                     MyShowToast(
                         context,
-                        "Số vé còn lại: ${tour.ticketLimit.numLimitTicket - tour.ticketLimit.numCurrentTicket}"
+                        "Rất tiếc! Số vé khả dụng: ${tour.ticketLimit.numLimitTicket - tour.ticketLimit.numCurrentTicket}"
                     )
                     return
                 }

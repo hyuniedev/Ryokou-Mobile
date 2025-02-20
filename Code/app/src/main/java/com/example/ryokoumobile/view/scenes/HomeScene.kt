@@ -102,7 +102,7 @@ fun HomeScene(
             Column(
                 modifier = Modifier
                     .padding(vertical = 10.dp)
-                    .height(350.dp),
+                    .height(380.dp),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
                 FlashSaleTimeCountDown(uiState.value.duration)

@@ -45,7 +45,6 @@ import com.google.firebase.Timestamp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.util.Date
 
 class MainActivity : ComponentActivity() {
@@ -63,8 +62,6 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainScene() {
-//    val tourViewModel = TourViewModel()
-
     val navController = rememberNavController()
     val navBackStackEntry = navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry.value?.destination?.route
