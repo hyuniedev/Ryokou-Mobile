@@ -45,8 +45,8 @@ import com.example.ryokoumobile.model.entity.Tour
 fun ItemTour(tour: Tour, isFavorite: Boolean, onClick: () -> Unit, onClickFavorite: () -> Unit) {
     Column(
         modifier = Modifier
-            .width(170.dp)
-            .height(250.dp)
+            .width(175.dp)
+            .height(280.dp)
             .wrapContentHeight()
             .border(
                 width = 1.dp,
@@ -59,7 +59,7 @@ fun ItemTour(tour: Tour, isFavorite: Boolean, onClick: () -> Unit, onClickFavori
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(0.5f),
+                .weight(0.45f),
             contentAlignment = Alignment.BottomCenter
         ) {
             Image(
@@ -99,15 +99,21 @@ fun ItemTour(tour: Tour, isFavorite: Boolean, onClick: () -> Unit, onClickFavori
         }
         Column(
             modifier = Modifier
-                .weight(0.5f)
+                .weight(0.55f)
                 .padding(horizontal = 10.dp, vertical = 5.dp),
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
             Text(
                 tour.name,
+                minLines = 2,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp)
+            )
+            Spacer(modifier = Modifier.height(5.dp))
+            Text(
+                "Còn ${tour.ticketLimit.numLimitTicket - tour.ticketLimit.numCurrentTicket} vé",
+                style = TextStyle(fontSize = 16.sp, color = Color.DarkGray)
             )
             Spacer(modifier = Modifier.height(5.dp))
             if (tour.lsRate.isEmpty()) {

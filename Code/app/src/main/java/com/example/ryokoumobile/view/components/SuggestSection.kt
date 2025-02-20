@@ -31,7 +31,7 @@ fun <T> SuggestSection(
     onClickFavorite: (tour: Tour) -> Unit,
     onClick: (tour: Tour) -> Unit
 ) {
-    Column(modifier = Modifier.height(340.dp), verticalArrangement = Arrangement.SpaceBetween) {
+    Column(modifier = Modifier.height(365.dp), verticalArrangement = Arrangement.SpaceBetween) {
         Text(
             title,
             style = TextStyle(

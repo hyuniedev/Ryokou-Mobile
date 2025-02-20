@@ -42,6 +42,7 @@ object DataController {
         FirebaseController.firestore.collection("bookedTours").document(tourBooked.id)
             .set(tourBooked)
         lsBookedTour.add(tourBooked)
+        tourVM.incNumCurrentTicket(tourVM.getTourFromID(tourBooked.tourId), tourBooked)
     }
 
     fun loadInitDataBookedTour() {

@@ -20,6 +20,7 @@ fun MyElevatedButton(
     modifier: Modifier = Modifier,
     title: String,
     isFilled: Boolean = true,
+    isEnable: Boolean = true,
     painter: Painter? = null,
     onClick: () -> Unit
 ) {
@@ -27,11 +28,12 @@ fun MyElevatedButton(
         onClick = { onClick() },
         modifier = modifier,
         shape = RoundedCornerShape(10.dp),
+        enabled = isEnable,
         colors = ButtonDefaults.elevatedButtonColors().copy(
             containerColor = if (!isFilled) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary,
             contentColor = if (!isFilled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary
         ),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
+        border = if (isEnable) BorderStroke(1.dp, MaterialTheme.colorScheme.primary) else null
     ) {
         if (painter != null) {
             Image(painter = painter, contentDescription = null)

@@ -38,7 +38,7 @@ class TourViewModel : ViewModel() {
                         lsTour.add(tour)
                     }
                 } catch (e: Exception) {
-                    Log.e("HyuNie", "Load a error tour")
+                    Log.e("HyuNie", "Load a error tour: ${e.message}")
                 }
                 _uiState.update { lsTour }
             }
@@ -51,6 +51,14 @@ class TourViewModel : ViewModel() {
         lsTour[index].lsRate += rate
         FirebaseController.firestore.collection("rates").document(rate.id).set(rate)
         _uiState.update { lsTour.toList() }
+    }
+
+    fun incNumCurrentTicket(tour: Tour, booked: TourBooked) {
+        val index = _uiState.value.indexOfFirst { tour.id == it.id }
+        val lsTour = _uiState.value
+        lsTour[index].ticketLimit.numCurrentTicket += booked.numPerson
+        _uiState.update { lsTour }
+        FirebaseController.firestore.collection("tours").document(tour.id).set(tour)
     }
 
     fun getIsFavoriteTour(tour: Tour): Boolean {

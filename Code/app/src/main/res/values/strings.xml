@@ -49,5 +49,5 @@
     <string name="soLuongKhach">Số lượng khách</string>
     <string name="tongTien">Tổng tiền</string>
     <string name="phuongThucThanhToan">Phương thức thanh toán</string>
-    
+    <string name="soVeKhaDung">Số vé khả dụng</string>
 </resources>
