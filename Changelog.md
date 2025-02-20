@@ -226,6 +226,19 @@
 ## 19-2-2025
 ### Added
 - add ticket limit
+
 ### Fixed
 - transient to password
 - city on tour -> list city
+
+## 20-2-2025
+### Added
+- Add Limit ticket of tour
+- Update Item tour -> Display number of tickets remaining
+- update current ticket of tour when conpleted book tour
+- Update tour when increment current ticket (when book tour)
+
+### Fixed
+- Fix save password (User) and lsRate (Tour) to Firebase
+- Check valid ticket when book tour
+- Fix book tour button on Tour Detail -> enable = false when ticket = 0
