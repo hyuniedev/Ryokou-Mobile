@@ -50,6 +50,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.ryokoumobile.R
 import com.example.ryokoumobile.model.controller.DataController
+import com.example.ryokoumobile.model.controller.UserAnalytics
 import com.example.ryokoumobile.model.entity.TourBooked
 import com.example.ryokoumobile.model.repository.Scenes
 import com.example.ryokoumobile.model.uistate.MyTourUIState
@@ -174,9 +175,8 @@ private fun OnLoggedIn(myTourVM: MyTourViewModel, navController: NavController) 
         ) { index -> myTourVM.updateIndexSelected(index) }
 
         // Recommend Tours Section
-        val lsRecommendTour = DataController.tourVM.uiState.collectAsState()
         Box(modifier = Modifier.padding(horizontal = 10.dp)) {
-            RecommendedTours(lsRecommendTour.value, navController)
+            RecommendedTours(UserAnalytics.lsSimilarTour, navController)
         }
     }
     if (uiState.value.bookedTourFocus != null) {

@@ -45,6 +45,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.ryokoumobile.R
 import com.example.ryokoumobile.model.controller.DataController
+import com.example.ryokoumobile.model.controller.UserAnalytics
 import com.example.ryokoumobile.model.enumClass.EProvince
 import com.example.ryokoumobile.model.uistate.SearchUIState
 import com.example.ryokoumobile.view.components.MyElevatedButton
@@ -82,7 +83,7 @@ private fun SearchResult(
 ) {
     Column(modifier.padding(horizontal = 15.dp)) {
         if (uiState.lsResult.isEmpty()) {
-            RecommendedTours(DataController.tourVM.uiState.collectAsState().value, navController)
+            RecommendedTours(UserAnalytics.lsMostPopularTour, navController)
         } else {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(

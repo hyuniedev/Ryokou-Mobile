@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.ryokoumobile.R
 import com.example.ryokoumobile.model.controller.DataController
+import com.example.ryokoumobile.model.controller.UserAnalytics
 import com.example.ryokoumobile.model.entity.User
 import com.example.ryokoumobile.model.repository.Scenes
 import com.example.ryokoumobile.view.components.MyElevatedButton
@@ -116,7 +117,6 @@ private fun NotifyOnFavoriteEmpty() {
 
 @Composable
 private fun OnLoggedIn(user: User, navController: NavController) {
-    val tours = DataController.tourVM.uiState.collectAsState()
     val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
@@ -150,6 +150,6 @@ private fun OnLoggedIn(user: User, navController: NavController) {
             }
         }
         Spacer(Modifier.height(10.dp))
-        RecommendedTours(tours.value, navController)
+        RecommendedTours(UserAnalytics.lsSimilarTour, navController)
     }
 }

@@ -126,6 +126,7 @@ object FirebaseController {
                     DataController.user.value = doc.toObject(User::class.java)
                     DataController.user.update { it?.copy(id = auth.currentUser?.uid) }
                     DataController.loadInitDataBookedTour()
+                    UserAnalytics.updateSimilarTours()
                 }
         }
     }

@@ -95,6 +95,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.ryokoumobile.R
 import com.example.ryokoumobile.model.controller.DataController
 import com.example.ryokoumobile.model.controller.FirebaseController
+import com.example.ryokoumobile.model.controller.UserAnalytics
 import com.example.ryokoumobile.model.entity.Rate
 import com.example.ryokoumobile.model.entity.ToDoOnDay
 import com.example.ryokoumobile.model.entity.Tour
@@ -177,14 +178,13 @@ private fun BodyTourDetail(
         HorizontalDivider(thickness = 2.dp)
         ServicesSection(tour)
         HorizontalDivider(thickness = 2.dp)
-        SimilarToursSection(navController = navController)
+        SimilarToursSection(tour, navController = navController)
         Spacer(Modifier.height(100.dp))
     }
 }
 
 @Composable
-fun SimilarToursSection(navController: NavController) {
-    val tours = DataController.tourVM.uiState.collectAsState()
+fun SimilarToursSection(tour: Tour, navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -196,7 +196,7 @@ fun SimilarToursSection(navController: NavController) {
         )
         Spacer(Modifier.height(10.dp))
         ShowHorizontalListTour(
-            lsTour = tours.value,
+            lsTour = UserAnalytics.getSimilarTour(tour = tour),
             onClick = { tour ->
                 DataController.tourVM.navigationToTourDetail(
                     tour = tour,

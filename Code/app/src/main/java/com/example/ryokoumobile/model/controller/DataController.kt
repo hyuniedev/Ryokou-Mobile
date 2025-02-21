@@ -6,6 +6,7 @@ import com.example.ryokoumobile.model.entity.Company
 import com.example.ryokoumobile.model.entity.Tour
 import com.example.ryokoumobile.model.entity.TourBooked
 import com.example.ryokoumobile.model.entity.User
+import com.example.ryokoumobile.model.enumClass.EVariationTicket
 import com.example.ryokoumobile.viewmodel.TourViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -42,7 +43,11 @@ object DataController {
         FirebaseController.firestore.collection("bookedTours").document(tourBooked.id)
             .set(tourBooked)
         lsBookedTour.add(tourBooked)
-        tourVM.incNumCurrentTicket(tourVM.getTourFromID(tourBooked.tourId), tourBooked)
+        tourVM.setNumCurrentTicket(
+            tourVM.getTourFromID(tourBooked.tourId),
+            tourBooked,
+            EVariationTicket.INC
+        )
     }
 
     fun loadInitDataBookedTour() {

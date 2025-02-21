@@ -7,6 +7,7 @@ import com.example.ryokoumobile.model.controller.DataController
 import com.example.ryokoumobile.model.controller.FirebaseController
 import com.example.ryokoumobile.model.entity.Schedule
 import com.example.ryokoumobile.model.entity.TourBooked
+import com.example.ryokoumobile.model.enumClass.EVariationTicket
 import com.example.ryokoumobile.model.uistate.MyTourUIState
 import com.example.ryokoumobile.view.components.MyShowToast
 import com.google.firebase.Timestamp
@@ -47,10 +48,16 @@ class MyTourViewModel : ViewModel() {
                 DataController.lsBookedTour.remove(bookedTour)
                 funListTour()
                 MyShowToast(context, "Hủy thành công!")
+                DataController.tourVM.setNumCurrentTicket(
+                    DataController.tourVM.getTourFromID(
+                        bookedTour.tourId
+                    ), bookedTour, EVariationTicket.DEC
+                )
             }
             .addOnFailureListener {
                 Log.e("HyuNie", "${it.message}")
             }
+
     }
 
     fun onClick(bookedTour: TourBooked) {

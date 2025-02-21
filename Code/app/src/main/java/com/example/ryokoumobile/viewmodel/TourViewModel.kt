@@ -5,9 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.example.ryokoumobile.model.controller.DataController
 import com.example.ryokoumobile.model.controller.FirebaseController
+import com.example.ryokoumobile.model.controller.UserAnalytics
 import com.example.ryokoumobile.model.entity.Rate
 import com.example.ryokoumobile.model.entity.Tour
 import com.example.ryokoumobile.model.entity.TourBooked
+import com.example.ryokoumobile.model.enumClass.EVariationTicket
 import com.example.ryokoumobile.model.repository.Scenes
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -53,10 +55,14 @@ class TourViewModel : ViewModel() {
         _uiState.update { lsTour.toList() }
     }
 
-    fun incNumCurrentTicket(tour: Tour, booked: TourBooked) {
+    fun setNumCurrentTicket(
+        tour: Tour,
+        booked: TourBooked,
+        eVariationTicket: EVariationTicket
+    ) {
         val index = _uiState.value.indexOfFirst { tour.id == it.id }
         val lsTour = _uiState.value
-        lsTour[index].ticketLimit.numCurrentTicket += booked.numPerson
+        lsTour[index].ticketLimit.numCurrentTicket += if (eVariationTicket == EVariationTicket.INC) booked.numPerson else -booked.numPerson
         _uiState.update { lsTour }
         FirebaseController.firestore.collection("tours").document(tour.id).set(tour)
     }

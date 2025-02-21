@@ -13,7 +13,7 @@ data class HomeUIState(
     var lsSection1: List<EMonth> = EMonth.values().toList(),
     var itemSelected1: EMonth = EMonth.JANUARY,
     var lsSection2: List<EProvince> = EProvince.values().toList(),
-    var itemSelected2: EProvince = EProvince.AOMORI,
+    var itemSelected2: EProvince = EProvince.HOKKAIDO,
 //    var lsSaleTour: List<Tour> = listOf(),
 //    var lsTourSection1: List<Tour> = listOf(),
 //    var lsTourSection2: List<Tour> = listOf()

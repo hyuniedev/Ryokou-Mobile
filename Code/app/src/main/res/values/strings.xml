@@ -7,7 +7,7 @@
     <string name="wait">Vui lòng chờ trong giây lát</string>
     <string name="dealHot">DEAL HOT ĐẾN 50% MỖI NGÀY</string>
     <string name="vuicungRyokou">Vui thả ga cùng Ryokou!!!</string>
-    <string name="suggest1">GET GO!!!</string>
+    <string name="suggest1">Được yêu thích</string>
     <string name="suggest2">Mùa lễ hội</string>
     <string name="dkThanhVien">Đăng ký thành viên! Hưởng nhiều ưu đãi</string>
     <string name="logOrSign">Đăng nhập / Đăng ký</string>
@@ -50,4 +50,5 @@
     <string name="tongTien">Tổng tiền</string>
     <string name="phuongThucThanhToan">Phương thức thanh toán</string>
     <string name="soVeKhaDung">Số vé khả dụng</string>
+    <string name="suggest3">Được mua nhiều</string>
 </resources>
