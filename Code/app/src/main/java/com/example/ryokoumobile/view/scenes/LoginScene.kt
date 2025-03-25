@@ -83,7 +83,8 @@ fun LoginScene(
                 MyInputTextField(
                     stringResource(R.string.txtEmail),
                     uiState.value.email,
-                    uiState.value.emailError
+                    uiState.value.emailError,
+                    keyboardType = KeyboardType.Email
                 ) { newValue -> viewModel.updateEmail(newValue) }
                 Spacer(modifier = Modifier.height(10.dp))
                 MyInputTextField(
@@ -94,11 +95,10 @@ fun LoginScene(
                 ) { newValue -> viewModel.updatePassword(newValue) }
                 Spacer(modifier = Modifier.height(10.dp))
                 MyLineTextHaveTextButton(
-
                     text1 = "",
                     textButton = "Quên mật khẩu", text2 = "",
                     position = Arrangement.End
-                ) { viewModel.forgetPassword() }
+                ) { viewModel.forgetPassword(navController) }
                 Spacer(modifier = Modifier.height(20.dp))
                 MyElevatedButton(
                     modifier = Modifier.fillMaxWidth(),

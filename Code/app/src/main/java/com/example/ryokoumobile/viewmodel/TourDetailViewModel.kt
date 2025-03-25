@@ -126,8 +126,15 @@ class TourDetailViewModel : ViewModel() {
         _uiState.update { it.copy(dateSelected = time) }
     }
 
-    fun updateNumTicket(value: Int) {
-        if (value < 0) return
+    fun updateNumTicket(context: Context, value: Int, maxValue: Int) {
+        if (value < 1) {
+            MyShowToast(context, "Số vé tối thiểu: 1")
+            return
+        }
+        if (value > maxValue) {
+            MyShowToast(context, "Số vé khả dụng: $maxValue")
+            return
+        }
         _uiState.update { it.copy(numTicket = value) }
     }
 
@@ -135,7 +142,7 @@ class TourDetailViewModel : ViewModel() {
         val startDay = uiState.value.dateSelected?.toDate()
         val calendar = Calendar.getInstance()
         calendar.time = startDay!!
-        calendar.add(Calendar.DAY_OF_MONTH, duration)
+        calendar.add(Calendar.DAY_OF_MONTH, duration - 1)
         return Timestamp(calendar.time)
     }
 
@@ -147,6 +154,13 @@ class TourDetailViewModel : ViewModel() {
     fun thanhToan(context: Context, tour: Tour, navController: NavController) {
         if (uiState.value.dateSelected != null) {
             if (uiState.value.numTicket > 0) {
+                if (tour.ticketLimit.numCurrentTicket + uiState.value.numTicket > tour.ticketLimit.numLimitTicket) {
+                    MyShowToast(
+                        context,
+                        "Rất tiếc! Số vé khả dụng: ${tour.ticketLimit.numLimitTicket - tour.ticketLimit.numCurrentTicket}"
+                    )
+                    return
+                }
                 val bookedTour = TourBooked(
                     numPerson = uiState.value.numTicket,
                     startDay = uiState.value.dateSelected!!,

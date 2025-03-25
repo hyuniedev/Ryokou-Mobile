@@ -1,8 +1,10 @@
 package com.example.ryokoumobile.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import com.example.ryokoumobile.model.controller.DataController
+import com.example.ryokoumobile.model.controller.UserAnalytics
 import com.example.ryokoumobile.model.enumClass.EMonth
 import com.example.ryokoumobile.model.enumClass.EProvince
 import com.example.ryokoumobile.model.uistate.HomeUIState
@@ -29,6 +31,7 @@ class HomeViewModel : ViewModel() {
                     uiState.value.currentTime.hour - 1
             )
         }
+        UserAnalytics.updateDealTours(uiState.value.startTime)
     }
 
     fun updateDuration() {

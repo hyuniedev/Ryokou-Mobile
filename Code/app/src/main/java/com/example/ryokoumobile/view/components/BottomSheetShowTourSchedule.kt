@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Place
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -108,7 +109,7 @@ fun SubModalBottomSheetShowTourSchedule(
             ) {
                 LazyColumn {
                     items(selectedDayOnSchedule.lsTodo) { toDo ->
-                        LineToDo(toDo)
+                        LineToDo(toDo, tour)
                     }
                 }
             }
@@ -117,10 +118,27 @@ fun SubModalBottomSheetShowTourSchedule(
 }
 
 @Composable
-private fun LineToDo(toDo: ToDoOnDay) {
+private fun LineToDo(toDo: ToDoOnDay, tour: Tour) {
     Row(modifier = Modifier.padding(bottom = 8.dp)) {
-        Text("${toDo.hour}:${toDo.minute}")
+        Text(
+            "${toDo.hour}:${toDo.minute}",
+            style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.W500)
+        )
         Spacer(Modifier.width(5.dp))
-        Text(toDo.content, maxLines = Int.MAX_VALUE)
+        Column {
+            Text(
+                toDo.content,
+                maxLines = Int.MAX_VALUE,
+                style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.W500)
+            )
+            Row {
+                Icon(
+                    Icons.Default.Place,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary
+                )
+                Text("Địa điểm: ${toDo.location.ifEmpty { tour.city[0] }}")
+            }
+        }
     }
 }

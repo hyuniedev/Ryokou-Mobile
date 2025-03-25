@@ -50,6 +50,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.ryokoumobile.R
 import com.example.ryokoumobile.model.controller.DataController
+import com.example.ryokoumobile.model.controller.UserAnalytics
 import com.example.ryokoumobile.model.entity.TourBooked
 import com.example.ryokoumobile.model.repository.Scenes
 import com.example.ryokoumobile.model.uistate.MyTourUIState
@@ -59,6 +60,7 @@ import com.example.ryokoumobile.view.components.RecommendedTours
 import com.example.ryokoumobile.view.components.ShowConfirmDialog
 import com.example.ryokoumobile.view.components.ShowGridTour
 import com.example.ryokoumobile.view.components.ShowInfoDialog
+import com.example.ryokoumobile.view.components.ShowReportDialog
 import com.example.ryokoumobile.view.components.SubModalBottomSheetShowTourSchedule
 import com.example.ryokoumobile.view.items.ItemBookedTour
 import com.example.ryokoumobile.viewmodel.MyTourViewModel
@@ -174,15 +176,14 @@ private fun OnLoggedIn(myTourVM: MyTourViewModel, navController: NavController) 
         ) { index -> myTourVM.updateIndexSelected(index) }
 
         // Recommend Tours Section
-        val lsRecommendTour = DataController.tourVM.uiState.collectAsState()
         Box(modifier = Modifier.padding(horizontal = 10.dp)) {
-            RecommendedTours(lsRecommendTour.value, navController)
+            RecommendedTours(UserAnalytics.lsSimilarTour.subList(0, 10), navController)
         }
     }
     if (uiState.value.bookedTourFocus != null) {
         val tour = DataController.tourVM.getTourFromID(uiState.value.bookedTourFocus!!.tourId)
         if (uiState.value.selectedDayOnSchedule.day.isEmpty())
-            myTourVM.updateSelectedDayOnSchedule(tour.schedule[0])
+            myTourVM.updateSelectedDayOnSchedule(tour!!.schedule[0])
         ModalBottomSheet(onDismissRequest = { myTourVM.unfocusBookedTour() }) {
             Column {
                 Row(
@@ -205,7 +206,7 @@ private fun OnLoggedIn(myTourVM: MyTourViewModel, navController: NavController) 
                 }
                 if (uiState.value.isScheduleShow) {
                     SubModalBottomSheetShowTourSchedule(
-                        tour = tour,
+                        tour = tour!!,
                         selectedDayOnSchedule = uiState.value.selectedDayOnSchedule,
                         showIcon = false,
                         updateSelectedDayOnSchedule = { schedule ->
@@ -225,7 +226,8 @@ private fun OnLoggedIn(myTourVM: MyTourViewModel, navController: NavController) 
                         uiState.value.bookedTourFocus!!,
                         uiState.value,
                         onSupportRequest = { myTourVM.updateIsShowSupportRequestDialog(true) },
-                        onCancelTicket = { myTourVM.updateIsShowCancelTourDialog(true) })
+                        onCancelTicket = { myTourVM.updateIsShowCancelTourDialog(true) },
+                        onReportTour = { myTourVM.updateIsShowReportTourDialog(true) })
                 }
             }
         }
@@ -241,6 +243,14 @@ private fun OnLoggedIn(myTourVM: MyTourViewModel, navController: NavController) 
             },
             onDismiss = { myTourVM.updateIsShowCancelTourDialog(false) }
         )
+        ShowReportDialog(showDialog = uiState.value.isShowReportTourDialog,
+            onDismiss = { myTourVM.updateIsShowReportTourDialog(false) },
+            onConfirm = {
+                myTourVM.sendReportTour(
+                    bookedTour = uiState.value.bookedTourFocus!!,
+                    it
+                )
+            })
     }
 }
 
@@ -249,7 +259,8 @@ private fun ShowInfoTicket(
     bookedTour: TourBooked,
     uiState: MyTourUIState,
     onSupportRequest: () -> Unit,
-    onCancelTicket: () -> Unit
+    onCancelTicket: () -> Unit,
+    onReportTour: () -> Unit
 ) {
     val tour = DataController.tourVM.getTourFromID(bookedTour.tourId)
     Column(
@@ -261,7 +272,7 @@ private fun ShowInfoTicket(
         RowInfoTicket("Người đặt vé: ", DataController.user.collectAsState().value!!.fullName)
         RowInfoTicket("Ngày đặt vé: ", bookedTour.formatDate(bookedTour.bookedDay.toDate()))
         RowInfoTicket("Số lượng: ", "${bookedTour.numPerson} vé")
-        RowInfoTicket("Địa điểm tập hợp: ", tour.gatheringPlace)
+        RowInfoTicket("Địa điểm tập hợp: ", tour!!.gatheringPlace)
         RowInfoTicket("Ngày đi: ", bookedTour.formatDate(bookedTour.startDay.toDate()))
         RowInfoTicket("Ngày về: ", bookedTour.formatDate(bookedTour.getEndDay()))
         RowInfoTicket("Tổng tiền: ", "${bookedTour.getTotalPay()}đ")
@@ -286,6 +297,22 @@ private fun ShowInfoTicket(
                     ) {
                         Text(
                             "Hủy vé",
+                            style = TextStyle(
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 16.sp,
+                                color = Color.Red.copy(alpha = 0.65f),
+                            )
+                        )
+                    }
+                }
+                if (uiState.lsGoneTour.contains(bookedTour)) {
+                    ElevatedButton(
+                        onClick = { onReportTour() },
+                        colors = ButtonDefaults.elevatedButtonColors()
+                            .copy(containerColor = MaterialTheme.colorScheme.errorContainer)
+                    ) {
+                        Text(
+                            "Báo cáo",
                             style = TextStyle(
                                 fontWeight = FontWeight.SemiBold,
                                 fontSize = 16.sp,

@@ -97,7 +97,8 @@ fun SignInScene(
             SignInTextField(
                 "Email",
                 uiState.value.email,
-                uiState.value.emailError
+                uiState.value.emailError,
+                keyboardType = KeyboardType.Email
             ) { newValue -> viewModel.updateEmail(newValue) }
             ChooseSex(
                 uiState.value.sex,
@@ -106,7 +107,8 @@ fun SignInScene(
             SignInTextField(
                 "Số điện thoại",
                 uiState.value.numberPhone,
-                uiState.value.numberPhoneError
+                uiState.value.numberPhoneError,
+                keyboardType = KeyboardType.Phone
             ) { newValue -> viewModel.updateNumberPhone(newValue) }
             SignInTextField(
                 "Mật khẩu",

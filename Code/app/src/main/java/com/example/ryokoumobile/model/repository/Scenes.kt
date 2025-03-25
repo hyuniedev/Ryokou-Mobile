@@ -24,6 +24,7 @@ sealed class Scenes(
     var icon: ImageVector = Icons.Outlined.Info,
     var iconOnSelected: ImageVector = Icons.Filled.Info
 ) {
+    data object Notification : Scenes("Notification")
     data object TourDetail : Scenes("TourDetail/{tourId}")
     data object TourPay : Scenes("TourPay/{numTicket}/{dayStart}/{tourId}")
     data object AccountGroup : Scenes("AccountGroup") {

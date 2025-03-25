@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -65,7 +66,7 @@ fun ChangePasswordScene(
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
-                        .size(120.dp)
+                        .size(150.dp)
                         .padding(bottom = 20.dp)
                 )
                 MyInputTextField(
@@ -92,7 +93,10 @@ fun ChangePasswordScene(
                 MyElevatedButton(title = "Xác nhận") {
                     changePasswordVM.onClickConfirmButton(context)
                 }
-                Spacer(Modifier.height(50.dp))
+                Spacer(Modifier.height(80.dp))
+                if (uiState.value.isShowConfirmDialog) {
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.tertiary)
+                }
             }
         }
     }
@@ -109,6 +113,7 @@ fun ChangePasswordScene(
         onAccept = {
             changePasswordVM.onClickConfirmDialog()
         })
+
     ShowInfoDialog(
         showDialog = uiState.value.isCompleted,
         "Thay đổi mật khẩu thành công."

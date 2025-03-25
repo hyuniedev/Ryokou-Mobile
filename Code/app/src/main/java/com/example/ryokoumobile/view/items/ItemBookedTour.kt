@@ -58,7 +58,7 @@ fun ItemBookedTour(
             contentAlignment = Alignment.BottomCenter
         ) {
             Image(
-                painter = rememberAsyncImagePainter(tour.lsFile[0]),
+                painter = rememberAsyncImagePainter(tour!!.lsFile[0]),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -99,7 +99,7 @@ fun ItemBookedTour(
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
             Text(
-                tour.name,
+                tour!!.name,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp)

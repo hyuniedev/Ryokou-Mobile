@@ -12,5 +12,6 @@ data class MyTourUIState(
     var selectedDayOnSchedule: Schedule = Schedule(),
     var isScheduleShow: Boolean = true,
     var isShowCancelTourDialog: Boolean = false,
+    var isShowReportTourDialog: Boolean = false,
     var isShowSupportRequestDialog: Boolean = false
 )

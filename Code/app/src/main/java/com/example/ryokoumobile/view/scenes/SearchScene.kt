@@ -1,5 +1,7 @@
 package com.example.ryokoumobile.view.scenes
 
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -12,7 +14,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -20,10 +25,13 @@ import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.RangeSlider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -45,6 +53,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.ryokoumobile.R
 import com.example.ryokoumobile.model.controller.DataController
+import com.example.ryokoumobile.model.controller.UserAnalytics
 import com.example.ryokoumobile.model.enumClass.EProvince
 import com.example.ryokoumobile.model.uistate.SearchUIState
 import com.example.ryokoumobile.view.components.MyElevatedButton
@@ -81,8 +90,8 @@ private fun SearchResult(
     navController: NavController,
 ) {
     Column(modifier.padding(horizontal = 15.dp)) {
-        if (uiState.lsResult.isEmpty()) {
-            RecommendedTours(DataController.tourVM.uiState.collectAsState().value, navController)
+        if (uiState.lsResult.isEmpty() && !uiState.showResult) {
+            RecommendedTours(UserAnalytics.lsMostPopularTour, navController)
         } else {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
@@ -145,6 +154,24 @@ private fun SearchBox(
                 .clip(RoundedCornerShape(10.dp)),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 15.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                IconTypeTour(
+                    "Đơn tỉnh",
+                    R.drawable.outline_tour,
+                    uiState.aProvince
+                ) { searchVM.updateAProvince() }
+                Spacer(Modifier.width(20.dp))
+                IconTypeTour(
+                    "Đa tỉnh",
+                    R.drawable.multi_province,
+                    uiState.multiProvince
+                ) { searchVM.updateMultiProvince() }
+            }
             OutlinedTextField(
                 value = uiState.searchText,
                 onValueChange = { value -> searchVM.updateSearchText(value) },
@@ -155,7 +182,7 @@ private fun SearchBox(
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 15.dp)
+                    .padding(top = 10.dp)
             )
             Row(
                 modifier = Modifier
@@ -240,42 +267,36 @@ private fun SearchBox(
                     }
                 }
             }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .border(
-                        width = 1.dp,
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(10.dp)
+            Column(modifier = Modifier.fillMaxWidth()) {
+                RangeSlider(
+                    value = uiState.priceRange,
+                    onValueChange = { searchVM.updateRangePrice(it) },
+                    valueRange = 0f..51f,
+                    steps = 50,
+                    colors = SliderDefaults.colors(
+                        thumbColor = MaterialTheme.colorScheme.primary,
+                        activeTrackColor = MaterialTheme.colorScheme.primary,
+                        inactiveTrackColor = Color.Gray
                     )
-                    .clip(RoundedCornerShape(10.dp))
-                    .clickable { searchVM.updateIsDropPriceRange(true) },
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.price_outline),
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(start = 8.dp)
                 )
-                Text(
-                    uiState.priceRange,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 10.dp)
-                )
-                DropdownMenu(
-                    modifier = Modifier
-                        .fillMaxWidth(0.8f)
-                        .heightIn(max = 250.dp),
-                    expanded = uiState.isDropPriceRange,
-                    onDismissRequest = { searchVM.updateIsDropPriceRange(false) }) {
-                    lsPriceRange.forEach { range ->
-                        DropdownMenuItem(
-                            onClick = { searchVM.updateSelectedPriceRange(range) },
-                            text = { Text(range) })
-                    }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        searchVM.getFormatPrice(uiState.priceRange.start.toLong()),
+                        style = TextStyle(fontSize = 18.sp)
+                    )
+                    HorizontalDivider(
+                        modifier = Modifier.width(10.dp),
+                        thickness = 1.dp,
+                        color = Color.Black
+                    )
+                    Text(
+                        searchVM.getFormatPrice(uiState.priceRange.endInclusive.toLong()),
+                        style = TextStyle(fontSize = 18.sp)
+                    )
                 }
             }
             MyElevatedButton(
@@ -289,5 +310,41 @@ private fun SearchBox(
                 focus.clearFocus()
             }
         }
+    }
+}
+
+@Composable
+private fun IconTypeTour(
+    title: String,
+    @DrawableRes painter: Int,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
+    Column(
+        modifier = Modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(5.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .border(
+                    1.dp, MaterialTheme.colorScheme.primary,
+                    CircleShape
+                )
+                .clip(CircleShape)
+                .background(color = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent)
+                .clickable { onClick() }
+        ) {
+            Icon(
+                painterResource(painter),
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(8.dp),
+                tint = if (isSelected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary
+            )
+        }
+        Text(title, style = TextStyle(fontSize = 16.sp), maxLines = 1)
     }
 }

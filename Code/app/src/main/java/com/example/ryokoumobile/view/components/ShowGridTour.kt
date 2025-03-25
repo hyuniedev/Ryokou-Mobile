@@ -64,10 +64,9 @@ fun <T> ShowGridTour(
 
                         else -> {}
                     }
-
-                }
-                if (it.size == 1) {
-                    Spacer(Modifier.width(170.dp))
+                    if (it.size == 1) {
+                        Spacer(Modifier.width(170.dp))
+                    }
                 }
             }
         }

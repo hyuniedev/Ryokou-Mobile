@@ -57,7 +57,7 @@ fun TourPay(tourBooked: TourBooked, navController: NavController) {
                 .padding(horizontal = 15.dp, vertical = 15.dp)
                 .verticalScroll(state = scrollState)
         ) {
-            ThongTinTour(tour, tourBooked, styleTitle, styleMedium)
+            ThongTinTour(tour!!, tourBooked, styleTitle, styleMedium)
             Spacer(Modifier.height(10.dp))
             PhuongThucThanhToan(styleTitle, styleMedium)
             Row(

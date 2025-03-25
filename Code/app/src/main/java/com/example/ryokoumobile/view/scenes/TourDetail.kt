@@ -95,6 +95,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.ryokoumobile.R
 import com.example.ryokoumobile.model.controller.DataController
 import com.example.ryokoumobile.model.controller.FirebaseController
+import com.example.ryokoumobile.model.controller.UserAnalytics
 import com.example.ryokoumobile.model.entity.Rate
 import com.example.ryokoumobile.model.entity.ToDoOnDay
 import com.example.ryokoumobile.model.entity.Tour
@@ -177,14 +178,13 @@ private fun BodyTourDetail(
         HorizontalDivider(thickness = 2.dp)
         ServicesSection(tour)
         HorizontalDivider(thickness = 2.dp)
-        SimilarToursSection(navController = navController)
+        SimilarToursSection(tour, navController = navController)
         Spacer(Modifier.height(100.dp))
     }
 }
 
 @Composable
-fun SimilarToursSection(navController: NavController) {
-    val tours = DataController.tourVM.uiState.collectAsState()
+fun SimilarToursSection(tour: Tour, navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -196,7 +196,7 @@ fun SimilarToursSection(navController: NavController) {
         )
         Spacer(Modifier.height(10.dp))
         ShowHorizontalListTour(
-            lsTour = tours.value,
+            lsTour = UserAnalytics.getSimilarTour(tour = tour),
             onClick = { tour ->
                 DataController.tourVM.navigationToTourDetail(
                     tour = tour,
@@ -564,6 +564,16 @@ private fun OverviewSection(tour: Tour) {
             stringResource(R.string.overview),
             style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
         )
+        ARowInOverview(
+            R.drawable.list_province,
+            R.string.tinhThanhDiQua,
+            tour.city.joinToString(separator = " - ")
+        )
+        ARowInOverview(
+            R.drawable.ticket,
+            R.string.soVeKhaDung,
+            "${tour.ticketLimit.numLimitTicket - tour.ticketLimit.numCurrentTicket} vé"
+        )
         ARowInOverview(R.drawable.time, R.string.durationTour, "${tour.durations} days")
         ARowInOverview(
             R.drawable.outline_tour,
@@ -731,7 +741,10 @@ private fun BottomBarTourDetail(
                     )
                 )
             }
-            MyElevatedButton(title = "Chọn") {
+            MyElevatedButton(
+                title = if (tour.ticketLimit.numLimitTicket - tour.ticketLimit.numCurrentTicket == 0) "Hết vé" else "Đặt vé",
+                isEnable = if (tour.ticketLimit.numLimitTicket - tour.ticketLimit.numCurrentTicket == 0) false else true
+            ) {
                 if (user == null) {
                     navController.navigate(Scenes.AuthGroup.Login.route)
                 } else {
@@ -829,12 +842,21 @@ private fun BottomBarTourDetail(
                         )
                     )
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        IconButton(onClick = { tourDetailVM.updateNumTicket(uiState.value.numTicket - 1) }) {
+                        IconButton(onClick = {
+                            tourDetailVM.updateNumTicket(
+                                context,
+                                uiState.value.numTicket - 1,
+                                tour.ticketLimit.numLimitTicket - tour.ticketLimit.numCurrentTicket
+                            )
+                        }) {
                             Text(
                                 "-",
                                 style = TextStyle(
                                     fontWeight = FontWeight.Bold,
-                                    fontSize = 22.sp
+                                    fontSize = 22.sp,
+                                    color = if (uiState.value.numTicket == 1) Color.DarkGray.copy(
+                                        alpha = 0.5f
+                                    ) else Color.Black
                                 )
                             )
                         }
@@ -847,12 +869,21 @@ private fun BottomBarTourDetail(
                                 )
                             )
                         }
-                        IconButton(onClick = { tourDetailVM.updateNumTicket(uiState.value.numTicket + 1) }) {
+                        IconButton(onClick = {
+                            tourDetailVM.updateNumTicket(
+                                context,
+                                uiState.value.numTicket + 1,
+                                tour.ticketLimit.numLimitTicket - tour.ticketLimit.numCurrentTicket
+                            )
+                        }) {
                             Text(
                                 "+",
                                 style = TextStyle(
                                     fontWeight = FontWeight.Bold,
-                                    fontSize = 22.sp
+                                    fontSize = 22.sp,
+                                    color = if (tour.ticketLimit.numCurrentTicket + uiState.value.numTicket == tour.ticketLimit.numLimitTicket) Color.DarkGray.copy(
+                                        alpha = 0.5f
+                                    ) else Color.Black
                                 )
                             )
                         }
